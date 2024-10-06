@@ -1,0 +1,231 @@
+@extends('layouts.app')
+
+@section('title', 'Nuevo producto')
+
+@section('content')
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <h3><a href="{{route('productos',[encrypt(1),encrypt(1)])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> NUEVO PRODUCTO:</h3>
+            </div>
+        </div>
+        <br>
+        <form action="{{route('createdetails')}}" id="form-create"  method="POST" enctype="multipart/form-data">
+             @csrf
+        <div class="row border shadow rounded-3 pt-3 pb-3 mb-3">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Datos generales</h3>
+                </div>
+            </div>
+            <div class="mb-3 col-12 col-md-6">
+                <label class="form-label">Titulo</label>
+                <input type="text" id="name-product" name="name" class="form-control" value="{{ old('name') }}" aria-describedby="basic-addon1" maxlength="200">
+            </div>
+            <div class="mb-3 col-6 col-md-3">
+            <label for="marca-product" id="marca-label" class="form-label">Marca:</label>
+                <select name="marca" id="marca-product" class="form-select">
+                    <option value="" {{ old('marca') ? '' : 'selected' }}>-Elige una marca-</option>
+                    @foreach($marcas as $marca)
+                        <option value="{{ $marca['idMarca'] }}"
+                            {{old('marca') == $marca['idMarca'] ? 'selected' : ''}}>
+                            {{ $marca['nombreMarca'] }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3 col-6 col-md-3">
+                <label for="grupo-product" id="grupo-label" class="form-label">Grupo:</label>
+                <select name="grupo" id="grupo-product" class="form-select">
+                        <option value="" {{ old('grupo') ? '' : 'selected' }}>-Elige un grupo-</option>
+                    @foreach($grupos as $grupo)
+                        <option value="{{ $grupo['idGrupoProducto'] }}"
+                            {{ old('grupo') == $grupo['idGrupoProducto'] ? 'selected' : '' }}>
+                            {{ $grupo['nombreGrupo'] }}
+                        </option>
+                    @endforeach
+                </select>
+                <input type="hidden" name="codigo" value="ERROR" id="codigo-product">
+            </div>
+            <div class="mb-3 col-6 col-md-2">
+                <label for="estado-product" id="estado-label" class="form-label">
+                    <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="<small>DISPONIBLE: En stock.</small><br><small>AGOTADO: Sin stock</small><br><small>EXCLUSIVO: Precio sin calculos.</small>"></i> 
+                    Estado:
+                </label>
+                <select name="estado" id="estado-product" class="form-select">
+                  <option value="" {{ old('estado') ? '' : 'selected' }}>-Elige un estado-</option>
+                  <option value="DISPONIBLE" {{ old('estado') == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
+                  <option value="AGOTADO" {{ old('estado') == 'AGOTADO' ? 'selected' : '' }}>AGOTADO</option>
+                  <option value="OFERTA" {{ old('estado') == 'OFERTA' ? 'selected' : '' }}>OFERTA</option>
+                  <option value="EXCLUSIVO" {{ old('estado') == 'EXCLUSIVO' ? 'selected' : '' }}>EXCLUSIVO</option>
+                  <option value="DESCONTINUADO" {{ old('estado') == 'DESCONTINUADO' ? 'selected' : '' }}>DESCONTINUADO</option>
+                </select>
+            </div>
+            <div class="mb-3 col-6 col-md-2">
+                <label for="garantia-product" id="garantia-label" class="form-label">Garantia:</label>
+                <select name="garantia" id="garantia-product" class="form-select">
+                  <option value="" {{ old('garantia') ? '' : 'selected' }}>-Elige la garantia-</option>
+                  <option value="No tiene" {{old('garantia') == 'No tiene' ? 'selected' : ''}}>No tiene</option>
+                  <option value="3 meses" {{old('garantia') == '3 meses' ? 'selected' : ''}}>3 meses</option>
+                  <option value="6 meses" {{old('garantia') == '6 meses' ? 'selected' : ''}}>6 meses</option>
+                  <option value="12 meses" {{old('garantia') == '12 meses' ? 'selected' : ''}}>12 meses</option>
+                  <option value="24 meses" {{old('garantia') == '24 meses' ? 'selected' : ''}}>24 meses</option>
+                  <option value="36 meses" {{old('garantia') == '36 meses' ? 'selected' : ''}}>36 meses</option>
+                </select>
+            </div>
+        </div>
+        <div class="row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
+            <div class="col-12">
+                <h3>Precios y Costos:</h3>
+            </div>
+            <div class="col-6 col-md-6">
+                <div class="row">
+                    <h5>Precio producto</h5>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label for="select-tipoprecio" class="form-label">Moneda:</label>
+                        <select class="form-select" onchange="changeTC()" name="tipoprecio" id="select-tipoprecio">
+                            <option value="DOLAR"{{old('tipoprecio') == '' || old('tipoprecio') == 'dolar' ? 'selected' : ''}}>Dolares</option>
+                            <option value="SOL" {{old('tipoprecio') == 'sol' ? 'selected' : ''}}>Soles</option>
+                          </select>
+                    </div>
+                    <div class="col-md-8"></div>
+                    <div class="mb-3 col-md-6">
+                        <label for="precio-producto" class="form-label">Sin IGV:</label>
+                         <input type="number" name="precio" value="{{old('precio') ? old('precio') : 0}}" id="precio-product"  aria-label="Last name" class="form-control  price-product" step="0.01">
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="mb-3 col-md-6">
+                        <label for="precio-producto" class="form-label">Con IGV:</label>
+                         <input type="number"  id="precio-product-igv" value="0" class="form-control price-product" step="0.01">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-6">
+                <div class="row">
+                    <h5>Precio venta</h5>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label for="precio-producto" class="form-label">Utilidad:</label>
+                         <input type="number"  value="{{old('ganancia') ? old('ganancia') : 0}}" name="ganancia" id="precio-product-ganancia"  class="form-control price-product" step="0.01">
+                    </div>
+                    <div class="col-md-8"></div>
+                    <div class="mb-3 col-md-4">
+                        <label for="precio-producto" class="form-label">Precio Calculado:</label>
+                         <input type="number"  value="" id="precio-product-calculado" class="form-control price-product" step="0.01" disabled>
+                    </div>
+                    <div class="col-md-8"></div>
+                        <div class="row" id="div-total-price">
+                        </div>
+                    <div class="col-md-8"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Datos clave</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label d-flex w-100"><span class="w-50">UPC/EAN</span><span class="text-secondary text-end w-50">No aplica</span></label>
+                <div class="input-group mb-3">
+                    <input type="text" name="upc" class="form-control" id="upc-product" placeholder="Maximo 13 caracteres" value="{{old('upc')}}" maxlength="13" aria-describedby="basic-addon1">
+                      <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="checkbox" onchange="checkException(this,'upc-product')" value="0" id="check-upc-product">
+                      </div>
+                </div>
+                
+                <small id="upcError" class="text-danger"></small>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Modelo</label>
+                <input type="text" name="modelo" class="form-control" id="modelo-product" value="{{old('modelo')}}" aria-describedby="basic-addon1" maxlength="70">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label d-flex w-100"><span class="w-50">Numero de Parte</span><span class="text-secondary text-end w-50">No aplica</span></label>
+                <div class="input-group mb-3">
+                    <input type="text" name="partnumber" class="form-control" placeholder="Part Number" id="partnumber-product" value="{{old('partnumber')}}" aria-describedby="basic-addon1" maxlength="50">
+                      <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="checkbox" onchange="checkException(this,'partnumber-product')" value="0" id="check-upc-product">
+                      </div>
+                </div>
+                <!--<input type="text" name="partnumber" class="form-control" placeholder="Agrega 0 si no aplica" id="partnumber-product" value="{{old('partnumber')}}" aria-describedby="basic-addon1" maxlength="50">-->
+            </div>
+        </div>
+        <div class="row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Cantidad disponible</h3>
+                </div>
+            </div>
+            @foreach($almacenes as $almacen)
+            <div class="col-6 col-md-2">
+                <label class="form-label">Stock {{$almacen->descripcion}}:</label>
+                <input name="stock[{{$almacen->idAlmacen}}]" value="{{old('stock[$almacen->idAlmacen]') ? old('stock[$almacen->idAlmacen]') : 0}}" type="number" class="form-control stock-product">
+            </div>
+            @endforeach
+            <div class="col-6 col-md-2">
+                <label for="precio-producto" class="form-label">Stock Proveedor:</label>
+                <input name="stockproveedor" value="{{old('stockproveedor') ? old('stockproveedor') : 0}}" type="number" id="stockproveedor-product" class="form-control">
+            </div>
+            <div class="col-6 col-md-3">
+                <label for="grupo-product" id="proveedor-label" class="form-label">Proveedor:</label>
+                <select name="proveedor" id="proveedor-product" class="form-select">
+                     <option  value=""  {{ old('proveedor') ? '' : 'selected' }}>-Elige un proveedor-</p></option>
+                    @foreach($proveedor as $pro)
+                        <option  value="{{ $pro['idProveedor'] }}"
+                            {{ old('proveedor') == $pro['idProveedor'] ? 'selected' : '' }}>
+                            {{ $pro['nombreProveedor'] }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
+        <div class="row">
+            <div class="col-12">
+                <h3>Detalles</h3>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="desc-producto" class="form-label" >Imagenes (Solo imagenes en 1000 x 1000px):</label>
+            <div class="row">
+                <div class="col-6 mb-3 img-div" id="previewImage1" data-bs-toggle="tooltip" data-bs-placement="top" title="Imagen de cabecera">
+                    <input class="d-none img-input" name="imgone" type="file" accept="image/*" id="imgone-product" onchange="changeImage(event,this,'previewImage1','triggerImage1')">
+                    <img src="{{ asset('storage/1000x1000image.webp') }}" alt="Click to upload" id="triggerImage1" class="w-100 border border-secondary rounded-3 img-preview" style="cursor: pointer; object-fit: cover;">
+                </div>
+                <div class="col-6 mb-3 img-div" id="previewImage2">
+                    <input class="d-none img-input" name="imgtwo"  type="file" accept="image/*" id="imgtwo-product" onchange="changeImage(event,this,'previewImage2','triggerImage2')">
+                    <img src="{{ asset('storage/1000x1000image.webp') }}" alt="Click to upload" id="triggerImage2" class="w-100 border border-secondary rounded-3 img-preview" style="cursor: pointer; object-fit: cover;">
+                </div>
+                <div class="col-6 img-div" id="previewImage3">
+                     <input class="d-none img-input" name="imgtree" type="file" accept="image/*" id="imgtree-product" onchange="changeImage(event,this,'previewImage3','triggerImage3')">
+                    <img src="{{ asset('storage/1000x1000image.webp') }}" alt="Click to upload" id="triggerImage3" class="w-100 border border-secondary rounded-3 img-preview" style="cursor: pointer; object-fit: cover;">
+                </div>
+                <div class="col-6 img-div" id="previewImage4">
+                    <input class="d-none img-input" name="imgfour" type="file" accept="image/*" id="imgfour-product" onchange="changeImage(event,this,'previewImage4','triggerImage4')">
+                    <img src="{{ asset('storage/1000x1000image.webp') }}" alt="Click to upload" id="triggerImage4" class="w-100 border border-secondary rounded-3 img-preview" style="cursor: pointer; object-fit: cover;">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="descripcion-product" class="form-label" >Descripcion:</label>
+            <textarea name="desc" type="text" maxlength="5000" id="descripcion-product" class="form-control" style=" width: 100%;max-height: 500px;overflow-y: auto;" oninput="autoResize(this)">{{old('desc')}}</textarea>
+        </div>
+    </div>
+       
+        <div class="row mt-4 pt-4">
+              <div class="col-12 text-center">
+                  <button type="submit" onclick="manejarSubmit()" class="btn btn-success " id="btnRegistrar" >Registrar <i class="bi bi-floppy"></i></button>
+              </div>
+        </div>
+      </form>
+      <br>
+    </div>
+    <script src="{{ route('js.create-product-scripts',[$tc]) }}"></script>
+    
+@endsection
