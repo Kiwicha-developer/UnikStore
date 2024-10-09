@@ -4,6 +4,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use App\Repositories\IngresoProductoRepositoryInterface;
 use App\Repositories\ProveedorRepositoryInterface;
+use App\Repositories\RegistroProductoRepositoryInterface;
 use App\Repositories\TipoComprobanteRepositoryInterface;
 
 class IngresoProductoService implements IngresoProductoServiceInterface
@@ -11,15 +12,21 @@ class IngresoProductoService implements IngresoProductoServiceInterface
     protected $ingresoRepository;
     protected $tipoComprobanteRepository;
     protected $proveedorRepository;
+    protected $registroProductoRepository;
+    protected $headerService;
 
     public function __construct(IngresoProductoRepositoryInterface $ingresoRepository,
                                 ProveedorRepositoryInterface $proveedorRepository,
-                                TipoComprobanteRepositoryInterface $tipoComprobanteRepository
+                                TipoComprobanteRepositoryInterface $tipoComprobanteRepository,
+                                RegistroProductoRepositoryInterface $registroProductoRepository,
+                                HeaderServiceInterface $headerService
                                 )
     {
         $this->ingresoRepository = $ingresoRepository;
         $this->proveedorRepository = $proveedorRepository;
         $this->tipoComprobanteRepository = $tipoComprobanteRepository;
+        $this->registroProductoRepository = $registroProductoRepository;
+        $this->headerService = $headerService;
     }
     
     public function getByComprobante($idComprobante){
@@ -50,8 +57,12 @@ class IngresoProductoService implements IngresoProductoServiceInterface
     public function deleteIngreso($id){
         if($id){
             $ingreso = $this->ingresoRepository->getOne('idIngreso',$id);
-            $data = ['estado' => 'INVALIDO'];
+            $dataRegistro = ['estado' => 'INVALIDO'];
+            $dataIngreso = ['idUser' => $this->headerService->getModelUser()->idUser,
+                            'fechaIngreso' => now()];
             
+            $this->registroProductoRepository->update($ingreso->idRegistro,$dataRegistro);
+            $this->ingresoRepository->update($ingreso->idIngreso,$dataIngreso);
             // $this->registroService->updateRegistro($ingreso->idRegistro,$data);
         }
     }

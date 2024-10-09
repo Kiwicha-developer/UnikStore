@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Producto;
+use Exception;
 
 class ProductoRepository implements ProductoRepositoryInterface
 {

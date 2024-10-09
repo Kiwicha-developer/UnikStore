@@ -7,5 +7,7 @@ interface UsuarioServiceInterface
     public function getUser($user);
     public function getUserId($id);
     public function allUsers();
-    public function allCargos();
+    public function getAllViews();
+    public function createUser(array $array);
+    public function updatePass($id,$pass);
 }

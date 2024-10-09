@@ -68,7 +68,7 @@ class IngresoProductoRepository implements IngresoProductoRepositoryInterface
     {
         $ingreso = IngresoProducto::findOrFail($id);
         $ingreso->update($data);
-        return $user;
+        return $ingreso;
     }
     
     public function getLast(){

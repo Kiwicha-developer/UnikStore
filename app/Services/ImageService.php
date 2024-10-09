@@ -17,9 +17,7 @@ class ImageService
         $imagePath = $file->getPathname();
         
         $manager = new ImageManager(Driver::class);
-        
         $image = $manager->read($imagePath);
-        
         $encoded = $image->encode(new WebpEncoder(quality: $quality));
         
          file_put_contents($webpFullPath, $encoded);

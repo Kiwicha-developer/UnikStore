@@ -9,7 +9,7 @@ class HeaderService implements HeaderServiceInterface
 {
     public function getModelUser(){
         $idUser = session()->get('idUser',-1);
-        $userModel = Usuario::select('idUser','user','idCargo')->where('idUser','=',$idUser)->first();
+        $userModel = Usuario::select('idUser','user')->where('idUser','=',$idUser)->first();
         return $userModel;
     }
     

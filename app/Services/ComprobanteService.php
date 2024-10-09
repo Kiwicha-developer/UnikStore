@@ -118,14 +118,12 @@ class ComprobanteService implements ComprobanteServiceInterface
         if($data){
             //Para actualizar stock
             $idProducto = $data['idProducto'];
-            
             //Para el detalle del Comprobante
             $data['idDetalleComprobante'] = $this-> getNewIdDetalleComprobante();
             $detalle = $this->detalleComprobanteRepository->create($data);
             if($detalle && $idAlmacen){
                 foreach($registros as $registro){
                     $validate = $this->productoRepository->validateSerial($idProducto,$registro['serialnumber']);
-                    // dd($validate);
                     if(!$validate){
                         $arrayRegistro = [
                         'idDetalleComprobante' => $data['idDetalleComprobante'],

@@ -2,8 +2,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
 
 class Usuario extends Model
 {
@@ -18,12 +16,10 @@ class Usuario extends Model
     protected $fillable = ['idUser','user','idCargo','tokenSesion','registroSesion','horaSesion','estadoUsuario'
                             ];
 
-    
     protected $hidden = [
         
     ];
 
-    
     protected $casts = [
         'idUser' => 'int',
         'idCargo' => 'int',
@@ -32,11 +28,6 @@ class Usuario extends Model
         'horaSesion' => 'datetime',
         'estadoUsuario' => 'bool',
     ];
-    
-    public function Cargo()
-    {
-        return $this->belongsTo(Cargo::class, 'idCargo', 'idCargo');
-    }
     
     public function Publicacion()
     {
@@ -61,5 +52,10 @@ class Usuario extends Model
       public function EgresoProducto()
     {
         return $this->hasMany(EgresoProducto::class,'idUser','idUser');
+    }
+
+    public function Accesos()
+    {
+        return $this->hasMany(Accesos::class,'idUser','idUser');
     }
 }

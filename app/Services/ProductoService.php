@@ -83,7 +83,6 @@ class ProductoService implements ProductoServiceInterface
                     'idProveedor' => $prov->idProveedor
                 ];
         });
-        // $proveedor = Preveedor::select('nombreProveedor','idProveedor')->orderBy('nombreProveedor','asc')->get();
         return $proveedor;
     }
     
@@ -208,12 +207,13 @@ class ProductoService implements ProductoServiceInterface
             $newProducto = $this->productoRepository->create($array);
             
             if($newProducto){
+                $this->insertInventory($array['idProducto'],$stock);
+                $this->createSeguimiento($array['idProducto'],$proveedor);
                 $imgService->createImage($img1,$array['idProducto'].'_1',$this->path);
                 $imgService->createImage($img2,$array['idProducto'].'_2',$this->path);
                 $imgService->createImage($img3,$array['idProducto'].'_3',$this->path);
                 $imgService->createImage($img4,$array['idProducto'].'_4',$this->path);
-                $this->insertInventory($array['idProducto'],$stock);
-                $this->createSeguimiento($array['idProducto'],$proveedor);
+                
             }
             
             return $array['idProducto'];

@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\HeaderServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Session;
 use App\Services\SesionService;
 use App\Services\UsuarioServiceInterface;
 
@@ -13,12 +13,15 @@ class ValidateSession
 {
     protected $usuarioService;
     protected $sesionService;
+    protected $headerService;
 
     public function __construct(UsuarioServiceInterface $usuarioService,
-                                SesionService $sesionService)
+                                SesionService $sesionService,
+                                HeaderServiceInterface $headerService)
     {
         $this->usuarioService = $usuarioService;
         $this->sesionService = $sesionService;
+        $this->headerService = $headerService;
     }
     
     /**
@@ -32,17 +35,16 @@ class ValidateSession
         $tokenSesion = $this->sesionService->getSesion();
         
         if($idUserSesion == -1 || empty($idUserSesion)){
-            echo("<script>alert('Inicia sesion');</script>");
+            $this->headerService->sendFlashAlerts('Inicia sesion','Se acabo el tiempo de sesión','warning','btn-danger');
             return redirect('');
         }else{
             $usuario = $this->usuarioService->getUserId($idUserSesion);
             $tokenBase = $usuario->tokenSesion;
-            $userBase = $usuario->idUser;
             if($tokenBase == $tokenSesion){
                 $this->sesionService->eliminarSesionesCaducadas();
                 return $next($request);
             }else{
-                echo("<script>alert('Sesion en otro dispositivo');</script>");
+                $this->headerService->sendFlashAlerts('Inicia sesion','Sesión en otro dispositivo','warning','btn-danger');
                 return redirect('');
             }
             

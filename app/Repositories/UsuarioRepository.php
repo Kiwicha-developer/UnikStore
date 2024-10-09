@@ -3,6 +3,8 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Usuario;
+use Exception;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioRepository implements UsuarioRepositoryInterface
 {
@@ -42,11 +44,35 @@ class UsuarioRepository implements UsuarioRepositoryInterface
         $this->validateColumns($column);
         return Usuario::where($column, 'LIKE', '%' . $data . '%')->get();
     }
+
+    public function getLast()
+    {
+        $user = Usuario::select('idUser')->orderBy('idUser','desc')->first();
+        return $user;
+    }
     
     
     public function create(array $data)
     {
-        return Usuario::create($data);
+        try{
+            DB::beginTransaction();
+            
+            $usuario = new Usuario();
+            $usuario->idUser = $data['idUser'];
+            $usuario->user = $data['user'];
+            $usuario->pass = Hash::make($data['pass']);
+            $usuario->tokenSesion = 0;
+            $usuario->registroSesion = false;
+            $usuario->horaSesion = date('Y-m-d H:i:s');
+            $usuario->estadoUsuario = true;
+            
+            $usuario->save();
+            
+            DB::commit();
+        }catch(Exception $e){
+            DB::rollBack();
+            throw new \InvalidArgumentException("Error al crear Usuario");
+        }
     }
     
     
@@ -54,7 +80,23 @@ class UsuarioRepository implements UsuarioRepositoryInterface
     {
         $user = Usuario::findOrFail($id);
         $user->update($data);
-        return $user;
+        
+    }
+
+    public function updatePass($id, $pass)
+    {
+        try{
+            DB::beginTransaction();
+            $user = Usuario::findOrFail($id);
+            $user->pass = Hash::make($pass);
+
+            $user->save();
+            DB::commit();
+            return $user;
+        }catch(Exception $e){
+            DB::rollBack();
+            throw new \InvalidArgumentException("Error al actualizar la contraseña");
+        }
     }
     
     private function validateColumns($column){

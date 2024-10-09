@@ -5,17 +5,18 @@ use App\Repositories\CargoRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 use App\Repositories\UsuarioRepositoryInterface;
+use App\Repositories\VistaRepositoryInterface;
 
 class UsuarioService implements UsuarioServiceInterface
 {
     protected $userRepository;
-    protected $cargoRepository;
+    protected $vistaRepository;
 
     public function __construct(UsuarioRepositoryInterface $userRepository,
-                                CargoRepositoryInterface $cargoRepository)
+                                VistaRepositoryInterface $vistaRepository)
     {
         $this->userRepository = $userRepository;
-        $this->cargoRepository = $cargoRepository;
+        $this->vistaRepository = $vistaRepository;
     }
     
     public function getUsersXCargos($arrayCargos){
@@ -39,8 +40,23 @@ class UsuarioService implements UsuarioServiceInterface
         return $this->userRepository->all();
     }
 
-    public function allCargos(){
-        return $this->cargoRepository->all();
+    public function getAllViews(){
+        return $this->vistaRepository->all();
     }
-    
+
+    public function updatePass($id,$pass){
+        $this->userRepository->updatePass($id,$pass);
+    }
+
+    public function createUser(array $array){
+        $array['idUser'] = $this->getNewUser(); 
+        $this->userRepository->create($array);
+    }
+
+    private function getNewUser(){
+        $lastId = $this->userRepository->getLast();
+        $id = $lastId ? $lastId->idUser : 0;
+        return $id + 1;
+    }
+
 }

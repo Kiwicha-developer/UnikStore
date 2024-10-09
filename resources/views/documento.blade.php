@@ -7,7 +7,7 @@
     <br>
     <div class="row">
         <div class="col-md-6">
-            <h2><a href="javascript:void(0)" onclick="window.history.back()" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> {{$documento->Preveedor->razSocialProveedor}}</h2>
+            <h2><a href="{{route('documentos',[now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-filter-circle"></i></a> {{$documento->Preveedor->razSocialProveedor}}</h2>
         </div>
         <div class="col-6 col-md-6 ">
             <h2 class="text-end d-none d-sm-none d-md-block">{{$documento->numeroComprobante}}</h2>
@@ -140,7 +140,7 @@
                         <ul class="list-group" style="position: relative;">
                             @foreach($detalle->RegistroProducto as $registro)
                             <li class="list-group-item">
-                                <div class="row text-center">
+                                <div class="row text-center {{$registro->estado == 'INVALIDO' ? 'text-danger text-decoration-line-through' : ''}}">
                                     <div class="col-6 col-md-3 text-start">
                                         <label class="text-secondary fw-italic">Numero de Serie</label>
                                         <p>{{$registro->numeroSerie}}</p>

@@ -24,18 +24,19 @@ class UsuarioController extends Controller
         
         //Variables propias del controlador
         $usuarios = $this->usuarioService->allUsers();
-        $cargos = $this->usuarioService->allCargos();
+        $vistas = $this->usuarioService->getAllViews();
         
-        if($userModel->idCargo == 1){
-            return view('usuarios',['user' => $userModel,
-                                    'usuarios' => $usuarios,
-                                    'cargos' => $cargos
-            ]);
-        }else{
-            $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
-            return redirect()->route('dashboard',['user' => $userModel]);
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 6){
+                return view('usuarios',['user' => $userModel,
+                'usuarios' => $usuarios,
+                'vistas' => $vistas
+                ]);
+            }
         }
-        
+
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
         
     }
     
@@ -43,16 +44,14 @@ class UsuarioController extends Controller
         //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
         
-        //Variables propias del controlador
-        $cargos = $this->usuarioService->allCargos();
-                      
-        if($userModel->idCargo == 1){
-            return view('createuser',['user' => $userModel,
-                                    'cargos' => $cargos]);
-        }else{
-            $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
-            return redirect()->route('dashboard',['user' => $userModel]);
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 6){
+                return view('createuser',['user' => $userModel]);
+            }
         }
+
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function createUser(Request $request){
@@ -61,65 +60,40 @@ class UsuarioController extends Controller
         
         //Variables propias del controlador
         $user = $request->input('user');
-        $cargo = $request->input('cargo');
         $pass = $request->input('pass');
-        $validatePass = $request->input('confirmpass');
-        
-        
-        
-        
-        if($userModel->idCargo == 1){
-            try{
-                DB::beginTransaction();
-                
-                $usuario = new Usuario();
-                $usuario->idUser = $this->newIdUser();
-                $usuario->user = $user;
-                $usuario->idCargo = $cargo;
-                $usuario->pass = Hash::make($pass);
-                $usuario->tokenSesion = 0;
-                $usuario->registroSesion = false;
-                $usuario->horaSesion = date('Y-m-d H:i:s');
-                $usuario->estadoUsuario = true;
-                
-                $usuario->save();
-                
-                DB::commit();
-                
-                echo("<script>alert('Usuario creado')</script>");
-                return redirect()->back();
-            }catch(Exception $e){
-                DB::rollBack();
-                echo("<script>alert('Error en la transacion.')</script>");
+
+        $validateUser = $this->usuarioService->getUser($user);
+        if($validateUser){
+            $this->headerService->sendFlashAlerts('Usuario existente','Verificar si el usuario existe en la base','error','btn-danger');
+            return redirect()->back();
+        }
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 6){
+                $array = ['user' => $user,
+                        'pass'=>$pass];
+
+                $this->usuarioService->createUser($array);
+
+                $this->headerService->sendFlashAlerts('Usuario registrado','Operacion realizada correctamente','success','btn-success');
                 return redirect()->back();
             }
-                
-        }else{
-            echo("<script>alert('No tienes permiso')</script>");
-            return redirect()->route('dashboard',['user' => $userModel]);
         }
+
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->back();return redirect()->route('dashboard',['user' => $userModel]);
+
     }
     
     public function updatePass(Request $request){
-        //variables de la cabecera
-        $userModel = $this->headerService->getModelUser();
-        
         //Variables propias del controlador
         $id = $request->input('id');
         $pass = $request->input('pass');
+
+        $this->usuarioService->updatePass($id,$pass);
         
-        $user = Usuario::where('idUser','=',$id)->first();
-        $user->pass = Hash::make($pass);
-        
-        $user->save();
-        
-        if($userModel->idCargo == 1){
-                echo("<script>alert('Contraseña actualizada".$id."')</script>");
-                return redirect()->back();
-        }else{
-            echo("<script>alert('No tienes permiso')</script>");
-            return redirect()->route('dashboard',['user' => $userModel]);
-        }
+        $this->headerService->sendFlashAlerts('Contraseña actualizada','Actualizacion correcta','success','btn-success');
+        return redirect()->back();
     }
     
     public function updateUser(Request $request){
@@ -168,11 +142,5 @@ class UsuarioController extends Controller
             echo("<script>alert('No tienes permiso')</script>");
             return redirect()->route('dashboard',['user' => $userModel]);
         }
-    }
-    
-    private function newIdUser(){
-        $id = Usuario::select('idUser')->orderBy('idUser','desc')->first();
-        $newId = $id ? $id->idUser : 0;
-        return $newId + 1;
     }
 }

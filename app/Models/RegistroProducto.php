@@ -17,7 +17,8 @@ class RegistroProducto extends Model
                             'idDetalleComprobante',
                             'numeroSerie',
                             'estado',
-                            'fechaMovimiento'
+                            'fechaMovimiento',
+                            'observacion'
                             ];
 
     

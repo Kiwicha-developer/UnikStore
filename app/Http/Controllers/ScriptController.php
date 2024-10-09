@@ -12,7 +12,6 @@ class ScriptController extends Controller
     public function headerScript(){
         
         $js = view('js.header-scripts')->render();
-        dd('problema');
         return response($js)->header('Content-Type', 'application/javascript');
     }
     

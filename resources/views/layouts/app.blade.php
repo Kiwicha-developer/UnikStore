@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="{{route('js.header-scripts')}}"></script>
 </head>
 <style>
 
@@ -173,11 +174,7 @@
                         </div>
                         <div class="col-4 col-md-2" style="position:relative;z-index:9000">
                             <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav" style="cursor:pointer">
-                                <!--<div class="col-9 d-flex align-items-center text-center pt-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{$user->Cargo->descCargo}}">-->
                                     <h5 class="w-100"><i class="bi bi-person-circle"></i> {{$user->user}}</h5>
-                                <!--<div class="col-3 d-flex align-items-center text-center">-->
-                                <!--    <a href="{{route('login')}}" class="text-decoration-none text-light"><i class="bi bi-box-arrow-left" style="font-size:2rem" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cerrar sesión"></i></a>-->
-                                <!--</div>-->
                             </div>
                             <div class="border shadow pt-2 pb-3 rounded-3 bg-light" style="position:absolute;width:100%;left:-10%;z-index:9000;display:none" id="options-user">
                                 <div class="row text-dark text-center">
@@ -185,7 +182,11 @@
                                         <small><a class=" text-decoration-none text-secondary link-hover"><i class="bi bi-journal-bookmark-fill" ></i> Pendientes</a></small>
                                     </div>
                                     <div class="col-md-12 mt-1">
-                                        <small><a class="text-decoration-none text-secondary link-hover"><i class="bi bi-arrow-clockwise"></i> Reestablecer Contrase&ntildea</a></small>
+                                        <small>
+                                            <a href="#" onclick="getIdPass({{ $user->idUser }}); return false;" class="text-decoration-none text-secondary link-hover" data-bs-toggle="modal" data-bs-target="#modalNewPass">
+                                                <i class="bi bi-arrow-clockwise"></i> Reestablecer Contrase&ntildea
+                                            </a>
+                                        </small>
                                     </div>
                                     <div class="col-md-12 mt-1">
                                         <small><a href="{{route('login')}}" class="text-danger text-decoration-none link-hover"><i class="bi bi-escape"></i> Cerrar Sesi&oacuten</a></small>
@@ -210,35 +211,59 @@
                   <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('dashboard')}}" class="btn text-light">Dashboard <i class="bi bi-house-fill"></i></a></li>
                   <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('publicaciones',[now()->format('Y-m')])}}" class="btn text-light">Publicaciones <i class="bi bi-megaphone-fill"></i></a></li>
                   <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('calculadora')}}" class="btn text-light">Calculadora <i class="bi bi-calculator"></i></a></li>
-                  <li class="list-group-item bg-sistema-uno menu-border">
-                      <div class="accordion accordion-flush " id="collapseAlmacen">
-                      <div class="accordion-item bg-sistema-uno ">
-                          <a class="btn text-light" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseAlmacen" aria-expanded="false" aria-controls="flush-collapseAlmacen">Almacen <i class="bi bi-boxes"></i></a>
-                        <div id="flush-collapseAlmacen" class="accordion-collapse collapse" aria-labelledby="flush-collapseAlmacen" data-bs-parent="#collapseAlmacen">
-                            <ul class="list-group list-group-flush">
-                              <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('productos',[encrypt(1),encrypt(1)])}}" class="btn text-light fw-light"><em>Productos <i class="bi bi-box-fill"></i></em></a></li>
-                              <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('documentos', [now()->format('Y-m')])}}" class="btn text-light fw-light"><em>Registros <i class="bi bi-folder-fill"></i></em></a></li>
-                            </ul>
-                        </div>
-                      </div>
-                    </li>
+                  <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('productos',[encrypt(1),encrypt(1)])}}" class="btn text-light">Productos <i class="bi bi-box-fill"></i></a></li>
+                  <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('documentos', [now()->format('Y-m')])}}" class="btn text-light">Registros <i class="bi bi-folder-fill"></i></a></li>
                   <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('plataformas')}}" class="btn text-light">Plataformas <i class="bi bi-shop"></i></a></li>
                   <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('publicidad')}}" class="btn text-light">Web <i class="bi bi-globe"></i></a></li>
-                  @if($user->idCargo == 1)
+                  {{-- @if($user->idCargo == 1) --}}
                   <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('usuarios')}}" class="btn text-light">Usuarios <i class="bi bi-person-fill"></i></a></li>
                   <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('config')}}" class="btn text-light">Configuraci&oacuten <i class="bi bi-gear-fill"></i></a></li>
-                  @endif
+                  {{-- @endif --}}
                 </ul>
           </div>
         </div>
     </nav>
     <main class="content">
         @yield('content')
+
+        <!-- Modal -->
+<form action="{{route('updatepass')}}"  method="POST">
+    @csrf
+   <div class="modal fade" id="modalNewPass" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title " id="modalNewPassLabel">Reestablecer contraseña</h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+           <div class="row">
+               <div class="col-12 mb-2">
+                   <input type="hidden" name="id" value="1" class="form-control" id="id-modal-password">
+                   <label class="form-label">Nueva contraseña</label>
+                   <input type="password" name="pass" class="form-control" id="pass-modal-password">
+                   <small id="passwordError" class="text-danger"></small>
+               </div>
+               <div class="col-12">
+                   <label class="form-label">Confirmar contraseña</label>
+                   <input type="password" name="confirmpass" class="form-control" id="confirmpass-modal-password">
+                   <small id="confirmPasswordError" class="text-danger"></small>
+               </div>
+           </div>
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" onclick="cancelarModal()" data-bs-dismiss="modal">Cancelar</button>
+           <button type="submit" id="btn-reestablecer-modal-password" class="btn btn-primary"><i class="bi bi-arrow-clockwise"></i> Reestablecer</button>
+         </div>
+       </div>
+     </div>
+   </div>
+   </form>
     </main>
     <footer>
     </footer>  
     @stack('scripts')
-    <script>
+    {{-- <script>
         function viewUser(){
             let options = document.getElementById('options-user');
             options.style.display = 'block';
@@ -254,7 +279,7 @@
         
         document.getElementById('options-user').addEventListener('mouseover',viewUser);
         document.getElementById('options-user').addEventListener('mouseout',hideUser);
-    </script>
+    </script> --}}
     <script>
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

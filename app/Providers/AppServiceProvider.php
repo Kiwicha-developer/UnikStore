@@ -14,8 +14,6 @@ use App\Services\ProductoServiceInterface;
 use App\Services\ProductoService;
 use App\Services\RegistroProductoServiceInterface;
 use App\Services\RegistroProductoService;
-use App\Services\TipoComprobanteServiceInterface;
-use App\Services\TipoComprobanteService;
 use App\Services\ComprobanteServiceInterface;
 use App\Services\ComprobanteService;
 use App\Services\IngresoProductoServiceInterface;
@@ -39,8 +37,6 @@ use App\Repositories\ProveedorRepositoryInterface;
 use App\Repositories\ProveedorRepository;
 use App\Repositories\AlmacenRepositoryInterface;
 use App\Repositories\AlmacenRepository;
-use App\Repositories\CargoRepository;
-use App\Repositories\CargoRepositoryInterface;
 use App\Repositories\InventarioRepositoryInterface;
 use App\Repositories\InventarioRepository;
 use App\Repositories\ProveedorInventarioRepositoryInterface;
@@ -63,6 +59,8 @@ use App\Repositories\DetalleComprobanteRepositoryInterface;
 use App\Repositories\DetalleComprobanteRepository;
 use App\Repositories\PublicacionRepositoryInterface;
 use App\Repositories\PublicacionRepository;
+use App\Repositories\VistaRepository;
+use App\Repositories\VistaRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -76,7 +74,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UsuarioServiceInterface::class, UsuarioService::class);
         $this->app->bind(ProductoServiceInterface::class, ProductoService::class);
         $this->app->bind(RegistroProductoServiceInterface::class, RegistroProductoService::class);
-        $this->app->bind(TipoComprobanteServiceInterface::class, TipoComprobanteService::class);
         $this->app->bind(ComprobanteServiceInterface::class, ComprobanteService::class);
         $this->app->bind(IngresoProductoServiceInterface::class, IngresoProductoService::class);
         $this->app->bind(PublicacionServiceInterface::class, PublicacionService::class);
@@ -100,7 +97,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ComisionRepositoryInterface::class, ComisionRepository::class);
         $this->app->bind(DetalleComprobanteRepositoryInterface::class, DetalleComprobanteRepository::class);
         $this->app->bind(PublicacionRepositoryInterface::class, PublicacionRepository::class);
-        $this->app->bind(CargoRepositoryInterface::class,CargoRepository::class);
+        $this->app->bind(VistaRepositoryInterface::class, VistaRepository::class);
         
     }
 
