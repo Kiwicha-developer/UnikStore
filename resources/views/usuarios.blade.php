@@ -28,7 +28,7 @@
                 <div class="col-5 col-md-5 pt-1 d-flex justify-content-end text-end">
                     <h5 class="text-end me-2 {{ $us->estadoUsuario == true ? 'text-success' : 'text-danger' }}">{{ $us->estadoUsuario == true ? 'ACTIVO' : 'INACTIVO' }}</h5>
                     <button class="btn btn-info text-light" 
-                    onclick="getUser({{$us->idUser}},'{{ $us->user }}',{{$us->estadoUsuario}},@json($us->Accesos))" 
+                    onclick='getUser({{$us->idUser}},"{{ $us->user }}",{{$us->estadoUsuario ? 1 : 0}},@json($us->Accesos))'
                     data-clicked="false" type="button" data-bs-toggle="modal" data-bs-target="#modalUpdateUser"><i class="bi bi-pencil-fill"></i></button>
                 </div>
                 <div class="col-md-8">
@@ -79,7 +79,7 @@
                     @foreach ($vistas as $vista)
                         <div class="col-6 col-md-4">
                             <div class="form-check form-switch">
-                                <input class="form-check-input access-check" type="checkbox" value="{{$vista->idVista}}" >
+                                <input class="form-check-input access-check" type="checkbox" name="access[]" value="{{$vista->idVista}}" >
                                 <label class="form-check-label" >{{$vista->descripcion}}</label>
                               </div>
                         </div>
@@ -102,10 +102,8 @@
         let inputHidden = document.getElementById('idUpdate');
         let inputUser = document.getElementById('userUpdate');
         let selectEstado = document.getElementById('estadoUpdate');
+        let checksAccess = document.querySelectorAll('.access-check');
         
-        alert(JSON.stringify(vistas));
-        console.log("Vista:", vistas);
-
         inputHidden.value = id;
         inputUser.value = user;
         inputUser.disabled = true;
@@ -115,6 +113,17 @@
         }else{
             selectEstado.value = 'false';
         }
+
+        checksAccess.forEach(function(x){
+            let check = false;
+            vistas.forEach(function(z){
+                if(x.value == z.idVista){
+                    check = true;
+                }
+            });
+
+            x.checked = check;
+        });
     }
 
     function validateAccess(id){

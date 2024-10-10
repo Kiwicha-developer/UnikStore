@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Repositories\AccesosRepositoryInterface;
 use App\Repositories\CargoRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -11,12 +12,15 @@ class UsuarioService implements UsuarioServiceInterface
 {
     protected $userRepository;
     protected $vistaRepository;
+    protected $accesosRepository;
 
     public function __construct(UsuarioRepositoryInterface $userRepository,
-                                VistaRepositoryInterface $vistaRepository)
+                                VistaRepositoryInterface $vistaRepository,
+                                AccesosRepositoryInterface $accesosRepository)
     {
         $this->userRepository = $userRepository;
         $this->vistaRepository = $vistaRepository;
+        $this->accesosRepository = $accesosRepository;
     }
     
     public function getUsersXCargos($arrayCargos){
@@ -46,6 +50,19 @@ class UsuarioService implements UsuarioServiceInterface
 
     public function updatePass($id,$pass){
         $this->userRepository->updatePass($id,$pass);
+    }
+
+    public function updateAccesos($user,$state,$accesos){
+        if($user){
+            $this->accesosRepository->deleteByUser($user);
+            $data = ['estadoUsuario' => $state];
+            $this->userRepository->update($user,$data);
+            if($accesos){
+                foreach($accesos as $access){
+                    $this->accesosRepository->create($access,$user);
+                }
+            }
+        }
     }
 
     public function createUser(array $array){

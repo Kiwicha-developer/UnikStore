@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\AccesosRepository;
+use App\Repositories\AccesosRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 use App\Services\HeaderServiceInterface;
@@ -61,6 +63,8 @@ use App\Repositories\PublicacionRepositoryInterface;
 use App\Repositories\PublicacionRepository;
 use App\Repositories\VistaRepository;
 use App\Repositories\VistaRepositoryInterface;
+use App\Services\PlataformaService;
+use App\Services\PlataformaServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -98,7 +102,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DetalleComprobanteRepositoryInterface::class, DetalleComprobanteRepository::class);
         $this->app->bind(PublicacionRepositoryInterface::class, PublicacionRepository::class);
         $this->app->bind(VistaRepositoryInterface::class, VistaRepository::class);
-        
+        $this->app->bind(AccesosRepositoryInterface::class,AccesosRepository::class);
+        $this->app->bind(PlataformaServiceInterface::class,PlataformaService::class);
     }
 
     /**

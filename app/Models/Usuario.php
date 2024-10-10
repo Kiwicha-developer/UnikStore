@@ -24,9 +24,9 @@ class Usuario extends Model
         'idUser' => 'int',
         'idCargo' => 'int',
         'tokenSesion' => 'int',
-        'registroSesion' => 'bool',
+        'registroSesion' => 'boolean',
         'horaSesion' => 'datetime',
-        'estadoUsuario' => 'bool',
+        'estadoUsuario' => 'boolean',
     ];
     
     public function Publicacion()

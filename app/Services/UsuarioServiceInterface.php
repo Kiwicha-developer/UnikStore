@@ -10,4 +10,5 @@ interface UsuarioServiceInterface
     public function getAllViews();
     public function createUser(array $array);
     public function updatePass($id,$pass);
+    public function updateAccesos($user,$state,$accesos);
 }

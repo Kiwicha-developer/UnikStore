@@ -99,48 +99,30 @@ class UsuarioController extends Controller
     public function updateUser(Request $request){
         //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
-        
+
         //Variables propias del controlador
-        $id = $request->input('id');
-        $user = $request->input('user');
-        $cargo = $request->input('cargo');
-        $stringEstado = $request->input('estado');
+        $user = $request->input('id');
+        $state = $request->input('estado');
+        $accesos = $request->input('access');
         
         $boolEstado = false;
-        if($stringEstado == 'true'){
+        if($state == 'true'){
             $boolEstado = true;
         }
-        
-        if($userModel->idCargo == 1){
-            if(!is_null($id) && !is_null($user) && !is_null($cargo) && !is_null($boolEstado)){
-                try{
-                    DB::beginTransaction();
-                    
-                    $usuario = Usuario::where('idUser','=',$id)->first();
-                    $usuario->user = $user;
-                    $usuario->idCargo = $cargo;
-                    $usuario->estadoUsuario = $boolEstado;
-                    
-                    $usuario->save();
-                    
-                    DB::commit();
-                    
-                    echo("<script>alert('Datos actualizados.')</script>");
-                    return redirect()->back();
-                }catch(Exception $e){
-                    DB::rollBack();
-                    
-                    echo("<script>alert('Datos actualizados.')</script>");
-                    return redirect()->back();
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 6){
+                if(!is_null($user) && !is_null($boolEstado)){
+                    $this->usuarioService->updateAccesos($user,$boolEstado,$accesos);
+                    $this->headerService->sendFlashAlerts('Permisos actualizados','Operacion realizada correctamente','success','btn-success');
+                    return redirect()->back();  
                 }
-                
-            }else{
-                echo("<script>alert('No puedes dejar un campo vacio.')</script>");
-                return redirect()->back();
-            }  
-        }else{
-            echo("<script>alert('No tienes permiso')</script>");
-            return redirect()->route('dashboard',['user' => $userModel]);
+                $this->headerService->sendFlashAlerts('Faltan Datos','Operacion fallida','success','btn-danger');
+                return redirect()->back(); 
+            }
         }
+        
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
 }

@@ -2,28 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\HeaderServiceInterface;
+use App\Services\PlataformaServiceInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Usuario;
-use App\Models\Plataforma;
-use App\Models\CuentasPlataforma;
-use App\Services\HeaderService;
 
 class PlataformaController extends Controller
 {
+    protected $headerService;
+    protected $plataformaService;
+
+    public function __construct(HeaderServiceInterface $headerService,
+                                PlataformaServiceInterface $plataformaService)
+    {
+        $this->headerService = $headerService;
+        $this->plataformaService = $plataformaService;
+    }
     public function index(){
         //variables de la cabecera
-        $serviceHeader = new HeaderService;
-        $userModel = $serviceHeader->getModelUser();
+        $userModel = $this->headerService->getModelUser();
         
         //variables propias del controlador
-        $plataformas = Plataforma::all();
-        $cuentas = CuentasPlataforma::orderBy('idPlataforma')->get();
+        $plataformas = $this->plataformaService->getAllPlataformas();
         
         return view('plataformas',['user' => $userModel,
-                                    'plataformas' => $plataformas,
-                                    'cuentas' => $cuentas,
+                                    'plataformas' => $plataformas
                                     
         ]);
     }

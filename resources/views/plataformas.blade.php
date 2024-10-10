@@ -21,11 +21,14 @@
     <div class="row">
         @foreach($plataformas as $plata)
         <div class="col-md-12 border shadow mb-3 rounded-3">
-            <div class="row border-bottom shadow pb-1">
-                <div class="col-9 col-md-11">
+            <div class="row border-bottom shadow">
+                <div class="col-9 col-md-9">
                     <h3>{{$plata->nombrePlataforma}}</h3>
                 </div>
-                <div class="col-3 col-md-1">
+                <div class="col-md-2">
+                  <button class="btn btn-info"></button>
+                </div>
+                <div class="col-3 col-md-1 ps-0 bg-danger">
                     <img src="{{asset('storage/'.$plata->imagenPlataforma)}}" alt="{{$plata->nombrePlataforma}}" class="rounded-3 w-100 mt-1" >
                 </div>
             </div>
@@ -59,24 +62,6 @@
           </div>
           <div class="modal-body ps-0 pe-0 pt-0 pb-0">
             <ul class="list-group list-group-flush ">
-            @foreach($cuentas as $cuenta)
-                <li class="list-group-item cuentas-list">
-                    <div class="row">
-                        <div class="col-6 col-md-6">
-                            <h6 class="mb-0">{{$cuenta->nombreCuenta}}</h6>
-                            <small class="text-secondary mt-0">{{$cuenta->Plataforma->nombrePlataforma}}</small>
-                        </div>
-                        <div class="col-6 col-md-6 text-end">
-                            <h6 class="{{$cuenta->estadoCuenta == 'ACTIVO' ? 'text-success' : 'text-danger'}}" id="titlecuenta-{{$cuenta->idCuentaPlataforma}}">Prueba</h6>
-                            <div class="form-check form-switch d-flex justify-content-end">
-                              <input class="form-check-input" type="checkbox" id="checkcuenta-{{$cuenta->idCuentaPlataforma}}"  {{$cuenta->estadoCuenta == 'ACTIVO' ? 'checked' : ''}}>
-                              <input type="hidden" name="estado[{{$cuenta->idCuentaPlataforma}}]" value="{{$cuenta->estadoCuenta == 'ACTIVO' ? 'ACTIVO' : 'INACTIVO'}}" id="hiddencuenta-{{$cuenta->idCuentaPlataforma}}">
-                              <input type="hidden" name="id[{{$cuenta->idCuentaPlataforma}}]" value="{{$cuenta->idCuentaPlataforma}}">
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            @endforeach
             </ul>
           </div>
           <div class="modal-footer">
@@ -155,13 +140,7 @@
         
     }
     
-    document.addEventListener('DOMContentLoaded', function() {
-         @foreach ($cuentas as $cuenta)
-            validateCuenta({{ $cuenta->idCuentaPlataforma }});
-            document.getElementById('checkcuenta-{{ $cuenta->idCuentaPlataforma }}').addEventListener('input', function() {
-                validateCuenta({{ $cuenta->idCuentaPlataforma }});
-            });
-        @endforeach
-    });
+    // document.addEventListener('DOMContentLoaded', function() {
+    // });
 </script>
 @endsection
