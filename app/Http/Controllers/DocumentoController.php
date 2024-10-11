@@ -39,60 +39,54 @@ class DocumentoController extends Controller
                     
         $adquisiciones = [['value' => 'NORMAL', 'name' => 'Normal'],
                         ['value' => 'OFERTA', 'name' => 'Oferta']];
-                        
-        return view('documento',['user' => $userModel,
-                                'documento' => $documento,
-                                'ubicaciones' => $ubicaciones,
-                                'estados' => $estados,
-                                'medidas' => $medidas,
-                                'adquisiciones' => $adquisiciones,
-                                'validate' => $bool
-                                ]);
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 8 && $bool){
+                return view('documento',['user' => $userModel,
+                'documento' => $documento,
+                'ubicaciones' => $ubicaciones,
+                'estados' => $estados,
+                'medidas' => $medidas,
+                'adquisiciones' => $adquisiciones,
+                'validate' => $bool
+                ]);
+            }
+
+            if($acceso->idVista == 3 && !$bool){
+                return view('documento',['user' => $userModel,
+                'documento' => $documento,
+                'ubicaciones' => $ubicaciones,
+                'estados' => $estados,
+                'medidas' => $medidas,
+                'adquisiciones' => $adquisiciones,
+                'validate' => $bool
+                ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function list($date){
         //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
         
-        //variables propias del controlador
-        $carbonMonth = Carbon::createFromFormat('Y-m-d', $date . '-01');
-        $documentos = $this->comprobanteService->getByMonth($date);
-        
-        return view('documentos',['user' => $userModel,
-                                    'documentos' => $documentos,
-                                    'fecha' => $carbonMonth
-                                ]);
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 3){
+                $carbonMonth = Carbon::createFromFormat('Y-m-d', $date . '-01');
+                $documentos = $this->comprobanteService->getByMonth($date);
+                
+                return view('documentos',['user' => $userModel,
+                                            'documentos' => $documentos,
+                                            'fecha' => $carbonMonth
+                                        ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
-    public function insertComprobante(Request $request){
-        $userModel = $this->headerService->getModelUser();
-        $proveedor = $request->input('proveedor');
-        $tipoComprobante = $request->input('tipocomprobante');
-        $numeroComprobante = $request->input('numerocomprobante');
-        
-        if($proveedor && $tipoComprobante && $numeroComprobante){
-            $array = array();
-            $array['idProveedor'] = $proveedor;
-            $array['idTipoComprobante'] = $tipoComprobante;
-            $array['idUser'] = $userModel->idUser;
-            $array['numeroComprobante'] = $numeroComprobante;
-            $array['moneda'] = 'SOL';
-            $array['totalCompra'] = 0;
-            $array['fechaRegistro'] = now();
-            
-            $operation = $this->comprobanteService->insertComprobante($array);
-            if($operation){
-                return redirect()->route('documento',[encrypt($operation),true]);
-            }else{
-                $this->headerService->sendFlashAlerts('Operacion Fallida','Ocurrio un error en la transaccion','error','btn-danger');
-                return back()->withInput();
-            }
-        }else{
-            $this->headerService->sendFlashAlerts('Datos Repetidos','Ya se encuentran en la base de datos','info','btn-danger');
-            return back()->withInput();
-        }
-        
-    }
+    
     
     public function searchDocument(Request $request){
         $query = $request->input('query');

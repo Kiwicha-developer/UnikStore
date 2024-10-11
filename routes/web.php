@@ -60,11 +60,12 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/ingresos/{month}', [IngresoController::class, 'index'])->name('ingresos');
     Route::post('/ingreso/insertingreso/{comprobante}', [IngresoController::class, 'insertIngreso'])->name('insertingreso');
     Route::post('/ingreso/deleteingreso', [IngresoController::class, 'deleteIngreso'])->name('deleteingreso');
+    Route::post('/documento/insertcomprobante', [IngresoController::class, 'insertComprobante'])->name('insertcomprobante');
     
     Route::get('/documento/searchdocument', [DocumentoController::class, 'searchDocument'])->name('searchdocument');
     Route::get('/documento/{id}/{bool}', [DocumentoController::class, 'index'])->name('documento');
     Route::get('/documentos/{date}', [DocumentoController::class, 'list'])->name('documentos');
-    Route::post('/documento/insertcomprobante', [DocumentoController::class, 'insertComprobante'])->name('insertcomprobante');
+    
     
     Route::get('/egresos/searchregistro', [EgresoController::class, 'searchRegistro'])->name('searchregistro');
     Route::get('/egresos/searchpublicacion', [EgresoController::class, 'searchPublicacion'])->name('searchpublicacion');

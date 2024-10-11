@@ -164,13 +164,6 @@
                     </div>
                   </div>
                   @php $cont++; @endphp
-              <!--<li class="list-group-item text-center {{$detalle->estado == 'INVALIDO' ? 'text-decoration-line-through text-danger' : ''}} ">-->
-              <!--  <div class="row">-->
-              <!--      <div class="col-md-1 text-end">-->
-              <!--          <button type="button" onclick="sendIdToDelete({{$detalle->idIngreso}})" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-trash-fill"></i></button>-->
-              <!--      </div>-->
-              <!--  </div>-->
-              <!--</li>-->
                 @endforeach
                 </div>
               </li>

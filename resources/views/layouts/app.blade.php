@@ -40,6 +40,11 @@
         background-color:#00b1b9 !important;
         border-color: #00b1b9 !important;
     }
+
+    .btn-primary{
+        background-color:#043e69 !important;
+        border-color: #043e69 !important;
+    }
     
     .btn-danger{
         background-color:#f34646 !important;
@@ -140,7 +145,6 @@
     .modal {
         z-index: 9990 !important; /* Establece el z-index para todos los modales */
     }
-    
 }
     
 </style>

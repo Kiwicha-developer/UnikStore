@@ -49,7 +49,9 @@ class PublicacionRepository implements PublicacionRepositoryInterface
     
     public function validateSkuDuplicity($sku,$idPlataforma){
         return Publicacion::join('CuentasPlataforma','CuentasPlataforma.idCuentaPlataforma','=','Publicacion.idCuentaPlataforma')
-                                    ->where('Publicacion.sku','=',$sku)->where('CuentasPlataforma.idPlataforma','=',$idPlataforma)->first();
+                                    ->where('Publicacion.sku','=',$sku)
+                                    ->where('CuentasPlataforma.idPlataforma','=',$idPlataforma)
+                                    ->where('Publicacion.estado','=',-1)->first();
     }
 
     public function create(array $data)

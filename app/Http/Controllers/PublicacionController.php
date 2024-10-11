@@ -22,73 +22,97 @@ class PublicacionController extends Controller
         //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
         
-        //variables propias del controlador
-        Carbon::setLocale('es');
-        $carbonMonth = Carbon::createFromFormat('Y-m', $date);
-        $publicaciones = $this->publicacionService->getAllPubliByMonth($date);
-        $plataformas = $this->publicacionService->getAllPlatafromasByTipe('TIENDA');
-        
-        return view('publicaciones',['user' => $userModel,
-                                    'publicaciones' => $publicaciones,
-                                    'plataformas' => $plataformas,
-                                    'fecha' => $carbonMonth
-                                ]);
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 1){
+                Carbon::setLocale('es');
+                $carbonMonth = Carbon::createFromFormat('Y-m', $date);
+                $publicaciones = $this->publicacionService->getAllPubliByMonth($date);
+                $plataformas = $this->publicacionService->getAllPlatafromasByTipe('TIENDA');
+                
+                return view('publicaciones',['user' => $userModel,
+                                            'publicaciones' => $publicaciones,
+                                            'plataformas' => $plataformas,
+                                            'fecha' => $carbonMonth
+                                        ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function create($idPlataforma){
         //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
         
-        //variables propias del controlador
-        $plataforma = $this->publicacionService->getOneByPlataformaId(decrypt($idPlataforma));
-        return view('createpublicacion',['user' => $userModel,
-                                        'plataforma' => $plataforma
-                                ]);
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 1){
+                $plataforma = $this->publicacionService->getOneByPlataformaId(decrypt($idPlataforma));
+                return view('createpublicacion',['user' => $userModel,
+                                                'plataforma' => $plataforma
+                                        ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function insertPublicacion(Request $request){
+        $userModel = $this->headerService->getModelUser();
         $titulo = $request->input('titulo');
         $sku = $request->input('sku');
         $fecha = $request->input('fecha');
         $cuenta = $request->input('cuenta');
         $idproducto = $request->input('idproducto');
         $precio = $request->input('precio');
-        
-        if($cuenta && $precio && $titulo && $fecha && $sku){
-            if($idproducto ){
-                $data = ['idCuentaPlataforma' => $cuenta,
-                        'idProducto' => $idproducto,
-                        'sku' => $sku,
-                        'titulo' => $titulo,
-                        'fechaPublicacion' => $fecha,
-                        'precioPublicacion' => $precio];
-                        
-                $message = $this->publicacionService->insertPublicacion($data);
-                echo("<script>alert('".$message['mensaje']."')</script>");
-                return $message['transaccion'] ? 
-                        redirect()->route('publicaciones',[now()->format('Y-m')]) : 
-                        back()->withInput();
-            }else{
-                echo("<script>alert('Producto no encontrado')</script>");
-                return back()->withInput();
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 1){
+                if($cuenta && $precio && $titulo && $fecha && $sku){
+                    if($idproducto ){
+                        $data = ['idCuentaPlataforma' => $cuenta,
+                                'idProducto' => $idproducto,
+                                'sku' => $sku,
+                                'titulo' => $titulo,
+                                'fechaPublicacion' => $fecha,
+                                'precioPublicacion' => $precio];
+                                
+                        $message = $this->publicacionService->insertPublicacion($data);
+                        $this->headerService->sendFlashAlerts('Producto no encontrado','','info','btn-success');
+                        return $message['transaccion'] ? 
+                                redirect()->route('publicaciones',[now()->format('Y-m')]) : 
+                                back()->withInput();
+                    }else{
+                        $this->headerService->sendFlashAlerts('Producto no encontrado','Revisa los datos acerca del producto.','info','btn-warning');
+                        return back()->withInput();
+                    }
+                }else{
+                    $this->headerService->sendFlashAlerts('Datos vacios','Ingresa datos en el formulario.','info','btn-warning');
+                    return back()->withInput();
+                }
             }
-        }else{
-            echo("<script>alert('Datos vacios')</script>");
-            return back()->withInput();
         }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function updateEstado(Request $request){
+        $userModel = $this->headerService->getModelUser();
         $id = $request->input('id');
         $data = $request->input('data');
         
-        if($id && $data){
-            $message = $this->publicacionService->updatePublicacion($id,$data);
-            echo("<script>alert('".$message."')</script>");
-            return back();
-        }else{
-            echo("<script>alert('Ocurrio un error')</script>");
-            return back();
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 1){
+                if($id && $data){
+                    $message = $this->publicacionService->updatePublicacion($id,$data);
+                    $this->headerService->sendFlashAlerts($message,'','warning','btn-success');
+                    return back();
+                }else{
+                    $this->headerService->sendFlashAlerts('Ocurrio un error','Faltan datos','error','btn-danger');
+                    return back();
+                }
+            }
         }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
 }

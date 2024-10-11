@@ -7,13 +7,10 @@
     <br>
     <br>
     <div class="row">
-        <div class="col-6 col-md-7 mb-2">
+        <div class="col-6 col-md-9 mb-2">
             <h2><i class="bi bi-shop"></i> Plataformas</h2>
         </div>
-        <div class="col-6 col-md-2 mb-2 text-end">
-            <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#cuentasModal"><i class="bi bi-people-fill"></i> Cuentas</button>
-        </div>
-        <div class="col-12 col-md-3 mb-2 text-end">
+        <div class="col-6 col-md-3 mb-2 text-end">
             <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#plataformaModal"><i class="bi bi-clipboard-plus-fill"></i> Nueva Plataforma</button>
         </div>
     </div>
@@ -21,15 +18,17 @@
     <div class="row">
         @foreach($plataformas as $plata)
         <div class="col-md-12 border shadow mb-3 rounded-3">
-            <div class="row border-bottom shadow">
-                <div class="col-9 col-md-9">
+            <div class="row border-bottom shadow pb-1">
+              <div class="col-3 col-md-1 pe-0">
+                <img src="{{asset('storage/'.$plata->imagenPlataforma)}}" alt="{{$plata->nombrePlataforma}}" class="rounded-3 w-100 mt-1" >
+            </div>
+                <div class="col-6 col-md-9">
                     <h3>{{$plata->nombrePlataforma}}</h3>
                 </div>
-                <div class="col-md-2">
-                  <button class="btn btn-info"></button>
-                </div>
-                <div class="col-3 col-md-1 ps-0 bg-danger">
-                    <img src="{{asset('storage/'.$plata->imagenPlataforma)}}" alt="{{$plata->nombrePlataforma}}" class="rounded-3 w-100 mt-1" >
+                <div class="col-3 col-md-2 text-end">
+                  <button class="btn btn-warning mt-1" type="button" data-bs-toggle="modal" data-bs-target="#cuentasModal" onclick='sendDataModalAcount("{{$plata->nombrePlataforma}}",@json($plata->CuentasPlataforma))'>
+                    <i class="bi bi-people-fill"></i>
+                  </button>
                 </div>
             </div>
             <div class="row">
@@ -57,11 +56,11 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header ">
-            <h5 class="modal-title w-100 text-center" id="cuentasModalLabel">CUENTAS</h5>
+            <h5 class="modal-title w-100 text-start" id="cuentasModalLabel">Cuentas <span id="span-modal-cuentas"></span></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body ps-0 pe-0 pt-0 pb-0">
-            <ul class="list-group list-group-flush ">
+            <ul class="list-group list-group-flush" id="ul-modal-cuentas">
             </ul>
           </div>
           <div class="modal-footer">
@@ -113,22 +112,70 @@
     </form>
 </div>
 <script>
-    function validateCuenta(id) {
-        let tituloModalCuenta = document.getElementById('titlecuenta-' + id);
-        let checkBoxModalCuenta = document.getElementById('checkcuenta-' + id);
-        let hiddenModalCuenta = document.getElementById('hiddencuenta-' + id);
-        
-        if (checkBoxModalCuenta.checked) {
-            tituloModalCuenta.textContent = 'ACTIVO';
-            hiddenModalCuenta.value = 'ACTIVO';
-            tituloModalCuenta.classList.add('text-success');
-            tituloModalCuenta.classList.remove('text-danger');
-        } else {
-            tituloModalCuenta.textContent = 'INACTIVO';
-            hiddenModalCuenta.value = 'INACTIVO';
-            tituloModalCuenta.classList.remove('text-success');
-            tituloModalCuenta.classList.add('text-danger');
-        }
+    function sendDataModalAcount(titulo,cuentas){
+      let ulList = document.getElementById('ul-modal-cuentas');
+      let spanTitle = document.getElementById('span-modal-cuentas');
+
+      ulList.textContent = '';
+      spanTitle.textContent = '';
+
+      spanTitle.textContent = titulo;
+      
+      cuentas.forEach(function(c){
+        let liCuenta = document.createElement('li');
+        liCuenta.classList.add('list-group-item');
+
+        let divRow = document.createElement('div');
+        divRow.classList.add('row');
+        let hiddenAcount = document.createElement('input');
+        hiddenAcount.type = 'hidden';
+        hiddenAcount.value = c.estadoCuenta;
+        hiddenAcount.name = 'cuentas['+ c.idCuentaPlataforma +']';
+        hiddenAcount.id = 'hidden-modal-cuentas' + c.idCuentaPlataforma;
+        divRow.appendChild(hiddenAcount);
+
+        let divColLabel = document.createElement('div');
+        divColLabel.classList.add('col-6');
+        let labelAcount = document.createElement('h6');
+        labelAcount.textContent = c.nombreCuenta;
+        let smallAcount = document.createElement('small');
+        smallAcount.classList.add(c.estadoCuenta == 'ACTIVO' ? 'text-success' : 'text-danger');
+        smallAcount.textContent = c.estadoCuenta;
+        smallAcount.id = 'small-modal-cuentas' + c.idCuentaPlataforma;
+        divColLabel.appendChild(labelAcount);
+        divColLabel.appendChild(smallAcount);
+
+        let divColSwitch = document.createElement('div');
+        divColSwitch.classList.add('col-6','text-end','form-check','form-switch','d-flex','justify-content-end');
+        let switchAcount = document.createElement('input');
+        switchAcount.type = 'checkbox';
+        switchAcount.classList.add('form-check-input');
+        switchAcount.checked = c.estadoCuenta == 'ACTIVO' ? true : false;
+        switchAcount.addEventListener('change',function(event){changeState(c.idCuentaPlataforma,event);});
+        divColSwitch.appendChild(switchAcount);
+
+        divRow.appendChild(divColLabel);
+        divRow.appendChild(divColSwitch);
+        liCuenta.appendChild(divRow);
+        ulList.appendChild(liCuenta);
+      });
+    }
+
+    function changeState(id,event){
+      let smallState = document.getElementById('small-modal-cuentas' + id);
+      let hiddenState = document.getElementById('hidden-modal-cuentas' + id);
+
+      if (event.target.checked) {
+        hiddenState.value = 'ACTIVO';
+        smallState.textContent = 'ACTIVO';
+        smallState.classList.remove('text-danger');
+        smallState.classList.add('text-success');
+      }else{
+        hiddenState.value = 'INACTIVO';
+        smallState.textContent = 'INACTIVO';
+        smallState.classList.remove('text-success');
+        smallState.classList.add('text-danger');
+      }
     }
     
     function nuevaCuenta(titulo,id){

@@ -9,6 +9,7 @@ interface CuentasPlataformaRepositoryInterface
     public function searchOne($column,$data);
     public function searchList($column,$data);
     public function getByRelation($table);  
+    public function getLast();
     public function create(array $data);
     public function update($id, array $data);
 }

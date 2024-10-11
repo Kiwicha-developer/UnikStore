@@ -90,9 +90,6 @@
             </div>
         </div>
     </div>
-    
-    
-    
     @endif
 </div>
 <script>
@@ -120,7 +117,7 @@ const baseUrl = "{{ route('documento', ['id' => 'dummyId', 'bool' => 'dummyBool'
 document.getElementById('search').addEventListener('input', function() {
     let query = this.value;
     let hiddenBody = document.getElementById('hidden-body');
-    if (query.length > 2) { // Comenzar la búsqueda después de 3 caracteres
+    if (query.length > 2) { // Comenzar la b锟斤拷squeda despu锟斤拷s de 3 caracteres
         let xhr = new XMLHttpRequest();
         xhr.open('GET', `/documento/searchdocument?query=${query}`, true);
         xhr.onreadystatechange = function() {
@@ -157,11 +154,11 @@ document.getElementById('search').addEventListener('input', function() {
                         divColDate.appendChild(smallDate);
                         
                         li.addEventListener('click', function() {
-                            document.getElementById('search').value = item.numeroComprobante; // Mostrar solo el número de documento
-                            suggestions.innerHTML = ''; // Limpiar sugerencias después de seleccionar una
+                            document.getElementById('search').value = item.numeroComprobante; // Mostrar solo el n锟斤拷mero de documento
+                            suggestions.innerHTML = ''; // Limpiar sugerencias despu锟斤拷s de seleccionar una
                             let encryptedId = item.encryptId; // Encriptar el ID del documento
-                            let boolValue = 0; // Valor del parámetro booleano (ajusta si es necesario)
-                            let url = baseUrl.replace('dummyId', encryptedId).replace('dummyBool', boolValue); // Reemplazar los marcadores de posición
+                            let boolValue = 0; // Valor del par锟斤拷metro booleano (ajusta si es necesario)
+                            let url = baseUrl.replace('dummyId', encryptedId).replace('dummyBool', boolValue); // Reemplazar los marcadores de posici锟斤拷n
                         
                             window.location.href = url;
                         });
@@ -190,7 +187,7 @@ function hideSuggestions(event) {
     }
 }
 
-// Añadir manejador de eventos para el clic en el documento
+// A锟�0锟�9adir manejador de eventos para el clic en el documento
 document.addEventListener('click', hideSuggestions);
 </script>
 @endsection

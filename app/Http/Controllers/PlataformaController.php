@@ -18,71 +18,54 @@ class PlataformaController extends Controller
         $this->plataformaService = $plataformaService;
     }
     public function index(){
-        //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
         
-        //variables propias del controlador
-        $plataformas = $this->plataformaService->getAllPlataformas();
-        
-        return view('plataformas',['user' => $userModel,
-                                    'plataformas' => $plataformas
-                                    
-        ]);
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 4){
+                $plataformas = $this->plataformaService->getAllPlataformas();
+                
+                return view('plataformas',['user' => $userModel,
+                                            'plataformas' => $plataformas
+                ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function updateCuentas(Request $request){
-        $estados = $request->input('estado', []);
-        
-        foreach($estados as $id => $estado){
-            try{
-                DB::beginTransaction();
-                
-                $cuenta = CuentasPlataforma::where('idCuentaPlataforma','=',$id)->first();
-                $cuenta->estadoCuenta = $estado;
-                
-                $cuenta->save();
-                
-                DB::commit();
-            }catch(Exception $e){
-                DB::rollBack();
+        $userModel = $this->headerService->getModelUser();
+        $acounts = $request->input('cuentas', []);
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 4){
+                $this->plataformaService->updateCuentas($acounts);
+                $this->headerService->sendFlashAlerts('Cuentas actualizadas','Operacion realizada correctamente','success','btn-success');
+                return redirect()->back();
             }
-            
         }
-        
-        echo("<script>alert('Cuentas actualizadas')</script>");
-        return redirect()->back();
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function createCuenta(Request $request){
+        $userModel = $this->headerService->getModelUser();
         $nombrecuenta = $request->input('cuenta');
         $idplataforma = $request->input('plataforma');
-        
-        if($nombrecuenta != ''){
-            try{
-                DB::beginTransaction();
-                
-                $cuenta = new CuentasPlataforma();
-                $cuenta->idCuentaPlataforma = $this->getLastCuenta();
-                $cuenta->nombreCuenta = $nombrecuenta;
-                $cuenta->idPlataforma = $idplataforma;
-                $cuenta->estadoCuenta = 'ACTIVO';
-                
-                $cuenta->save();
-                
-                DB::commit();
-            }catch(Exception $e){
-                DB::rollBack();
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 4){
+                if($nombrecuenta != ''){
+                    $this->plataformaService->createCuenta($idplataforma,$nombrecuenta);
+                    $this->headerService->sendFlashAlerts('Cuenta Registrada','Operacion realizada correctamente.','success','btn-success');
+                    return redirect()->back();
+                }else{
+                    $this->headerService->sendFlashAlerts('Faltan datos','Ingresa datos en el formulario.','info','btn-warning');
+                    return redirect()->back();
+                }
             }
-            
         }
-        
-        echo("<script>alert('Cuenta creada')</script>");
-        return redirect()->back();
-    }
-    
-    private function getLastCuenta(){
-        $lastId = CuentasPlataforma::select('idCuentaPlataforma')->orderBy('idCuentaPlataforma','desc')->first();
-        $id = $lastId ? $lastId->idCuentaPlataforma : 0;
-        return $id + 1;
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
 }

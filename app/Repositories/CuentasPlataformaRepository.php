@@ -46,6 +46,12 @@ class CuentasPlataformaRepository implements CuentasPlataformaRepositoryInterfac
     public function getByRelation($table){
         return CuentasPlataforma::whereHas($table)->get();
     }
+
+    public function getLast()
+    {
+        $product = CuentasPlataforma::select('idCuentaPlataforma')->orderBy('idCuentaPlataforma','desc')->first();
+        return $product;
+    }
     
     public function create(array $data)
     {
