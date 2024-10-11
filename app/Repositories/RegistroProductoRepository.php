@@ -44,6 +44,13 @@ class RegistroProductoRepository implements RegistroProductoRepositoryInterface
                                     ->orderBy('IngresoProducto.fechaIngreso','desc')
                                     ->get();
     }
+
+    public function searchByEgreso($serial){
+        return RegistroProducto::where('estado','!=','ENTREGADO')
+                                ->where('estado','!=','INVALIDO')
+                                ->where('numeroSerie', 'LIKE', "%{$serial}%")
+                                ->get();
+    }
     
     public function create(array $data)
     {

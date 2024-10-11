@@ -10,7 +10,7 @@
     <br>
     <div class="row">
         <div class="col-md-8">
-            <h2><a href="{{route('movimientos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-minus-fill"></i> Egresos<span class="text-capitalize text-secondary fw-light"><em>({{$fecha->translatedFormat('F')}})</em></span></h2>
+            <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-minus-fill"></i> Egresos<span class="text-capitalize text-secondary fw-light"><em>({{$fecha->translatedFormat('F')}})</em></span></h2>
         </div>
         <div class="col-md-2 text-end">
             <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}" >

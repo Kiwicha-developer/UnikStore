@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\EgresoProductoServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Hash;
 use App\Services\HeaderServiceInterface;
 
 class EgresoController extends Controller
 {
     protected $headerService;
+    protected $egresoService;
     
-    public function __construct(HeaderServiceInterface $headerService)
+    public function __construct(HeaderServiceInterface $headerService,
+                                EgresoProductoServiceInterface $egresoService)
     {
         $this->headerService = $headerService;
+        $this->egresoService = $egresoService;
     }
     
     public function index($month){
@@ -24,8 +26,7 @@ class EgresoController extends Controller
         //variables propias del controlador
         Carbon::setLocale('es');
         $carbonMonth = Carbon::createFromFormat('Y-m', $month);
-        $egresos = EgresoProducto::whereMonth('fechaSalida', $carbonMonth->month)
-                                    ->get();
+        $egresos = $this->egresoService->getEgresosByMonth($month);
         
         return view('egresos',['user' => $userModel,
                                 'egresos' => $egresos,
@@ -97,18 +98,7 @@ class EgresoController extends Controller
     
     public function searchRegistro(Request $request){
         $query = $request->input('query');
-    
-        $results = RegistroProducto::where('estado','!=','ENTREGADO')->where('estado','!=','INVALIDO')->where('numeroSerie', 'LIKE', "%{$query}%")
-                    ->take(5) // Limitar a 5 resultados, por ejemplo
-                    ->get()
-                    ->map(function($details) {
-                         return [
-                            'nombreProducto' => $details->Producto->nombreProducto,
-                            'almacen' => $details->Almacen->descripcion,
-                            'idRegistroProducto' => $details->idRegistroProducto,
-                            'numeroSerie' => $details->numeroSerie
-                        ];
-                    });
+        $results = $this->egresoService->searchAjaxRegistro($query);
     
         return response()->json($results);
     }

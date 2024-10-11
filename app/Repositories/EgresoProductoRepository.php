@@ -1,0 +1,69 @@
+<?php
+namespace App\Repositories;
+
+use Illuminate\Support\Facades\DB;
+use App\Models\EgresoProducto;
+
+class EgresoProductoRepository implements EgresoProductoRepositoryInterface
+{
+    protected $modelColumns;
+
+    public function __construct()
+    {
+        // Define las columnas válidas
+        $this->modelColumns = (new EgresoProducto())->getFillable();
+    }
+
+    public function getOne($column, $data)
+    {
+        $this->validateColumns($column);
+        return EgresoProducto::where($column,'=', $data)->first();
+    }
+
+    public function getAllByColumn($column, $data)
+    {
+        $this->validateColumns($column);
+        return EgresoProducto::where($column,'=', $data)->get();
+    }
+    
+    public function getAllByMonth($month){
+        return EgresoProducto::whereMonth('fechaEgreso', $month)
+                                    ->orderBy('fechaEgreso','desc')
+                                    ->get();
+    }
+
+    public function searchOne($column, $data)
+    {
+        $this->validateColumns($column);
+        return EgresoProducto::where($column, 'LIKE', '%' . $data . '%')->first();
+    }
+
+    public function searchList($column, $data)
+    {
+        $this->validateColumns($column);
+        return EgresoProducto::where($column, 'LIKE', '%' . $data . '%')->get();
+    }
+    
+    public function create(array $data)
+    {
+        return EgresoProducto::create($data);
+    }
+    
+    
+    public function update($id, array $data)
+    {
+        $ingreso = EgresoProducto::findOrFail($id);
+        $ingreso->update($data);
+        return $ingreso;
+    }
+    
+    public function getLast(){
+        return EgresoProducto::orderBy('idEgreso', 'desc')->first();
+    }
+    
+    private function validateColumns($column){
+        if (!in_array($column, $this->modelColumns)) {
+            throw new \InvalidArgumentException("La columna '$column' no es válida.");
+        }
+    }
+}

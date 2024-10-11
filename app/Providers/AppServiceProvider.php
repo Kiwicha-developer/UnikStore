@@ -59,10 +59,14 @@ use App\Repositories\ComisionRepositoryInterface;
 use App\Repositories\ComisionRepository;
 use App\Repositories\DetalleComprobanteRepositoryInterface;
 use App\Repositories\DetalleComprobanteRepository;
+use App\Repositories\EgresoProductoRepository;
+use App\Repositories\EgresoProductoRepositoryInterface;
 use App\Repositories\PublicacionRepositoryInterface;
 use App\Repositories\PublicacionRepository;
 use App\Repositories\VistaRepository;
 use App\Repositories\VistaRepositoryInterface;
+use App\Services\EgresoProductoService;
+use App\Services\EgresoProductoServiceInterface;
 use App\Services\PlataformaService;
 use App\Services\PlataformaServiceInterface;
 
@@ -81,6 +85,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ComprobanteServiceInterface::class, ComprobanteService::class);
         $this->app->bind(IngresoProductoServiceInterface::class, IngresoProductoService::class);
         $this->app->bind(PublicacionServiceInterface::class, PublicacionService::class);
+        $this->app->bind(PlataformaServiceInterface::class,PlataformaService::class);
+        $this->app->bind(EgresoProductoServiceInterface::class,EgresoProductoService::class);
         
         $this->app->bind(CalculadoraRepositoryInterface::class, CalculadoraRepository::class);
         $this->app->bind(UsuarioRepositoryInterface::class, UsuarioRepository::class);
@@ -103,7 +109,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PublicacionRepositoryInterface::class, PublicacionRepository::class);
         $this->app->bind(VistaRepositoryInterface::class, VistaRepository::class);
         $this->app->bind(AccesosRepositoryInterface::class,AccesosRepository::class);
-        $this->app->bind(PlataformaServiceInterface::class,PlataformaService::class);
+        $this->app->bind(EgresoProductoRepositoryInterface::class,EgresoProductoRepository::class);
     }
 
     /**
