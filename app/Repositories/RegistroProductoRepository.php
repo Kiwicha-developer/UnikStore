@@ -51,6 +51,13 @@ class RegistroProductoRepository implements RegistroProductoRepositoryInterface
                                 ->where('numeroSerie', 'LIKE', "%{$serial}%")
                                 ->get();
     }
+
+    public function getByEgreso($serial){
+        return RegistroProducto::where('estado','!=','ENTREGADO')
+                                ->where('estado','!=','INVALIDO')
+                                ->where('numeroSerie','=',$serial)
+                                ->first();
+    }
     
     public function create(array $data)
     {

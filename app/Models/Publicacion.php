@@ -55,6 +55,11 @@ class Publicacion extends Model
         return $this->belongsTo(Producto::class,'idProducto','idProducto');
     }
 
+    public function EgresoProducto()
+    {
+        return $this->hasMany(EgresoProducto::class,'idPublicacion','idPublicacion');
+    }
+
     /**
      * Obtener las relaciones del modelo.
      */

@@ -63,13 +63,13 @@
                         <small>{{$egreso->RegistroProducto->numeroSerie}}</small>
                     </div>
                     <div class="col-md-2">
-                        <small><a href="{{route('producto',[encrypt($egreso->RegistroProducto->Producto->idProducto)])}}">{{$egreso->RegistroProducto->Producto->codigoProducto}}</a></small>
+                        <small><a href="{{route('producto',[encrypt($egreso->RegistroProducto->DetalleComprobante->Producto->idProducto)])}}">{{$egreso->RegistroProducto->DetalleComprobante->Producto->codigoProducto}}</a></small>
                     </div>
                     <div class="col-md-1">
-                        <small>{{$egreso->fechaPedido->format('d/m/y')}}</small>
+                        <small>{{$egreso->fechaCompra->format('d/m/y')}}</small>
                     </div>
                     <div class="col-md-1">
-                        <small>{{$egreso->fechaSalida->format('d/m/y')}}</small>
+                        <small>{{$egreso->fechaDespacho->format('d/m/y')}}</small>
                     </div>
                 </div>
             </li>
@@ -209,7 +209,6 @@
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let data = JSON.parse(xhr.responseText);
-                    //alert(JSON.stringify(data));
                     let suggestions = document.getElementById('suggestions-serial-number');
                     suggestions.innerHTML = '';
     
@@ -275,7 +274,7 @@
         if (query.length > 2) { // Comenzar la búsqueda después de 3 caracteres
             document.getElementById('hidden-publicacion-sku').value = "";
             let xhr = new XMLHttpRequest();
-            xhr.open('GET', `/egresos/searchpublicacion?query=${query}`, true);
+            xhr.open('GET', `/searchpublicacion?query=${query}`, true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let data = JSON.parse(xhr.responseText);

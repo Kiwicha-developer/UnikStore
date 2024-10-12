@@ -46,7 +46,11 @@ class PublicacionRepository implements PublicacionRepositoryInterface
     public function getByMonth($month){
         return Publicacion::whereMonth('fechaPublicacion', $month)->get();
     }
-    
+
+    public function searchByEgreso($data){
+        return Publicacion::where('estado','=',1)->where('sku', 'LIKE', "%{$data}%")->get();
+    }
+
     public function validateSkuDuplicity($sku,$idPlataforma){
         return Publicacion::join('CuentasPlataforma','CuentasPlataforma.idCuentaPlataforma','=','Publicacion.idCuentaPlataforma')
                                     ->where('Publicacion.sku','=',$sku)

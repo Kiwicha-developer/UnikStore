@@ -9,4 +9,5 @@ interface PublicacionServiceInterface
     public function updatePublicacion($id,$type);
     public function getAllPlatafromasByTipe($type);
     public function getOneByPlataformaId($id);
+    public function searchAjaxPubli($data);
 }

@@ -60,7 +60,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/ingresos/{month}', [IngresoController::class, 'index'])->name('ingresos');
     Route::post('/ingreso/insertingreso/{comprobante}', [IngresoController::class, 'insertIngreso'])->name('insertingreso');
     Route::post('/ingreso/deleteingreso', [IngresoController::class, 'deleteIngreso'])->name('deleteingreso');
-    Route::post('/documento/insertcomprobante', [IngresoController::class, 'insertComprobante'])->name('insertcomprobante');
+    Route::post('/ingreso/insertcomprobante', [IngresoController::class, 'insertComprobante'])->name('insertcomprobante');
     
     Route::get('/documento/searchdocument', [DocumentoController::class, 'searchDocument'])->name('searchdocument');
     Route::get('/documento/{id}/{bool}', [DocumentoController::class, 'index'])->name('documento');
@@ -68,7 +68,6 @@ Route::middleware(['validate.session'])->group(function () {
     
     
     Route::get('/egresos/searchregistro', [EgresoController::class, 'searchRegistro'])->name('searchregistro');
-    Route::get('/egresos/searchpublicacion', [EgresoController::class, 'searchPublicacion'])->name('searchpublicacion');
     Route::get('/egresos/{month}', [EgresoController::class, 'index'])->name('egresos');
     Route::post('/egresos/insertegreso', [EgresoController::class, 'insertEgreso'])->name('insertegreso');
     
@@ -84,6 +83,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/crear-publicacion/{idPlataforma}', [PublicacionController::class, 'create'])->name('createpublicacion');
     Route::post('/insert-publicacion', [PublicacionController::class, 'insertPublicacion'])->name('insertpublicacion');
     Route::post('/update-estado-publicacion', [PublicacionController::class, 'updateEstado'])->name('update-estado-publicacion');
+    Route::get('/searchpublicacion', [PublicacionController::class, 'searchPublicacion'])->name('searchpublicacion');
     
     Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('config');
     Route::post('/configuracion/updatecomision', [ConfiguracionController::class, 'updateComision'])->name('updatecomision');

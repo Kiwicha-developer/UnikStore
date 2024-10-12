@@ -41,9 +41,4 @@ class Plataforma extends Model
         return $this->hasMany(ComisionPlataforma::class,'idPlataforma','idPlataforma');
     }
     
-    public function EgresoProducto()
-    {
-        return $this->hasMany(EgresoProducto::class,'idPlataforma','idPlataforma');
-    }
-    
 }

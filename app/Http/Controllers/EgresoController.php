@@ -6,6 +6,7 @@ use App\Services\EgresoProductoServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\HeaderServiceInterface;
+use Exception;
 
 class EgresoController extends Controller
 {
@@ -34,6 +35,7 @@ class EgresoController extends Controller
     }
     
     public function insertEgreso(Request $request){
+        $userModel = $this->headerService->getModelUser();
         $numeroserie = $request->input('serialnumber');
         $idregistro = $request->input('idregistro');
         $sku = $request->input('sku');
@@ -44,56 +46,41 @@ class EgresoController extends Controller
         
         $validateRegistro = '';
         if(is_null($idregistro)){
-            $validateRegistro = RegistroProducto::select('idRegistroProducto')->where('estado','!=','ENTREGADO')->where('numeroSerie','=',$numeroserie)->value('idRegistroProducto');
+            $validateRegistro = $this->egresoService->getRegistro($numeroserie)->idRegistro;
         }else{
             $validateRegistro = $idregistro;
         }
-        
+
         $validatePublicacion = '';
         if(is_null($idpublicacion)){
-            $validatePublicacion = Publicacion::select('idPublicacion')->where('sku','=',$sku)->value('idPublicacion');
+            $validatePublicacion = $this->egresoService->getPublicacion($sku)->idPublicacion;
         }else{
             $validatePublicacion = $idpublicacion;
         }
         
-        try{
-            if(!is_null($validateRegistro) && !is_null($validatePublicacion) && !is_null($fechapedido) && !is_null($fechadespacho)){
-                $serviceHeader = new HeaderService;
-                $userModel = $serviceHeader->getModelUser();
-        
-                $newIdEgreso = $this->getNewIdEgreso();
-                $egreso = new EgresoProducto();
-                $egreso->idEgreso = $newIdEgreso;
-                $egreso->idRegistroProducto = $validateRegistro;
-                if($validatePublicacion == 'NULO'){
-                    $egreso->idPublicacion = null;
-                }else{
-                    $egreso->idPublicacion = $validatePublicacion;
-                }
-                $egreso->idUser = $userModel->idUser;
-                $egreso->numeroPedido = $numeroorden;
-                $egreso->fechaPedido = $fechapedido;
-                $egreso->fechaSalida = $fechadespacho;
+        if(!is_null($validateRegistro) && !is_null($validatePublicacion) && !is_null($fechapedido) && !is_null($fechadespacho)){
+            // try{
+                $arrayEgreso = ['idRegistro' => $validateRegistro,
+                                'idPublicacion' => $validatePublicacion == 'NULO' ? null : $validatePublicacion,
+                                'numeroOrden' => $validatePublicacion == 'NULO' ? null : $numeroorden,
+                                'fechaCompra' => $fechapedido,
+                                'fechaDespacho' => $fechadespacho];
                 
-                $egreso->save();
+                $this->egresoService->createEgreso($arrayEgreso);
                 
-                $registro = RegistroProducto::where('idRegistroProducto','=',$validateRegistro)->first();
-                $registro->estado = 'ENTREGADO';
-                
-                $registro->save();
-                
-                echo("<script>alert('Egreso registrado')</script>");
+                $this->headerService->sendFlashAlerts('Egreso registrado','Operacion exitosa','success','btn-success');
                 return back();
+            // }catch(Exception $e){
+            //     $this->headerService->sendFlashAlerts('Error al registrar','Hubo un error en la operacion','error','btn-danger');
+            //     return back();
+            // }
                 
-            }else{
-                echo("<script>alert('Datos incompletos')</script>");
-                return back();
-            }
-            
-        }catch(Exception $e){
-            echo("<script>alert('Hubo un error en la operacion')</script>");
+        }else{
+            $this->headerService->sendFlashAlerts('Datos incompletos','Verifica que los datos ingresados existan','info','btn-warning');
             return back();
         }
+            
+        
     }
     
     public function searchRegistro(Request $request){
@@ -103,27 +90,4 @@ class EgresoController extends Controller
         return response()->json($results);
     }
     
-    public function searchPublicacion(Request $request){
-        $query = $request->input('query');
-    
-        $results = Publicacion::where('estado','=',1)->where('sku', 'LIKE', "%{$query}%")
-                    ->take(5) // Limitar a 5 resultados, por ejemplo
-                    ->get()
-                    ->map(function($details) {
-                         return [
-                            'sku' => $details->sku,
-                            'fechaPublicacion' => $details->fechaPublicacion->format('Y-m-d'),
-                            'idPublicacion' => $details->idPublicacion,
-                            'titulo' => $details->titulo
-                        ];
-                    });
-    
-        return response()->json($results);
-    }
-    
-    private function getNewIdEgreso(){
-        $lastEgreso = EgresoProducto::orderBy('idEgreso', 'desc')->first();
-        $id = $lastEgreso ? $lastEgreso->idEgreso : 0;
-        return $id + 1;
-    }
 }

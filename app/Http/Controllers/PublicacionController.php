@@ -115,4 +115,11 @@ class PublicacionController extends Controller
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
         return redirect()->route('dashboard',['user' => $userModel]);
     }
+
+    public function searchPublicacion(Request $request){
+        $query = $request->input('query');
+        $results = $this->publicacionService->searchAjaxPubli($query);
+    
+        return response()->json($results);
+    }
 }

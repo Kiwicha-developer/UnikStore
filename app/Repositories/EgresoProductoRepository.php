@@ -27,8 +27,8 @@ class EgresoProductoRepository implements EgresoProductoRepositoryInterface
     }
     
     public function getAllByMonth($month){
-        return EgresoProducto::whereMonth('fechaEgreso', $month)
-                                    ->orderBy('fechaEgreso','desc')
+        return EgresoProducto::whereMonth('fechaDespacho', $month)
+                                    ->orderBy('fechaDespacho','desc')
                                     ->get();
     }
 

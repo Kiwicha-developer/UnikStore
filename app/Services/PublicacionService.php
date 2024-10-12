@@ -24,6 +24,19 @@ class PublicacionService implements PublicacionServiceInterface
         $this->cuentasPlataformaRepository = $cuentasPlataformaRepository;
     }
 
+    public function searchAjaxPubli($data){
+        $publicaciones = $this->publicacionRepository->searchByEgreso($data)
+                        ->take(5)->map(function($details) {
+                                             return [
+                                                'sku' => $details->sku,
+                                                'fechaPublicacion' => $details->fechaPublicacion->format('Y-m-d'),
+                                                'idPublicacion' => $details->idPublicacion,
+                                                'titulo' => $details->titulo
+                                            ];
+                                        });
+        return $publicaciones;
+    }
+
     public function getOneByPlataformaId($id){
         return $this->plataformaRepository->getOne('idPlataforma',$id);
     }

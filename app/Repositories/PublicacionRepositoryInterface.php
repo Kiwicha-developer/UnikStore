@@ -13,4 +13,5 @@ interface PublicacionRepositoryInterface
     public function create(array $data);
     public function update($id, array $data);
     public function getLast();
+    public function searchByEgreso($serial);
 }

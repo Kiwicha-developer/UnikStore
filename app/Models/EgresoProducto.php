@@ -11,9 +11,15 @@ class EgresoProducto extends Model
     
     protected $primaryKey = 'idEgreso';
 
-    protected $guarded = ['idEgreso','idRegistro','idUser','idPlataforma'];
+    protected $guarded = ['idEgreso'];
     
-    protected $fillable = ['fechaEgreso','numeroOrden'
+    protected $fillable = ['idEgreso',
+                            'idRegistro',
+                            'idPublicacion',
+                            'idUser',
+                            'numeroOrden',
+                            'fechaCompra',
+                            'fechaDespacho'
                             ];
 
     
@@ -26,8 +32,10 @@ class EgresoProducto extends Model
         'idEgreso' => 'int',
         'idRegistro' => 'int',
         'idUser' => 'int',
-        'idPlataforma' => 'int',
-        'fechaEgreso' => 'date'
+        'idPublicacion' => 'int',
+        'fechaCompra' => 'datetime',
+        'fechaDespacho' => 'datetime'
+        
     ];
     
      public function RegistroProducto()
@@ -40,9 +48,9 @@ class EgresoProducto extends Model
         return $this->belongsTo(Usuario::class,'idUser','idUser');
     }
     
-     public function Plataforma()
+     public function Publicacion()
     {
-        return $this->belongsTo(Plataforma::class,'idPlataforma','idPlataforma');
+        return $this->belongsTo(Publicacion::class,'idPublicacion','idPublicacion');
     }
 
     /**

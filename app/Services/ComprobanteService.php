@@ -123,7 +123,13 @@ class ComprobanteService implements ComprobanteServiceInterface
             $detalle = $this->detalleComprobanteRepository->create($data);
             if($detalle && $idAlmacen){
                 foreach($registros as $registro){
-                    $validate = $this->productoRepository->validateSerial($idProducto,$registro['serialnumber']);
+                    if($registro['serialnumber'] == 0){
+                        $validate = null;
+                        $registro['serialnumber'] = $this->generateSerial($idProducto);
+                    }else{
+                        $validate = $this->productoRepository->validateSerial($idProducto,$registro['serialnumber']);
+                    }
+                    
                     if(!$validate){
                         $arrayRegistro = [
                         'idDetalleComprobante' => $data['idDetalleComprobante'],
@@ -142,6 +148,26 @@ class ComprobanteService implements ComprobanteServiceInterface
                     
                 }
             }
+        }
+    }
+
+    private function generateSerial($idProduct){
+        try {
+            $product = $this->productoRepository->getOne('idProducto', $idProduct);
+            
+            if (!$product) {
+                throw new \Exception('Producto no encontrado.');
+            }
+    
+            $parcialCode = 'UNK-' . $product->codigoProducto;
+            $validateCode = $this->registroProductoRepository->searchList('numeroSerie', $parcialCode);
+            
+            $code = $parcialCode . '-' . (100000 + (count($validateCode) + 1));
+            
+            return $code;
+    
+        } catch (\Exception $e) {
+            throw new \Exception('Error al generar el número de serie: ' . $e->getMessage());
         }
     }
 
