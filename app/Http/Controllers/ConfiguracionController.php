@@ -2,147 +2,181 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CalculadoraServiceInterface;
+use App\Services\ConfiguracionServiceInterface;
+use App\Services\HeaderServiceInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Services\HeaderService;
-use App\Models\Empresa;
-use App\Models\RangoPrecio;
-use App\Models\Comision;
-use App\Models\Calculadora;
-use App\Models\CategoriaProducto;
-use App\Models\GrupoProducto;
-use Illuminate\Support\Facades\Hash;
 
 class ConfiguracionController extends Controller
 {
-    public function index(){
-        //variables de la cabecera
-        $serviceHeader = new HeaderService;
-        $userModel = $serviceHeader->getModelUser();
+    protected $headerService;
+    protected $calculadoraService;
+    protected $configuracionService;
+
+    public function __construct(HeaderServiceInterface $headerService,
+                                CalculadoraServiceInterface $calculadoraService,
+                                ConfiguracionServiceInterface $configuracionService)
+    {
+        $this->headerService = $headerService;
+        $this->calculadoraService = $calculadoraService;
+        $this->configuracionService = $configuracionService;
+    }
+    public function web(){
+        $userModel = $this->headerService->getModelUser();
         
-        //Variables propias del controlador
-        $categorias = CategoriaProducto::select('idCategoria','nombreCategoria','iconCategoria')->get();
-        $rangos = RangoPrecio::select('idRango','descripcion')->get();
-        
-        $calculos = Calculadora::first();
-        
-        $empresas = Empresa::all();
-        
-        if($userModel->idCargo == 1){
-            return view('configuracion',['user' => $userModel,
-                                    'categorias' => $categorias,
-                                    'rangos' => $rangos,
-                                    'calculos' => $calculos,
-                                    'empresas' => $empresas
-            ]);
-        }else{
-            echo("<script>alert('No tienes permiso')</script>");
-            return redirect()->route('dashboard',['user' => $userModel]);
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                $empresas = $this->configuracionService->getAllEmpresas();
+                
+                    return view('configuracion',['user' => $userModel,
+                                            'pagina' => 'web',
+                                            'empresas' => $empresas
+                    ]);
+            }
         }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function calculos(){
+        $userModel = $this->headerService->getModelUser();
         
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                $categorias = $this->configuracionService->getAllCategorias();
+                $rangos = $this->configuracionService->getAllRangos();
+                
+                $calculos = $this->calculadoraService->get();
+                
+                $empresas = $this->configuracionService->getAllEmpresas();
+                
+                    return view('configuracion',['user' => $userModel,
+                                            'pagina' => 'calculos',
+                                            'empresas' => $empresas,
+                                            'calculos' => $calculos,
+                                            'categorias' => $categorias,
+                                            'rangos' =>$rangos
+                    ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function almacen(){
+        $userModel = $this->headerService->getModelUser();
         
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                
+                    return view('configuracion',['user' => $userModel,
+                                            'pagina' => 'almacen'
+                    ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function categorias(){
+        $userModel = $this->headerService->getModelUser();
+        
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                
+                    return view('configuracion',['user' => $userModel,
+                                            'pagina' => 'categorias'
+                    ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function especificaciones(){
+        $userModel = $this->headerService->getModelUser();
+        
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                
+                return view('configuracion',['user' => $userModel,
+                                        'pagina' => 'especificaciones'
+                ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function updateComision(Request $request){
-        //variables de la cabecera
-        $serviceHeader = new HeaderService;
-        $userModel = $serviceHeader->getModelUser();
-        
-        //variables del controlador
+        $userModel = $this->headerService->getModelUser();
         $comisiones = $request->input('comision');
         $grupo = $request->input('grupo');
-        
-        
-        $category = $request->input('category');
-        
-        
-        if($userModel->idCargo == 1){
-            if(!empty($comisiones) && !empty($grupo)){
-                foreach($comisiones as $rango => $comision){
-                    $comisionModel = Comision::where('idGrupoProducto','=',$grupo)->where('idRango','=',$rango)->first();
-                    $comisionModel->comision = $comision;
-                    
-                    $comisionModel->save();
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if(!empty($comisiones) && !empty($grupo)){
+                    foreach($comisiones as $rango => $comision){
+                        $this->configuracionService->updateComisionValue($grupo,$rango,$comision);
+                    }
+                    $this->headerService->sendFlashAlerts('Actualizacion correcta','Operacion realizada con exito','success','btn-success');
+                    return back();
+                }else{
+                    $this->headerService->sendFlashAlerts('Error','Hubo un error en la operacion','error','btn-danger');
+                    return back()->withInput();
                 }
-                
-                echo("<script>alert('Guardado')</script>");
-                return back()->withInput();
-            }else{
-                echo("<script>alert('Error en la actualización')</script>");
-                return back()->withInput();
             }
-            
-            
-        }else{
-            echo("<script>alert('No tienes permiso')</script>");
-            return redirect()->route('dashboard',['user' => $userModel]);
-        }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function updateCalculos(Request $request){
-        //variables de la cabecera
-        $serviceHeader = new HeaderService;
-        $userModel = $serviceHeader->getModelUser();
-        
-        //variables del controlador
+        $userModel = $this->headerService->getModelUser();
         $igv = $request->input('igv');
         $facturacion = $request->input('facturacion');
         $empresas = $request->input('empresas');
-        
-        if($userModel->idCargo == 1){
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
                 if(!empty($igv) && !empty($facturacion) && !empty($empresas)){
-                    $calculadora = Calculadora::first();
-                    $calculadora->igv = $igv;
-                    $calculadora->facturacion = $facturacion;
-                    
-                    $calculadora->save();
+                    $this->configuracionService->updateCalculadora($igv,$facturacion);
                     
                     foreach($empresas as $idEmpresa => $comision){
-                        $empresaModel = Empresa::where('idEmpresa','=',$idEmpresa)->first();
-                        $empresaModel->comision = $comision;
-                        
-                        $empresaModel->save();
+                        $this->configuracionService->updateComisionEmpresa($idEmpresa,$comision);
                     }
                     
-                    echo("<script>alert('Valores actualizados')</script>");
                     return back()->withInput();
                 }else{
-                    echo("<script>alert('Error en la operacion')</script>");
+                    $this->headerService->sendFlashAlerts('Error','Hubo un error en la operacion','error','btn-danger');
                     return back()->withInput();
                 }
-        }else{
-            echo("<script>alert('No tienes permiso')</script>");
-            return redirect()->route('dashboard',['user' => $userModel]);
-        }
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+
     }
     
     public function updateCorreos(Request $request){
-        //variables de la cabecera
-        $serviceHeader = new HeaderService;
-        $userModel = $serviceHeader->getModelUser();
-        
-        //variables propias del controlador
+        $userModel = $this->headerService->getModelUser();
         $correos = $request->input('correos');
-        
-        if($userModel->idCargo == 1){
-            if(!empty($correos)){
-                foreach($correos as $idEmpresa => $correo){
-                    $empresaModel = Empresa::where('idEmpresa','=',$idEmpresa)->first();
-                    $empresaModel->correoEmpresa = $correo;
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if(!empty($correos)){
+                    foreach($correos as $idEmpresa => $correo){
+                        $this->configuracionService->updateCorreoEmpresa($idEmpresa,$correo);
+                    }
                     
-                    $empresaModel->save();
+                    return back();
+                }else{
+                    $this->headerService->sendFlashAlerts('Error','Hubo un error en la operacion','error','btn-danger');
+                    return back()->withInput();
                 }
-                
-                echo("<script>alert('Fuynka')</script>");
-                return back()->withInput();
-            }else{
-                echo("<script>alert('Error en la operacion.')</script>");
-                return back()->withInput();
             }
-            
-        }else{
-            echo("<script>alert('No tienes permiso')</script>");
-            return redirect()->route('dashboard',['user' => $userModel]);
-        }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
 }

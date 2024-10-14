@@ -61,10 +61,16 @@ use App\Repositories\DetalleComprobanteRepositoryInterface;
 use App\Repositories\DetalleComprobanteRepository;
 use App\Repositories\EgresoProductoRepository;
 use App\Repositories\EgresoProductoRepositoryInterface;
+use App\Repositories\EmpresaRepository;
+use App\Repositories\EmpresaRepositoryInterface;
 use App\Repositories\PublicacionRepositoryInterface;
 use App\Repositories\PublicacionRepository;
+use App\Repositories\RangoPrecioRepository;
+use App\Repositories\RangoPrecioRepositoryInterface;
 use App\Repositories\VistaRepository;
 use App\Repositories\VistaRepositoryInterface;
+use App\Services\ConfiguracionService;
+use App\Services\ConfiguracionServiceInterface;
 use App\Services\EgresoProductoService;
 use App\Services\EgresoProductoServiceInterface;
 use App\Services\PlataformaService;
@@ -87,6 +93,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PublicacionServiceInterface::class, PublicacionService::class);
         $this->app->bind(PlataformaServiceInterface::class,PlataformaService::class);
         $this->app->bind(EgresoProductoServiceInterface::class,EgresoProductoService::class);
+        $this->app->bind(ConfiguracionServiceInterface::class,ConfiguracionService::class);
         
         $this->app->bind(CalculadoraRepositoryInterface::class, CalculadoraRepository::class);
         $this->app->bind(UsuarioRepositoryInterface::class, UsuarioRepository::class);
@@ -110,6 +117,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(VistaRepositoryInterface::class, VistaRepository::class);
         $this->app->bind(AccesosRepositoryInterface::class,AccesosRepository::class);
         $this->app->bind(EgresoProductoRepositoryInterface::class,EgresoProductoRepository::class);
+        $this->app->bind(RangoPrecioRepositoryInterface::class,RangoPrecioRepository::class);
+        $this->app->bind(EmpresaRepositoryInterface::class,EmpresaRepository::class);
     }
 
     /**

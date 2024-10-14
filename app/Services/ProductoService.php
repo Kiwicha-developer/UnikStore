@@ -279,6 +279,11 @@ class ProductoService implements ProductoServiceInterface
                     $array['estadoProductoWeb'] = 'AGOTADO';
                     
                     $this->productoRepository->update($producto->idProducto,$array);
+                }elseif(!$agotado){
+                    $array = array();
+                    $array['estadoProductoWeb'] = 'DISPONIBLE';
+                    
+                    $this->productoRepository->update($producto->idProducto,$array);
                 }
             }
         }

@@ -13,7 +13,8 @@ class Empresa extends Model
 
     protected $guarded = ['idEmpresa'];
     
-    protected $fillable = ['rucEmpresa',
+    protected $fillable = ['idEmpresa',
+                            'rucEmpresa',
                             'razonSocial',
                             'nombreComercial'.
                             'colorUno',

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Configuraci¨®n')
+@section('title', 'Configuraciï¿½ï¿½n')
 
 @section('content')
 <div class="container">
@@ -11,6 +11,11 @@
         </div>
     </div>
     <br>
+    <div class="col-md-12">
+        <x-nav_config :pag="$pagina" />
+    </div>
+    <br>
+    @if($pagina == 'web')
     <div class="row border shadow rounded-3 pt-2 pb-2" id="correos-empresa">
         <form action="{{route('updatecorreos')}}" method="POST">
              @csrf
@@ -116,6 +121,8 @@
         </div>
     </div>
     <br>
+    @endif
+    @if ($pagina == 'calculos')
     <div class="row border shadow rounded-3 pt-2 pb-2" id="calculos-generales">
         <form action="{{route('updatecalculos')}}" method="POST">
              @csrf
@@ -240,13 +247,9 @@
         @endforeach
     </div>
     <br>
-    <div class="row border shadow rounded-3">
-        <div class="col-md-12">
-            <h3>Rangos de comisiones</h3>
-        </div>
-    </div>
-    
+    @endif
     <!-- Modal -->
+    @if($pagina == 'calculos')
     <form action="{{route('updatecomision')}}" method="POST">
              @csrf
     <div class="modal fade" id="comisionModal" tabindex="-1" aria-labelledby="comisionModalLabel" aria-hidden="true">
@@ -283,6 +286,7 @@
       </div>
     </div>
     </form>
+    @endif
     <div class="modal fade" id="cuentasBancariasModal" tabindex="-1" aria-labelledby="cuentasBancariasModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -326,7 +330,7 @@
         
         tituloComision.textContent = 'Comisiones: ' + titulo;
     }
-
+    @if (isset($categorias))
     function viewElementsComision(category){
         @foreach($categorias as $categoria)
             if(category == {{$categoria->idCategoria}}){
@@ -342,6 +346,7 @@
             }
         @endforeach
     }
+    @endif
     
     function calculateGeneralDisabled() {
         let btnSaveCalculos = document.getElementById('btnSaveCalculos');
@@ -380,11 +385,18 @@
     }
     
     document.addEventListener('DOMContentLoaded', function() {
-        let oldCategoryComision = document.getElementById('categoryModalComision').value;
-        viewElementsComision(oldCategoryComision);
+        @switch($pagina)
+            @case('web')
+                correosEmpresaDisabled();
+                @break
+            @case('calculos')
+                calculateGeneralDisabled();
+                let oldCategoryComision = document.getElementById('categoryModalComision').value;
+                viewElementsComision(oldCategoryComision);
+                @break
+            @default
+        @endswitch
         
-        calculateGeneralDisabled();
-        correosEmpresaDisabled();
     });
 </script>
 @endsection

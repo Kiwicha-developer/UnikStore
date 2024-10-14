@@ -235,7 +235,7 @@
                             <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('usuarios')}}" class="btn text-light">Usuarios <i class="bi bi-person-fill"></i></a></li>
                               @break
                         @case(7)
-                            <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('config')}}" class="btn text-light">Configuraci&oacuten <i class="bi bi-gear-fill"></i></a></li>
+                            <li class="list-group-item bg-sistema-uno menu-border"><a href="{{route('configweb')}}" class="btn text-light">Configuraci&oacuten <i class="bi bi-gear-fill"></i></a></li>
                               @break
                       @endswitch
                   @endforeach

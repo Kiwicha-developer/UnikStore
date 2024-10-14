@@ -85,7 +85,11 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/update-estado-publicacion', [PublicacionController::class, 'updateEstado'])->name('update-estado-publicacion');
     Route::get('/searchpublicacion', [PublicacionController::class, 'searchPublicacion'])->name('searchpublicacion');
     
-    Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('config');
+    Route::get('/configuracion/web', [ConfiguracionController::class, 'web'])->name('configweb');
+    Route::get('/configuracion/calculos', [ConfiguracionController::class, 'calculos'])->name('configcalculos');
+    Route::get('/configuracion/categorias', [ConfiguracionController::class, 'categorias'])->name('configcategorias');
+    Route::get('/configuracion/especificaciones', [ConfiguracionController::class, 'especificaciones'])->name('configespecificaciones');
+    Route::get('/configuracion/almacen', [ConfiguracionController::class, 'almacen'])->name('configalmacen');
     Route::post('/configuracion/updatecomision', [ConfiguracionController::class, 'updateComision'])->name('updatecomision');
     Route::post('/configuracion/updatecalculos', [ConfiguracionController::class, 'updateCalculos'])->name('updatecalculos');
     Route::post('/configuracion/updatecorreos', [ConfiguracionController::class, 'updateCorreos'])->name('updatecorreos');

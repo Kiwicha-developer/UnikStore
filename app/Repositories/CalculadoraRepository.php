@@ -18,6 +18,12 @@ class CalculadoraRepository implements CalculadoraRepositoryInterface
     {
         return Calculadora::first();
     }
+
+    public function update(array $data){
+        $calc = Calculadora::first();
+        $calc->update($data);
+        return $calc;
+    }
     
     private function validateColumns($column){
         if (!in_array($column, $this->modelColumns)) {
