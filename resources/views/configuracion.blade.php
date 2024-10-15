@@ -248,6 +248,58 @@
     </div>
     <br>
     @endif
+    @if ($pagina == 'especificaciones')
+    <div id="caracteristicas-container" style="display: none;opacity: 0;">
+        probansjjsjibsajbsch
+    </div>
+    <div id="category-container">
+        @foreach ($categorias as $categoria)
+        <div class="row div-spect" data-category="{{$categoria->idCategoria}}">
+            <div class="col-md-9 d-flex align-items-center pt-1">
+                <a class="fs-4 text-secondary" href="#" onclick="viewCaracteristicas()"><i class="bi bi-arrow-left-circle"></i></a>
+                <h3 class="mt-2 ms-1"><i class="{{$categoria->iconCategoria}}"></i> {{$categoria->nombreCategoria}}</h3>
+            </div>
+            <div class="col-md-3 d-flex align-items-center justify-content-end">
+                <div class="btn-group dropstart">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Categorias
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach ($categorias as $cat)
+                            <li><a class="dropdown-item" href="#" onclick="viewDivSpect({{$cat->idCategoria}})">{{$cat->nombreCategoria}}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            @foreach ($categoria->GrupoProducto as $grupo)
+            <div class="col-md-12 mt-2">
+                <div class="row border shadow-sm rounded-3 mb-3">
+                    <div class="col-md-6 d-flex align-items-center border-bottom">
+                        <h5 class="pt-1">{{$grupo->nombreGrupo}}</h5>
+                    </div>
+                    <div class="col-md-6 border-bottom text-end pt-1 pb-1">
+                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#spectXGrupoModal">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-12 ">
+                        <div class="row pt-2 pe-2 pb-1">
+                            @foreach ($grupo->Caracteristicas_Grupo as $caracteristica)
+                            <div class="col-md-2 mb-1">
+                                <div class="row ms-1 h-100 border rounded-2 truncate">
+                                    <small>{{$caracteristica->Caracteristicas->especificacion}}</small>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+    </div>
+    @endforeach
+    </div>
+    @endif
     <!-- Modal -->
     @if($pagina == 'calculos')
     <form action="{{route('updatecomision')}}" method="POST">
@@ -287,6 +339,7 @@
     </div>
     </form>
     @endif
+    @if($pagina == 'web')
     <div class="modal fade" id="cuentasBancariasModal" tabindex="-1" aria-labelledby="cuentasBancariasModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -305,6 +358,28 @@
         </div>
       </div>
     </div>
+    @endif
+    @if ($pagina == 'especificaciones')
+    <div class="modal fade" id="spectXGrupoModal" tabindex="-1" aria-labelledby="spectXGrupoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="spectXGrupoModalLabel">Agregar Especificaci&oacute;n</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary"><i class="bi bi-floppy"></i> Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <br>
 </div>
 <script>
@@ -383,6 +458,31 @@
             x.disabled = isDisabledCorreos;
         });
     }
+
+    @if ($pagina == 'especificaciones')
+    function viewDivSpect(idCategory){
+        let divSpects = document.querySelectorAll('.div-spect');
+        divSpects.forEach(function(x){
+            if(x.dataset.category == idCategory){
+                x.style.display = 'flex';
+            }else{
+                x.style.display = 'none';
+            }
+        });
+    }
+
+    function viewCaracteristicas(){
+        let categoryContainer = document.getElementById('category-container');
+
+        categoryContainer.style.transition = 'transform 1s ease, opacity 1s ease'; // Asegúrate de añadir la transición
+        categoryContainer.style.transform = 'translateX(100%)'; // Comillas alrededor de la transformación
+        categoryContainer.style.opacity = '0';
+
+        setTimeout(() => {
+            categoryContainer.style.display = 'none';
+        }, 1000);
+    }
+    @endif
     
     document.addEventListener('DOMContentLoaded', function() {
         @switch($pagina)
@@ -393,6 +493,9 @@
                 calculateGeneralDisabled();
                 let oldCategoryComision = document.getElementById('categoryModalComision').value;
                 viewElementsComision(oldCategoryComision);
+                @break
+            @case('especificaciones')
+                viewDivSpect(1);
                 @break
             @default
         @endswitch

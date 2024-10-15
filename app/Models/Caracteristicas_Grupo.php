@@ -3,11 +3,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Inventario extends Model
+class Caracteristicas_Grupo extends Model
 {
     public $timestamps = false;
-    protected $table = 'Inventario';
-    protected $primaryKey = ['idProducto','idAlmacen'];
+    protected $table = 'Caracteristicas_grupo';
+    protected $primaryKey = ['idGrupoProducto','idCaracteristica'];
     public $incrementing = false;
     protected $keyType = 'int';
     
@@ -30,11 +30,10 @@ class Inventario extends Model
         return $query;
     }
 
-    protected $guarded = ['idProducto','idAlmacen'];
+    protected $guarded = ['idGrupoProducto','idCaracteristica'];
     
-    protected $fillable = ['idProducto',
-                            'idAlmacen',
-                            'stock'
+    protected $fillable = ['idGrupoProducto',
+                            'idCaracteristica'
                             ];
 
     
@@ -44,18 +43,18 @@ class Inventario extends Model
 
     
     protected $casts = [
-        'idProducto' => 'int',
-        'idAlmacen' => 'int',
+        'idGrupoProducto' => 'int',
+        'idCaracteristica' => 'int',
     ];
     
-    public function Almacen()
+    public function GrupoProducto()
     {
-        return $this->belongsTo(Almacen::class,'idAlmacen','idAlmacen');
+        return $this->belongsTo(GrupoProducto::class,'idGrupoProducto','idGrupoProducto');
     }
     
-    public function Producto()
+    public function Caracteristicas()
     {
-        return $this->belongsTo(Producto::class,'idProducto','idProducto');
+        return $this->belongsTo(Caracteristicas::class,'idCaracteristica','idCaracteristica');
     }
     
 

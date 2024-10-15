@@ -39,6 +39,8 @@ use App\Repositories\ProveedorRepositoryInterface;
 use App\Repositories\ProveedorRepository;
 use App\Repositories\AlmacenRepositoryInterface;
 use App\Repositories\AlmacenRepository;
+use App\Repositories\CaracteristicasRepository;
+use App\Repositories\CaracteristicasRepositoryInterface;
 use App\Repositories\InventarioRepositoryInterface;
 use App\Repositories\InventarioRepository;
 use App\Repositories\ProveedorInventarioRepositoryInterface;
@@ -119,6 +121,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EgresoProductoRepositoryInterface::class,EgresoProductoRepository::class);
         $this->app->bind(RangoPrecioRepositoryInterface::class,RangoPrecioRepository::class);
         $this->app->bind(EmpresaRepositoryInterface::class,EmpresaRepository::class);
+        $this->app->bind(CaracteristicasRepositoryInterface::class,CaracteristicasRepository::class);
     }
 
     /**

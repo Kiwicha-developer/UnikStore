@@ -2,10 +2,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class GrupoProducto extends Model
 {
- 
     protected $table = 'GrupoProducto';
     
     protected $primaryKey = 'idGrupoProducto';
@@ -66,5 +66,9 @@ class GrupoProducto extends Model
     public function TipoProducto()
     {
         return $this->belongsTo(TipoProducto::class,'idTipoProducto','idTipoProducto');
+    }
+
+    public function Caracteristicas_Grupo(){
+        return $this->hasMany(Caracteristicas_Grupo::class,'idGrupoProducto','idGrupoProducto');
     }
 }

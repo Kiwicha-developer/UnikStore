@@ -83,10 +83,10 @@ class ConfiguracionController extends Controller
         
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
-                
-                    return view('configuracion',['user' => $userModel,
-                                            'pagina' => 'categorias'
-                    ]);
+                $categorias = $this->configuracionService->getAllCategorias();
+                return view('configuracion',['user' => $userModel,
+                                        'pagina' => 'categorias'
+                ]);
             }
         }
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
@@ -98,9 +98,13 @@ class ConfiguracionController extends Controller
         
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
+                $categorias = $this->configuracionService->getAllCategorias();
+                $spects = $this->configuracionService->getAllEspecificaciones();
                 
                 return view('configuracion',['user' => $userModel,
-                                        'pagina' => 'especificaciones'
+                                        'pagina' => 'especificaciones',
+                                        'categorias' => $categorias,
+                                        'caracteristicas' => $spects
                 ]);
             }
         }

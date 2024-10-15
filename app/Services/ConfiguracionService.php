@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Repositories\CalculadoraRepositoryInterface;
+use App\Repositories\CaracteristicasRepositoryInterface;
 use App\Repositories\CategoriaProductoRepositoryInterface;
 use App\Repositories\ComisionRepositoryInterface;
 use App\Repositories\EmpresaRepositoryInterface;
@@ -14,18 +15,21 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     protected $empresaRepository;
     protected $calculadoraRepository;
     protected $comisionRepository;
+    protected $caracteristicasRepository;
 
     public function __construct(CategoriaProductoRepositoryInterface $categoriaRepository,
                                 RangoPrecioRepositoryInterface $rangoRepository,
                                 EmpresaRepositoryInterface $empresaRepository,
                                 CalculadoraRepositoryInterface $calculadoraRepository,
-                                ComisionRepositoryInterface $comisionRepository)
+                                ComisionRepositoryInterface $comisionRepository,
+                                CaracteristicasRepositoryInterface $caracteristicasRepository)
     {
         $this->categoriaRepository = $categoriaRepository;
         $this->rangoRepository = $rangoRepository;
         $this->empresaRepository = $empresaRepository;
         $this->calculadoraRepository = $calculadoraRepository;
         $this->comisionRepository = $comisionRepository;
+        $this->caracteristicasRepository = $caracteristicasRepository;
     }
 
     public function getAllCategorias(){
@@ -67,5 +71,9 @@ class ConfiguracionService implements ConfiguracionServiceInterface
             $data = ['comision' => $comision];
             $this->comisionRepository->update($idRango,$idGrupo,$data);
         }
+    }
+
+    public function getAllEspecificaciones(){
+        return $this->caracteristicasRepository->all();
     }
 }

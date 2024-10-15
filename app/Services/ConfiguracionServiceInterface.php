@@ -10,4 +10,5 @@ interface ConfiguracionServiceInterface
     public function updateComisionEmpresa($id,$comision);
     public function updateCalculadora($igv,$fact);
     public function updateComisionValue($idGrupo,$idRango,$comision);
+    public function getAllEspecificaciones();
 }
