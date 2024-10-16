@@ -88,11 +88,20 @@
           </div>
           <div class="modal-body">
             <div class="row">
-                <div class="col-md-12 mb-2" style="position:relative">
+                <div class="col-md-8 mb-2" style="position:relative">
                     <label>Numero de Serie</label>
                     <input type="text" oninput="searchRegistro(this)" name="serialnumber" placeholder="Serial Number" class="form-control input-egreso" id="input-serial-number">
                     <input type="hidden" value="" name="idregistro" id="hidden-product-serial-number">
                     <ul class="list-group" id="suggestions-serial-number" name="idregistro" style="position:absolute;z-index:1000;top:100%;left:0;width:100%"></ul>
+                </div>
+                <div class="col-md-4">
+                    <label>Almacén</label>
+                    <select class="form-select input-egreso" name="almacen">
+                        <option value="">-Elige un almacén-</option>
+                        @foreach ($almacenes as $almacen)
+                            <option value="{{$almacen->idAlmacen}}">{{$almacen->descripcion}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col-md-12 mb-2">
                     <div class="row">

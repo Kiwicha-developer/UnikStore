@@ -15,6 +15,7 @@ class RegistroProducto extends Model
     
     protected $fillable = ['idRegistro',
                             'idDetalleComprobante',
+                            'idAlmacen',
                             'numeroSerie',
                             'estado',
                             'fechaMovimiento',
@@ -31,6 +32,7 @@ class RegistroProducto extends Model
         'idRegistro' => 'int',
         'idComprobante' => 'int',
         'idProducto' => 'int',
+        'idAlmacen' => 'int',
         'fechaMovimiento' => 'date'
     ];
     
@@ -47,6 +49,10 @@ class RegistroProducto extends Model
     public function EgresoProducto()
     {
         return $this->belongsTo(EgresoProducto::class,'idRegistro','idRegistro');
+    }
+
+    public function Almacen(){
+        return $this->belongsTo(Almacen::class,'idAlmacen','idAlmacen');
     }
 
     /**

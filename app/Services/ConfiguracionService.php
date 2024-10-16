@@ -74,6 +74,6 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     }
 
     public function getAllEspecificaciones(){
-        return $this->caracteristicasRepository->all();
+        return $this->caracteristicasRepository->all()->sortBy('especificacion');
     }
 }

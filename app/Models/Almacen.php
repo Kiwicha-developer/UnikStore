@@ -31,6 +31,10 @@ class Almacen extends Model
         return $this->hasMany(Inventario::class,'idAlmacen','idAlmacen');
     }
 
+    public function RegistroProducto(){
+        return $this->hasMany(RegistroProducto::class,'idAlmacen','idAlmacen');
+    }
+
     /**
      * Obtener las relaciones del modelo.
      */

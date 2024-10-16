@@ -136,6 +136,7 @@ class ComprobanteService implements ComprobanteServiceInterface
                         'numeroSerie' => $registro['serialnumber'],
                         'estado' => $registro['estado'],
                         'observacion' => $registro['observacion'],
+                        'idAlmacen' => $idAlmacen
                         ];
                         try {
                             $this->insertRegistro($arrayRegistro);

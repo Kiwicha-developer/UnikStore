@@ -6,18 +6,22 @@ use App\Services\EgresoProductoServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Services\HeaderServiceInterface;
+use App\Services\ProductoServiceInterface;
 use Exception;
 
 class EgresoController extends Controller
 {
     protected $headerService;
     protected $egresoService;
+    protected $productoService;
     
     public function __construct(HeaderServiceInterface $headerService,
-                                EgresoProductoServiceInterface $egresoService)
+                                EgresoProductoServiceInterface $egresoService,
+                                ProductoServiceInterface $productoService)
     {
         $this->headerService = $headerService;
         $this->egresoService = $egresoService;
+        $this->productoService = $productoService;
     }
     
     public function index($month){
@@ -28,9 +32,11 @@ class EgresoController extends Controller
         Carbon::setLocale('es');
         $carbonMonth = Carbon::createFromFormat('Y-m', $month);
         $egresos = $this->egresoService->getEgresosByMonth($month);
+        $almacenes = $this->egresoService->getAllAlmacenes();
         
         return view('egresos',['user' => $userModel,
                                 'egresos' => $egresos,
+                                'almacenes' => $almacenes,
                                 'fecha' => $carbonMonth]);
     }
     
@@ -43,17 +49,20 @@ class EgresoController extends Controller
         $numeroorden = $request->input('numeroorden');
         $fechapedido = $request->input('fechapedido');
         $fechadespacho = $request->input('fechadespacho');
+        $idAlmacen = $request->input('almacen');
         
         $validateRegistro = '';
         if(is_null($idregistro)){
-            $validateRegistro = $this->egresoService->getRegistro($numeroserie)->idRegistro;
+            $modelRegistro = $this->egresoService->getRegistro($numeroserie);
+            $validateRegistro = $modelRegistro == null ? null : $modelRegistro->idRegistro;
         }else{
             $validateRegistro = $idregistro;
         }
 
         $validatePublicacion = '';
         if(is_null($idpublicacion)){
-            $validatePublicacion = $this->egresoService->getPublicacion($sku)->idPublicacion;
+            $modelPublicacion = $this->egresoService->getPublicacion($sku);
+            $validatePublicacion = $modelPublicacion == null ? null : $modelPublicacion->idPublicacion;
         }else{
             $validatePublicacion = $idpublicacion;
         }
@@ -66,14 +75,11 @@ class EgresoController extends Controller
                                 'fechaCompra' => $fechapedido,
                                 'fechaDespacho' => $fechadespacho];
                 
-                $this->egresoService->createEgreso($arrayEgreso);
+                $producto = $this->egresoService->createEgreso($idAlmacen,$arrayEgreso);
+                $this->productoService->validateState($producto->idProducto);
                 
                 $this->headerService->sendFlashAlerts('Egreso registrado','Operacion exitosa','success','btn-success');
                 return back();
-            // }catch(Exception $e){
-            //     $this->headerService->sendFlashAlerts('Error al registrar','Hubo un error en la operacion','error','btn-danger');
-            //     return back();
-            // }
                 
         }else{
             $this->headerService->sendFlashAlerts('Datos incompletos','Verifica que los datos ingresados existan','info','btn-warning');

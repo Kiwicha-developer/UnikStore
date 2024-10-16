@@ -60,7 +60,7 @@
                             <div class="row w-100 ">
                                 <div class="col-2 col-md-1 text-center" style="position:relative;cursor:pointer">
                                     <img onmouseover="mostrarImg({{ $pro->idProducto }})" onmouseout="ocultarImg({{ $pro->idProducto }})" src="{{ asset('storage/'.$pro->imagenProducto1) }}" alt="Tooltip Imagen" style="width:100%" class="rounded-3">
-                                    <div class="border border-secondary rounded-3 justify-content-top" style="width: 200px;position: absolute;z-index: 900;top:0;right:100%;display:none" id="img-{{$pro->idProducto}}">
+                                    <div class="border border-secondary rounded-3 justify-content-top" style="width: 200px;position: absolute;z-index: 900;top:0;left:100%;display:none" id="img-{{$pro->idProducto}}">
                                         <img src="{{ asset('storage/'.$pro->imagenProducto1) }}" alt="Tooltip Imagen" style="width:100%" class="rounded-3">
                                     </div>
                                 </div>

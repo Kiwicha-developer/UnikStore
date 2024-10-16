@@ -63,14 +63,14 @@ class ConfiguracionController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
 
-    public function almacen(){
+    public function inventario(){
         $userModel = $this->headerService->getModelUser();
         
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
                 
                     return view('configuracion',['user' => $userModel,
-                                            'pagina' => 'almacen'
+                                            'pagina' => 'inventario'
                     ]);
             }
         }
@@ -109,6 +109,20 @@ class ConfiguracionController extends Controller
             }
         }
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function createCaracteristica(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $descripcion = $request->input('descripcion');
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                dd($descripcion);
+                return back();
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
         return redirect()->route('dashboard',['user' => $userModel]);
     }
     

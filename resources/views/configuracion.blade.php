@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Configuraci��n')
+@section('title', 'Configuración')
 
 @section('content')
 <div class="container">
@@ -249,14 +249,59 @@
     <br>
     @endif
     @if ($pagina == 'especificaciones')
-    <div id="caracteristicas-container" style="display: none;opacity: 0;">
-        probansjjsjibsajbsch
+    <div id="caracteristicas-container">
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="mt-2">Especificaciones 
+                    <a class="fs-4" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#createSpectModal">
+                        <i class="bi bi-plus-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Nueva especificacion"></i>
+                    </a>
+                </h3>
+            </div>
+            <div class="col-md-6 text-end pt-2">
+                <a class="fs-4 text-secondary" onclick="viewCategoriasXGrupos()" href="javascript:void(0)"  data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Categorias y Grupos">
+                    <i class="bi bi-arrow-right-circle"></i>
+                </a>
+            </div>
+            <div class="col-md-12 text-secondary">
+                <small>Especificaciones generales para todos los grupos.</small>
+            </div>
+            <div class="col-md-12 mt-2">
+                <ul class="list-group">
+                    <li class="list-group-item bg-sistema-uno text-light">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6>Especificacion</h6>
+                            </div>
+                            <div class="col-md-8 text-center">
+                                <h6>Grupos</h6>
+                            </div>
+                        </div>
+                    </li>
+                    @foreach ($caracteristicas as $caracteristica)
+                        <li class="list-group-item">
+                            <div class="row h-100">
+                                <div class="col-md-3">
+                                    <strong>{{$caracteristica->especificacion}}</strong>
+                                </div>
+                                <div class="col-md-8 text-secondary text-center">
+                                    @foreach ($caracteristica->Caracteristicas_Grupo as $grupo)
+                                    {{ $loop->index  == 0 ? '' : ' | '}}
+                                    <small class="text-decoration-underline">{{$grupo->GrupoProducto->nombreGrupo}}</small>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
     </div>
     <div id="category-container">
         @foreach ($categorias as $categoria)
         <div class="row div-spect" data-category="{{$categoria->idCategoria}}">
             <div class="col-md-9 d-flex align-items-center pt-1">
-                <a class="fs-4 text-secondary" href="#" onclick="viewCaracteristicas()"><i class="bi bi-arrow-left-circle"></i></a>
+                <a class="fs-4 text-secondary" href="javascript:void(0)" onclick="viewCaracteristicas()" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Caracteristicas"><i class="bi bi-arrow-left-circle"></i></a>
                 <h3 class="mt-2 ms-1"><i class="{{$categoria->iconCategoria}}"></i> {{$categoria->nombreCategoria}}</h3>
             </div>
             <div class="col-md-3 d-flex align-items-center justify-content-end">
@@ -271,22 +316,25 @@
                     </ul>
                 </div>
             </div>
+            <div class="col-md-12 text-secondary">
+                <small>Especificaciones asignadas para cada grupo.</small>
+            </div>
             @foreach ($categoria->GrupoProducto as $grupo)
             <div class="col-md-12 mt-2">
-                <div class="row border shadow-sm rounded-3 mb-3">
-                    <div class="col-md-6 d-flex align-items-center border-bottom">
+                <div class="row border shadow rounded-3 mb-3">
+                    <div class="col-md-6 d-flex align-items-center border-bottom border-secondary">
                         <h5 class="pt-1">{{$grupo->nombreGrupo}}</h5>
                     </div>
-                    <div class="col-md-6 border-bottom text-end pt-1 pb-1">
-                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#spectXGrupoModal">
+                    <div class="col-md-6 border-bottom border-secondary text-end pt-1 pb-1">
+                        <button class="btn btn-sm btn-success" onclick="sendGrupoToModal({{$grupo->idGrupoProducto}})" data-bs-toggle="modal" data-bs-target="#spectXGrupoModal">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                     </div>
-                    <div class="col-md-12 ">
+                    <div class="col-md-12 bg-list">
                         <div class="row pt-2 pe-2 pb-1">
                             @foreach ($grupo->Caracteristicas_Grupo as $caracteristica)
                             <div class="col-md-2 mb-1">
-                                <div class="row ms-1 h-100 border rounded-2 truncate">
+                                <div class="row ms-1 h-100 border bg-light rounded-2 truncate">
                                     <small>{{$caracteristica->Caracteristicas->especificacion}}</small>
                                 </div>
                             </div>
@@ -369,7 +417,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div></div>
+                        <div class="col-md-12">
+                            <input type="hidden" name="grupo" value="" id="hidden-modal-addespecificacionxgrupo-grupo">
+                            <input type="hidden" name="caracteristica" value="" id="hidden-modal-addespecificacionxgrupo-especificacion">
+                            <input class="form-control" type="text" placeholder="Busca una caracteristica..." id="text-modal-addespecificacionxgrupo" readonly>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <input class="form-control" oninput="inputSearch(this)" type="text" placeholder="busca aqui!!">
+                            <ul class="list-group" id="modal-addespecificacionxgrupo-results" style="position:absolute;top:100%;z-index:1000"></ul>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -379,109 +435,197 @@
             </div>
         </div>
     </div>
+    <form action="{{route('createcaracteristica')}}" method="POST">
+        @csrf
+    <div class="modal fade" id="createSpectModal" tabindex="-1" aria-labelledby="createSpectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createSpectModalLabel">Agregar Especificaci&oacute;n</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Especificacion:</label>
+                            <input type="text" name="descripcion" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
     @endif
     <br>
 </div>
 <script>
     let isDisabledCalGeneral = false;
     let isDisabledCorreos = false;
-    
-    function modalComision(titulo,grupo,categoria){
-        let tituloComision = document.getElementById('comisionModalLabel');
-        let divComision = document.getElementById('div-comision-' + grupo);
-        let listComisiones = divComision.querySelectorAll('.hidden-comision');
-        let hiddenGroup = document.getElementById('comisionHiddenGrup');
-        let hiddenCategory = document.getElementById('categoryModalComision');
+
+    @if($pagina == 'web')
+        function correosEmpresaDisabled() {
+            let btnSaveCorreo = document.getElementById('btnSaveCorreos');
+            let divCorreoEmpresa = document.getElementById('correos-empresa');
+            let btnEditCorreoEmpresa = divCorreoEmpresa.querySelectorAll('.input-edit'); 
         
-        
-        listComisiones.forEach(function(x){
-            let liComision = document.getElementById('comisionModalList-' + x.dataset.rango);
+            isDisabledCorreos= !isDisabledCorreos;
             
-            liComision.value = x.value;
-        });
-        
-        hiddenGroup.value = grupo;
-        hiddenCategory.value = categoria;
-        
-        tituloComision.textContent = 'Comisiones: ' + titulo;
-    }
-    @if (isset($categorias))
-    function viewElementsComision(category){
-        @foreach($categorias as $categoria)
-            if(category == {{$categoria->idCategoria}}){
-                let divCategory  = document.querySelectorAll('.divCategory-' + {{$categoria->idCategoria}});
-                divCategory.forEach(function(x){
-                    x.style.display = 'block';
-                });
+            if(isDisabledCorreos){
+                btnSaveCorreo.style.display = 'none';
             }else{
-                let divCategory  = document.querySelectorAll('.divCategory-' + {{$categoria->idCategoria}});
-                divCategory.forEach(function(x){
-                    x.style.display = 'none';
-                });
+                btnSaveCorreo.style.display = 'inline-flex';
             }
-        @endforeach
-    }
+        
+            btnEditCorreoEmpresa.forEach(function(x) {
+                x.disabled = isDisabledCorreos;
+            });
+        }
     @endif
     
-    function calculateGeneralDisabled() {
-        let btnSaveCalculos = document.getElementById('btnSaveCalculos');
-        let divCalculosGenerales = document.getElementById('calculos-generales');
-        let btnEditCalcGeneral = divCalculosGenerales.querySelectorAll('.input-edit'); 
-    
-        isDisabledCalGeneral = !isDisabledCalGeneral;
-        
-        if(isDisabledCalGeneral){
-            btnSaveCalculos.style.display = 'none';
-        }else{
-            btnSaveCalculos.style.display = 'inline-flex';
+    @if($pagina == 'calculos')
+        function modalComision(titulo,grupo,categoria){
+            let tituloComision = document.getElementById('comisionModalLabel');
+            let divComision = document.getElementById('div-comision-' + grupo);
+            let listComisiones = divComision.querySelectorAll('.hidden-comision');
+            let hiddenGroup = document.getElementById('comisionHiddenGrup');
+            let hiddenCategory = document.getElementById('categoryModalComision');
+            
+            
+            listComisiones.forEach(function(x){
+                let liComision = document.getElementById('comisionModalList-' + x.dataset.rango);
+                
+                liComision.value = x.value;
+            });
+            
+            hiddenGroup.value = grupo;
+            hiddenCategory.value = categoria;
+            
+            tituloComision.textContent = 'Comisiones: ' + titulo;
         }
-    
-        btnEditCalcGeneral.forEach(function(x) {
-            x.disabled = isDisabledCalGeneral;
-        });
-    }
-    
-    function correosEmpresaDisabled() {
-        let btnSaveCorreo = document.getElementById('btnSaveCorreos');
-        let divCorreoEmpresa = document.getElementById('correos-empresa');
-        let btnEditCorreoEmpresa = divCorreoEmpresa.querySelectorAll('.input-edit'); 
-    
-        isDisabledCorreos= !isDisabledCorreos;
-        
-        if(isDisabledCorreos){
-            btnSaveCorreo.style.display = 'none';
-        }else{
-            btnSaveCorreo.style.display = 'inline-flex';
-        }
-    
-        btnEditCorreoEmpresa.forEach(function(x) {
-            x.disabled = isDisabledCorreos;
-        });
-    }
 
-    @if ($pagina == 'especificaciones')
-    function viewDivSpect(idCategory){
-        let divSpects = document.querySelectorAll('.div-spect');
-        divSpects.forEach(function(x){
-            if(x.dataset.category == idCategory){
-                x.style.display = 'flex';
+        function viewElementsComision(category){
+            @foreach($categorias as $categoria)
+                if(category == {{$categoria->idCategoria}}){
+                    let divCategory  = document.querySelectorAll('.divCategory-' + {{$categoria->idCategoria}});
+                    divCategory.forEach(function(x){
+                        x.style.display = 'block';
+                    });
+                }else{
+                    let divCategory  = document.querySelectorAll('.divCategory-' + {{$categoria->idCategoria}});
+                    divCategory.forEach(function(x){
+                        x.style.display = 'none';
+                    });
+                }
+            @endforeach
+        }
+
+        function calculateGeneralDisabled() {
+            let btnSaveCalculos = document.getElementById('btnSaveCalculos');
+            let divCalculosGenerales = document.getElementById('calculos-generales');
+            let btnEditCalcGeneral = divCalculosGenerales.querySelectorAll('.input-edit'); 
+        
+            isDisabledCalGeneral = !isDisabledCalGeneral;
+            
+            if(isDisabledCalGeneral){
+                btnSaveCalculos.style.display = 'none';
             }else{
-                x.style.display = 'none';
+                btnSaveCalculos.style.display = 'inline-flex';
             }
-        });
-    }
+        
+            btnEditCalcGeneral.forEach(function(x) {
+                x.disabled = isDisabledCalGeneral;
+            });
+        }
+    @endif
+    
+    @if ($pagina == 'especificaciones')
+        var dataSpects = Object.values(@json($caracteristicas));
+        
+        function viewDivSpect(idCategory){
+            let divSpects = document.querySelectorAll('.div-spect');
+            divSpects.forEach(function(x){
+                if(x.dataset.category == idCategory){
+                    x.style.display = 'flex';
+                }else{
+                    x.style.display = 'none';
+                }
+            });
+        }
 
-    function viewCaracteristicas(){
-        let categoryContainer = document.getElementById('category-container');
+        function viewCaracteristicas(){
+            let categoryContainer = document.getElementById('category-container');
+            let caracteristicasContainer = document.getElementById('caracteristicas-container');
 
-        categoryContainer.style.transition = 'transform 1s ease, opacity 1s ease'; // Asegúrate de añadir la transición
-        categoryContainer.style.transform = 'translateX(100%)'; // Comillas alrededor de la transformación
-        categoryContainer.style.opacity = '0';
+            caracteristicasContainer.style.display = 'block';
+            categoryContainer.style.transition = 'transform 0.5s ease, opacity 0.5s ease'; // Asegúrate de añadir la transición
+            categoryContainer.style.transform = 'translateX(100%)'; // Comillas alrededor de la transformación
+            categoryContainer.style.opacity = '0';
+            
 
-        setTimeout(() => {
-            categoryContainer.style.display = 'none';
-        }, 1000);
-    }
+            setTimeout(() => {
+                categoryContainer.style.display = 'none';
+                caracteristicasContainer.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+                caracteristicasContainer.style.transform = 'translateX(0)';
+                caracteristicasContainer.style.opacity = '1';
+            }, 500);
+        }
+
+        function viewCategoriasXGrupos(){
+            let categoryContainer = document.getElementById('category-container');
+            let caracteristicasContainer = document.getElementById('caracteristicas-container');
+
+            categoryContainer.style.display = 'block';
+            caracteristicasContainer.style.transition = 'transform 0.5s ease, opacity 0.5s ease'; // Asegúrate de añadir la transición
+            caracteristicasContainer.style.transform = 'translateX(-100%)'; // Comillas alrededor de la transformación
+            caracteristicasContainer.style.opacity = '0';
+            
+
+            setTimeout(() => {
+                caracteristicasContainer.style.display = 'none';
+                categoryContainer.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+                categoryContainer.style.transform = 'translateX(0)';
+                categoryContainer.style.opacity = '1';
+            }, 500);
+        }
+
+        function sendGrupoToModal(id){
+            let inputHidden = document.getElementById('hidden-modal-addespecificacionxgrupo-grupo');
+            inputHidden.value = id;
+        }
+
+        function search(query) {
+            return dataSpects.filter(item => item.especificacion.toLowerCase().includes(query.toLowerCase())).slice(0, 5);
+        }
+
+        function inputSearch(input){
+            const query = input.value;
+            const results = search(query);
+            const resultsContainer = document.getElementById('modal-addespecificacionxgrupo-results');
+            resultsContainer.innerHTML = '';
+
+            if(query.length > 0){
+                results.forEach(item => {
+                    const li = document.createElement('li');
+                    li.style.cursor = "pointer";
+                    li.classList.add('list-group-item', 'hover-sistema-uno');
+                    li.textContent = `${item.especificacion}`;
+
+                    li.addEventListener('click', function() {
+                            document.getElementById('hidden-modal-addespecificacionxgrupo-especificacion').value = item.idCaracteristica; 
+                            document.getElementById('text-modal-addespecificacionxgrupo').value = item.especificacion;
+                            resultsContainer.innerHTML = ''; 
+                        });
+                    resultsContainer.appendChild(li);
+                });
+            }else {
+                resultsContainer.innerHTML = '';
+            }
+        }
     @endif
     
     document.addEventListener('DOMContentLoaded', function() {
@@ -496,6 +640,9 @@
                 @break
             @case('especificaciones')
                 viewDivSpect(1);
+                document.getElementById('caracteristicas-container').style.display = 'none';
+                document.getElementById('caracteristicas-container').style.transform = 'translateX(-100%)';
+                document.getElementById('caracteristicas-container').style.opacity = '0';
                 @break
             @default
         @endswitch

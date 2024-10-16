@@ -1,8 +1,10 @@
 <?php
 namespace App\Services;
 
+use App\Repositories\AlmacenRepositoryInterface;
 use Carbon\Carbon;
 use App\Repositories\EgresoProductoRepositoryInterface;
+use App\Repositories\InventarioRepositoryInterface;
 use App\Repositories\PublicacionRepositoryInterface;
 use App\Repositories\RegistroProductoRepositoryInterface;
 
@@ -12,17 +14,26 @@ class EgresoProductoService implements EgresoProductoServiceInterface
     protected $registroRepository;
     protected $publicacionRepository;
     protected $headerService;
+    protected $productoRepository;
+    protected $inventarioRepository;
+    protected $almacenRepository;
 
     public function __construct(EgresoProductoRepositoryInterface $egresoRepository,
                                 RegistroProductoRepositoryInterface $registroRepository,
                                 PublicacionRepositoryInterface $publicacionRepository,
-                                HeaderServiceInterface $headerService
+                                HeaderServiceInterface $headerService,
+                                ProductoServiceInterface $productoRepository,
+                                InventarioRepositoryInterface $inventarioRepository,
+                                AlmacenRepositoryInterface $almacenRepository
                                 )
     {
         $this->egresoRepository = $egresoRepository;
         $this->registroRepository = $registroRepository;
         $this->publicacionRepository = $publicacionRepository;
         $this->headerService = $headerService;
+        $this->productoRepository = $productoRepository;
+        $this->inventarioRepository = $inventarioRepository;
+        $this->almacenRepository = $almacenRepository;
     }
     
     public function getEgresosByMonth($date){
@@ -53,15 +64,30 @@ class EgresoProductoService implements EgresoProductoServiceInterface
         return $publicacion;
     }
 
-    public function createEgreso(array $data){
+    public function getAllAlmacenes(){
+        return $this->almacenRepository->all();
+    }
+
+    public function createEgreso($idAlmacen,array $data){
         if($data){
             $data['idEgreso'] = $this->getNewIdEgreso();
             $data['idUser'] = $this->headerService->getModelUser()->idUser;
 
             $arrayRegistro =['estado' => 'ENTREGADO'];
-
+            
             $this->egresoRepository->create($data);
             $this->registroRepository->update($data['idRegistro'],$arrayRegistro);
+            $producto = $this->updateStock($idAlmacen,$data['idRegistro']);
+            return $producto;
+        }
+    }
+
+    private function updateStock($idAlmacen,$idRegistro){
+        if($idAlmacen && $idRegistro){
+            $producto = $this->registroRepository->getOne('idRegistro',$idRegistro)
+                        ->DetalleComprobante->Producto;
+            $this->inventarioRepository->removeStock($producto->idProducto,$idAlmacen);
+            return $producto;
         }
     }
 
