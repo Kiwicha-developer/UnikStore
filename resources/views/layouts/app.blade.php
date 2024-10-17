@@ -102,6 +102,10 @@
         color: #00b1b9;
         text-decoration: underline;
     }
+
+    .link-danger:hover{
+        color: red !important;
+    }
     
     .decoration-link{
         color: #00b1b9;

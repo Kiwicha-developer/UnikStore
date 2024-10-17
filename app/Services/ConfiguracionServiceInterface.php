@@ -11,4 +11,6 @@ interface ConfiguracionServiceInterface
     public function updateCalculadora($igv,$fact);
     public function updateComisionValue($idGrupo,$idRango,$comision);
     public function getAllEspecificaciones();
+    public function createCaracteristica($descripcion);
+    public function insertCaracteristicaXGrupo($idGrupo,$idCaracteristica);
 }

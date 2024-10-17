@@ -118,8 +118,33 @@ class ConfiguracionController extends Controller
 
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
-                dd($descripcion);
-                return back();
+                if($descripcion){
+                    $this->configuracionService->createCaracteristica($descripcion);
+                    return back();
+                }else{
+                    $this->headerService->sendFlashAlerts('Faltan datos','Ingresa datos validos','warning','btn-danger');
+                    return back();
+                }
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function insertCaracteristicaXGrupo(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $idGrupo = $request->input('grupo');
+        $idCaracteristica = $request->input('caracteristica');
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if($idGrupo && $idCaracteristica){
+                    $this->configuracionService->insertCaracteristicaXGrupo($idGrupo,$idCaracteristica);
+                    return back();
+                }else{
+                    $this->headerService->sendFlashAlerts('Faltan datos','Ingresa datos validos','warning','btn-danger');
+                    return back();
+                }
             }
         }    
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');

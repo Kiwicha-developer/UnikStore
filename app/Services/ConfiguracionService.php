@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Repositories\CalculadoraRepositoryInterface;
+use App\Repositories\CaracteristicasGrupoRepositoryInterface;
 use App\Repositories\CaracteristicasRepositoryInterface;
 use App\Repositories\CategoriaProductoRepositoryInterface;
 use App\Repositories\ComisionRepositoryInterface;
@@ -16,13 +17,15 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     protected $calculadoraRepository;
     protected $comisionRepository;
     protected $caracteristicasRepository;
+    protected $caracteristicasGrupoRepository;
 
     public function __construct(CategoriaProductoRepositoryInterface $categoriaRepository,
                                 RangoPrecioRepositoryInterface $rangoRepository,
                                 EmpresaRepositoryInterface $empresaRepository,
                                 CalculadoraRepositoryInterface $calculadoraRepository,
                                 ComisionRepositoryInterface $comisionRepository,
-                                CaracteristicasRepositoryInterface $caracteristicasRepository)
+                                CaracteristicasRepositoryInterface $caracteristicasRepository,
+                                CaracteristicasGrupoRepositoryInterface $caracteristicasGrupoRepository)
     {
         $this->categoriaRepository = $categoriaRepository;
         $this->rangoRepository = $rangoRepository;
@@ -30,6 +33,7 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         $this->calculadoraRepository = $calculadoraRepository;
         $this->comisionRepository = $comisionRepository;
         $this->caracteristicasRepository = $caracteristicasRepository;
+        $this->caracteristicasGrupoRepository = $caracteristicasGrupoRepository;
     }
 
     public function getAllCategorias(){
@@ -75,5 +79,28 @@ class ConfiguracionService implements ConfiguracionServiceInterface
 
     public function getAllEspecificaciones(){
         return $this->caracteristicasRepository->all()->sortBy('especificacion');
+    }
+
+    public function insertCaracteristicaXGrupo($idGrupo,$idCaracteristica){
+        if($idGrupo && $idCaracteristica){
+            $data = ['idGrupoProducto' => $idGrupo,
+                    'idCaracteristica' => $idCaracteristica];
+            $this->caracteristicasGrupoRepository->create($data);
+        }
+    }
+
+    public function createCaracteristica($descripcion){
+        if($descripcion){
+            $data = ['idCaracteristica' => $this->getNewIdCaracteristica(),
+                    'especificacion' => $descripcion,
+                    'tipo' => 'FILTRO'];
+            $this->caracteristicasRepository->create($data);
+        }
+    }
+
+    private function getNewIdCaracteristica(){
+        $caracteristica = $this->caracteristicasRepository->getLast();
+        $id = $caracteristica ? $caracteristica->idCaracteristica : 0;
+        return $id + 1;
     }
 }

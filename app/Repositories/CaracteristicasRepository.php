@@ -54,6 +54,11 @@ class CaracteristicasRepository implements CaracteristicasRepositoryInterface
         $car->update($productoData);
         return $car;
     }
+
+    public function getLast(){
+        $caracteristica = Caracteristicas::select('idCaracteristica')->orderBy('idCaracteristica','desc')->first();
+        return $caracteristica;
+    }
     
     private function validateColumns($column){
         if (!in_array($column, $this->modelColumns)) {

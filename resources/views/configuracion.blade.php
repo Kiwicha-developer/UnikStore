@@ -290,6 +290,9 @@
                                     <small class="text-decoration-underline">{{$grupo->GrupoProducto->nombreGrupo}}</small>
                                     @endforeach
                                 </div>
+                                <div class="col-md-1 text-end">
+                                    <button class="btn btn-danger {{count($caracteristica->Caracteristicas_Grupo) == 0 ? '' : 'd-none'}}"><i class="bi bi-trash3-fill"></i></button>
+                                </div>
                             </div>
                         </li>
                     @endforeach
@@ -326,7 +329,7 @@
                         <h5 class="pt-1">{{$grupo->nombreGrupo}}</h5>
                     </div>
                     <div class="col-md-6 border-bottom border-secondary text-end pt-1 pb-1">
-                        <button class="btn btn-sm btn-success" onclick="sendGrupoToModal({{$grupo->idGrupoProducto}})" data-bs-toggle="modal" data-bs-target="#spectXGrupoModal">
+                        <button class="btn btn-sm btn-success" onclick="sendGrupoToModal({{$grupo->idGrupoProducto}},'{{$grupo->nombreGrupo}}')" data-bs-toggle="modal" data-bs-target="#spectXGrupoModal">
                             <i class="bi bi-plus-lg"></i>
                         </button>
                     </div>
@@ -335,7 +338,11 @@
                             @foreach ($grupo->Caracteristicas_Grupo as $caracteristica)
                             <div class="col-md-2 mb-1">
                                 <div class="row ms-1 h-100 border bg-light rounded-2 truncate">
-                                    <small>{{$caracteristica->Caracteristicas->especificacion}}</small>
+                                    <small>
+                                        <a href="javascript:void(0)" class="text-dark link-danger">
+                                            <i class="bi bi-x-lg "></i></a>
+                                        {{$caracteristica->Caracteristicas->especificacion}}
+                                    </small>
                                 </div>
                             </div>
                             @endforeach
@@ -350,91 +357,94 @@
     @endif
     <!-- Modal -->
     @if($pagina == 'calculos')
-    <form action="{{route('updatecomision')}}" method="POST">
-             @csrf
-    <div class="modal fade" id="comisionModal" tabindex="-1" aria-labelledby="comisionModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="comisionModalLabel"></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body ps-0 pe-0 pt-0">
-            <ul class="list-group list-group-flush ">
-                @foreach($rangos as $rango)
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-6 col-md-6">
-                            <h6>{{$rango->descripcion}}</h6>
-                        </div>
-                        <div class="col-6 col-md-6">
-                            <input type="number" name="comision[{{$rango->idRango}}]" class="form-control" id="comisionModalList-{{$rango->idRango}}" step="0.01">
-                            
-                        </div>
-                    </div>
-                </li>
-                @endforeach
-            </ul>
-          </div>
-          <div class="modal-footer">
-            <input type="hidden" name="grupo" id="comisionHiddenGrup" value="">
-            <input type="hidden" id="categoryModalComision" name="category" value="{{ old('category', 1) }}">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Actualizar <i class="bi bi-floppy"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-    </form>
-    @endif
-    @if($pagina == 'web')
-    <div class="modal fade" id="cuentasBancariasModal" tabindex="-1" aria-labelledby="cuentasBancariasModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="cuentasBancariasModalLabel">Example</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body ps-0 pe-0 pt-0">
-          </div>
-          <div class="modal-footer">
-            <input type="hidden" name="grupo" id="comisionHiddenGrup" value="">
-            <input type="hidden" id="categoryModalComision" name="category" value="{{ old('category', 1) }}">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Actualizar <i class="bi bi-floppy"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-    @endif
-    @if ($pagina == 'especificaciones')
-    <div class="modal fade" id="spectXGrupoModal" tabindex="-1" aria-labelledby="spectXGrupoModalLabel" aria-hidden="true">
+        <form action="{{route('updatecomision')}}" method="POST">
+        @csrf
+        <div class="modal fade" id="comisionModal" tabindex="-1" aria-labelledby="comisionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="comisionModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ps-0 pe-0 pt-0">
+                <ul class="list-group list-group-flush ">
+                    @foreach($rangos as $rango)
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-6 col-md-6">
+                                <h6>{{$rango->descripcion}}</h6>
+                            </div>
+                            <div class="col-6 col-md-6">
+                                <input type="number" name="comision[{{$rango->idRango}}]" class="form-control" id="comisionModalList-{{$rango->idRango}}" step="0.01">
+                                
+                            </div>
+                        </div>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="grupo" id="comisionHiddenGrup" value="">
+                <input type="hidden" id="categoryModalComision" name="category" value="{{ old('category', 1) }}">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Actualizar <i class="bi bi-floppy"></i></button>
+            </div>
+            </div>
+        </div>
+        </div>
+        </form>
+    @endif
+    @if($pagina == 'web')
+        <div class="modal fade" id="cuentasBancariasModal" tabindex="-1" aria-labelledby="cuentasBancariasModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="spectXGrupoModalLabel">Agregar Especificaci&oacute;n</h5>
+                    <h5 class="modal-title" id="cuentasBancariasModalLabel">Example</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <input type="hidden" name="grupo" value="" id="hidden-modal-addespecificacionxgrupo-grupo">
-                            <input type="hidden" name="caracteristica" value="" id="hidden-modal-addespecificacionxgrupo-especificacion">
-                            <input class="form-control" type="text" placeholder="Busca una caracteristica..." id="text-modal-addespecificacionxgrupo" readonly>
-                        </div>
-                        <div class="col-md-12 mt-3">
-                            <input class="form-control" oninput="inputSearch(this)" type="text" placeholder="busca aqui!!">
-                            <ul class="list-group" id="modal-addespecificacionxgrupo-results" style="position:absolute;top:100%;z-index:1000"></ul>
-                        </div>
-                    </div>
+                <div class="modal-body ps-0 pe-0 pt-0">
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="grupo" id="comisionHiddenGrup" value="">
+                    <input type="hidden" id="categoryModalComision" name="category" value="{{ old('category', 1) }}">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary"><i class="bi bi-floppy"></i> Guardar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar <i class="bi bi-floppy"></i></button>
+                </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
+    @if ($pagina == 'especificaciones')
+    <form action="{{route('insertcaracteristicaxgrupo')}}" method="POST">
+        @csrf
+        <div class="modal fade" id="spectXGrupoModal" tabindex="-1" aria-labelledby="spectXGrupoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="spectXGrupoModalLabel">Agregar Especificaci&oacute;n <span id="title-modal-addespecificacionxgrupo"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="hidden" name="grupo" value="" id="hidden-modal-addespecificacionxgrupo-grupo">
+                                <input type="hidden" name="caracteristica" value="" id="hidden-modal-addespecificacionxgrupo-especificacion">
+                                <input class="form-control" type="text" placeholder="Busca una caracteristica..." id="text-modal-addespecificacionxgrupo" readonly>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <input class="form-control" oninput="inputSearch(this);disableButtonSave();" type="text" placeholder="busca aqui!!">
+                                <ul class="list-group" id="modal-addespecificacionxgrupo-results" style="position:absolute;top:100%;z-index:1000"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btn-modal-addespecificacionxgrupo"><i class="bi bi-floppy"></i> Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     <form action="{{route('createcaracteristica')}}" method="POST">
         @csrf
     <div class="modal fade" id="createSpectModal" tabindex="-1" aria-labelledby="createSpectModalLabel" aria-hidden="true">
@@ -593,9 +603,34 @@
             }, 500);
         }
 
-        function sendGrupoToModal(id){
+        function sendGrupoToModal(id,title){
             let inputHidden = document.getElementById('hidden-modal-addespecificacionxgrupo-grupo');
+            let spanTitle = document.getElementById('title-modal-addespecificacionxgrupo');
+            let inputHiddeSpect = document.getElementById('hidden-modal-addespecificacionxgrupo-especificacion'); 
+            let textSpect = document.getElementById('text-modal-addespecificacionxgrupo');
+            inputHidden.value = '';
+            inputHiddeSpect.value = '';
+            textSpect.value = '';
+
+            spanTitle.textContent = title;
             inputHidden.value = id;
+        }
+
+        function disableButtonSave(){
+            let btnModalCaracteristicas = document.getElementById('btn-modal-addespecificacionxgrupo');
+            let inputHiddenGrupo = document.getElementById('hidden-modal-addespecificacionxgrupo-grupo');
+            let inputHiddenCar = document.getElementById('hidden-modal-addespecificacionxgrupo-especificacion');
+            let disabled = false;
+
+            if(inputHiddenGrupo.value == ''){
+                disabled = true;
+            }
+
+            if(inputHiddenCar.value == ''){
+                disabled = true;
+            }
+
+            btnModalCaracteristicas.disabled = disabled;
         }
 
         function search(query) {
@@ -618,6 +653,7 @@
                     li.addEventListener('click', function() {
                             document.getElementById('hidden-modal-addespecificacionxgrupo-especificacion').value = item.idCaracteristica; 
                             document.getElementById('text-modal-addespecificacionxgrupo').value = item.especificacion;
+                            disableButtonSave();
                             resultsContainer.innerHTML = ''; 
                         });
                     resultsContainer.appendChild(li);
@@ -640,6 +676,7 @@
                 @break
             @case('especificaciones')
                 viewDivSpect(1);
+                disableButtonSave();
                 document.getElementById('caracteristicas-container').style.display = 'none';
                 document.getElementById('caracteristicas-container').style.transform = 'translateX(-100%)';
                 document.getElementById('caracteristicas-container').style.opacity = '0';

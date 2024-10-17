@@ -234,6 +234,9 @@ class ProductoService implements ProductoServiceInterface
             $producto = $this->productoRepository->update($id,$array);
             
             if($producto){
+                if(!is_null($img1) || !is_null($img2) || !is_null($img3) || !is_null($img4)){
+                    $this->imageVersions($id);
+                }
                 is_null($img1) ? '' : $imgService->createImage($img1,$producto->idProducto.'_1',$this->path);
                 is_null($img2) ? '' : $imgService->createImage($img2,$producto->idProducto.'_2',$this->path);
                 is_null($img3) ? '' : $imgService->createImage($img3,$producto->idProducto.'_3',$this->path);
@@ -293,7 +296,7 @@ class ProductoService implements ProductoServiceInterface
         return $this->productoRepository->validateSerial($id, $serial) !== null;
     }
     
-     public function updateInventory($idProduct,$array){
+    public function updateInventory($idProduct,$array){
         if (!$idProduct) {
             return null;
         }
@@ -336,6 +339,32 @@ class ProductoService implements ProductoServiceInterface
             // Manejo de excepciones
             throw new \InvalidArgumentException($e->getMessage());
         }
+    }
+
+    private function imageVersions($id){
+        if($id){
+            $producto = $this->productoRepository->getOne('idProducto',$id);
+            $data = ['imagenProducto1' => $this->generateImageVersion($producto->imagenProducto1),
+                    'imagenProducto2' => $this->generateImageVersion($producto->imagenProducto2),
+                    'imagenProducto3' => $this->generateImageVersion($producto->imagenProducto3),
+                    'imagenProducto4' => $this->generateImageVersion($producto->imagenProducto4)
+                    ];
+            $this->productoRepository->update($id,$data);
+        }
+    }
+
+    private function generateImageVersion($path){
+        if($path){
+            $pos = strpos($path, '?v=');
+            if(!$pos){
+                return $path . '?v=1';
+            }else{
+                $version =  (int) substr($path, $pos + 3);
+                $namepath = substr($path,0, -1);
+                return $namepath . ($version + 1);
+            }
+        }
+        return $path;
     }
     
     private function createSeguimiento($idProducto,$array){

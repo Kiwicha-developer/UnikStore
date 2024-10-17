@@ -5,13 +5,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Caracteristicas extends Model
 {
+    public $timestamps = false;
     protected $table = 'Caracteristicas';
     
     protected $primaryKey = 'idCaracteristica';
 
     protected $guarded = ['idCaracteristica'];
     
-    protected $fillable = ['especificacion'
+    protected $fillable = ['idCaracteristica',
+                            'especificacion',
+                            'tipo'
                             ];
 
     
@@ -26,6 +29,10 @@ class Caracteristicas extends Model
 
     public function Caracteristicas_Grupo(){
         return $this->hasMany(Caracteristicas_Grupo::class,'idCaracteristica','idCaracteristica');
+    }
+
+    public function Caracteristicas_Producto(){
+        return $this->hasMany(Caracteristicas_Producto::class,'idCaracteristica','idCaracteristica');
     }
 
     /**
