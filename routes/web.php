@@ -87,18 +87,17 @@ Route::middleware(['validate.session'])->group(function () {
     
     Route::get('/configuracion/web', [ConfiguracionController::class, 'web'])->name('configweb');
     Route::get('/configuracion/calculos', [ConfiguracionController::class, 'calculos'])->name('configcalculos');
-    Route::get('/configuracion/categorias', [ConfiguracionController::class, 'categorias'])->name('configcategorias');
+    Route::get('/configuracion/productos', [ConfiguracionController::class, 'productos'])->name('configproductos');
     Route::get('/configuracion/especificaciones', [ConfiguracionController::class, 'especificaciones'])->name('configespecificaciones');
     Route::get('/configuracion/inventario', [ConfiguracionController::class, 'inventario'])->name('configinventario');
     Route::post('/configuracion/createcaracteristica', [ConfiguracionController::class, 'createCaracteristica'])->name('createcaracteristica');
+    Route::post('/configuracion/removecaracteristica', [ConfiguracionController::class, 'removeCaracteristica'])->name('removecaracteristica');
     Route::post('/configuracion/updatecomision', [ConfiguracionController::class, 'updateComision'])->name('updatecomision');
     Route::post('/configuracion/updatecalculos', [ConfiguracionController::class, 'updateCalculos'])->name('updatecalculos');
     Route::post('/configuracion/updatecorreos', [ConfiguracionController::class, 'updateCorreos'])->name('updatecorreos');
     Route::post('/configuracion/insertcaracteristicaxgrupo', [ConfiguracionController::class, 'insertCaracteristicaXGrupo'])->name('insertcaracteristicaxgrupo');
-    
-    
-    
-
+    Route::post('/configuracion/deletecaracteristicaxgrupo', [ConfiguracionController::class, 'deleteCaracteristicaXGrupo'])->name('deletecaracteristicaxgrupo');
+  
 });
 
 

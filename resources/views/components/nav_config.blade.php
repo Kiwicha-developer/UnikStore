@@ -7,7 +7,7 @@
           <a class="nav-link {{$pag == 'calculos' ? 'bg-sistema-dos text-light active' : 'text-dark'}}" href="{{route('configcalculos')}}">C&aacute;lculos</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{$pag == 'categorias' ? 'bg-sistema-dos text-light active' : 'text-dark'}}" href="{{route('configcategorias')}}">Categorias</a>
+            <a class="nav-link {{$pag == 'productos' ? 'bg-sistema-dos text-light active' : 'text-dark'}}" href="{{route('configproductos')}}">Productos</a>
           </li>
           <li class="nav-item">
             <a class="nav-link {{$pag == 'especificaciones' ? 'bg-sistema-dos text-light active' : 'text-dark'}}" href="{{route('configespecificaciones')}}">Especificaciones</a>

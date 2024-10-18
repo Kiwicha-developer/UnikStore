@@ -55,6 +55,11 @@ class CaracteristicasRepository implements CaracteristicasRepositoryInterface
         return $car;
     }
 
+    public function remove($id){
+        $model = Caracteristicas::findOrFail($id);
+        $model->delete();
+    }
+
     public function getLast(){
         $caracteristica = Caracteristicas::select('idCaracteristica')->orderBy('idCaracteristica','desc')->first();
         return $caracteristica;

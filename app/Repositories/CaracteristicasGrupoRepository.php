@@ -31,6 +31,11 @@ class CaracteristicasGrupoRepository implements CaracteristicasGrupoRepositoryIn
         return Caracteristicas_Grupo::create($data);
     }
 
+    public function remove($idGrupo,$idCaracteristica){
+        $model = $this->getOne($idGrupo,$idCaracteristica);
+        $model->delete();
+    }
+
     private function validateColumns($column){
         if (!in_array($column, $this->modelColumns)) {
             throw new \InvalidArgumentException("La columna '$column' no es válida.");

@@ -28,7 +28,7 @@ class ConfiguracionController extends Controller
             if($acceso->idVista == 7){
                 $empresas = $this->configuracionService->getAllEmpresas();
                 
-                    return view('configuracion',['user' => $userModel,
+                    return view('configweb',['user' => $userModel,
                                             'pagina' => 'web',
                                             'empresas' => $empresas
                     ]);
@@ -50,7 +50,7 @@ class ConfiguracionController extends Controller
                 
                 $empresas = $this->configuracionService->getAllEmpresas();
                 
-                    return view('configuracion',['user' => $userModel,
+                    return view('configcalculos',['user' => $userModel,
                                             'pagina' => 'calculos',
                                             'empresas' => $empresas,
                                             'calculos' => $calculos,
@@ -68,24 +68,32 @@ class ConfiguracionController extends Controller
         
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
-                
-                    return view('configuracion',['user' => $userModel,
-                                            'pagina' => 'inventario'
-                    ]);
+                $almacenes = $this->configuracionService->getAllAlmacenes();
+                $proveedores = $this->configuracionService->getAllProveedores();
+
+                return view('configinventario',['user' => $userModel,
+                                        'pagina' => 'inventario',
+                                        'almacenes' => $almacenes,
+                                        'proveedores' => $proveedores
+                ]);
             }
         }
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
         return redirect()->route('dashboard',['user' => $userModel]);
     }
 
-    public function categorias(){
+    public function productos(){
         $userModel = $this->headerService->getModelUser();
         
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
                 $categorias = $this->configuracionService->getAllCategorias();
-                return view('configuracion',['user' => $userModel,
-                                        'pagina' => 'categorias'
+                $marcas = $this->configuracionService->getAllMarcas();
+
+                return view('configproductos',['user' => $userModel,
+                                        'pagina' => 'productos',
+                                        'categorias' => $categorias,
+                                        'marcas' => $marcas
                 ]);
             }
         }
@@ -101,7 +109,7 @@ class ConfiguracionController extends Controller
                 $categorias = $this->configuracionService->getAllCategorias();
                 $spects = $this->configuracionService->getAllEspecificaciones();
                 
-                return view('configuracion',['user' => $userModel,
+                return view('configespecificaciones',['user' => $userModel,
                                         'pagina' => 'especificaciones',
                                         'categorias' => $categorias,
                                         'caracteristicas' => $spects
@@ -120,11 +128,33 @@ class ConfiguracionController extends Controller
             if($acceso->idVista == 7){
                 if($descripcion){
                     $this->configuracionService->createCaracteristica($descripcion);
+                    $this->headerService->sendFlashAlerts('Especificacion creada',$descripcion . ' creada correctamente.','success','btn-success');
                     return back();
                 }else{
                     $this->headerService->sendFlashAlerts('Faltan datos','Ingresa datos validos','warning','btn-danger');
                     return back();
                 }
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function removeCaracteristica(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $idCaracteristica = $request->input('caracteristica');
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if($idCaracteristica){
+                    $this->configuracionService->removeCaracteristica($idCaracteristica);
+                    $this->headerService->sendFlashAlerts('Operacion exitosa','Datos eliminados correctamente','success','btn-success');
+                    return back();
+                }else{
+                    $this->headerService->sendFlashAlerts('Faltan Datos','Verifica los campos de entrada','warning','btn-danger');
+                    return back();
+                }
+
             }
         }    
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
@@ -140,9 +170,28 @@ class ConfiguracionController extends Controller
             if($acceso->idVista == 7){
                 if($idGrupo && $idCaracteristica){
                     $this->configuracionService->insertCaracteristicaXGrupo($idGrupo,$idCaracteristica);
+                    $this->headerService->sendFlashAlerts('Operacion exitosa','Datos registrados correctamente','success','btn-success');
                     return back();
                 }else{
                     $this->headerService->sendFlashAlerts('Faltan datos','Ingresa datos validos','warning','btn-danger');
+                    return back();
+                }
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function deleteCaracteristicaXGrupo(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $idCaracteristica = $request->input('caracteristica');
+        $idGrupo = $request->input('grupo');
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if($idCaracteristica && $idGrupo){
+                    $this->configuracionService->deleteCaracteristicaXGrupo($idGrupo,$idCaracteristica);
+                    $this->headerService->sendFlashAlerts('Operacion exitosa','Datos eliminados correctamente','success','btn-success');
                     return back();
                 }
             }
@@ -222,4 +271,5 @@ class ConfiguracionController extends Controller
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
         return redirect()->route('dashboard',['user' => $userModel]);
     }
+
 }

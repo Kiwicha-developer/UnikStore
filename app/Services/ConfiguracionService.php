@@ -1,12 +1,15 @@
 <?php
 namespace App\Services;
 
+use App\Repositories\AlmacenRepositoryInterface;
 use App\Repositories\CalculadoraRepositoryInterface;
 use App\Repositories\CaracteristicasGrupoRepositoryInterface;
 use App\Repositories\CaracteristicasRepositoryInterface;
 use App\Repositories\CategoriaProductoRepositoryInterface;
 use App\Repositories\ComisionRepositoryInterface;
 use App\Repositories\EmpresaRepositoryInterface;
+use App\Repositories\MarcaProductoRepositoryInterface;
+use App\Repositories\ProveedorRepositoryInterface;
 use App\Repositories\RangoPrecioRepositoryInterface;
 
 class ConfiguracionService implements ConfiguracionServiceInterface
@@ -18,6 +21,9 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     protected $comisionRepository;
     protected $caracteristicasRepository;
     protected $caracteristicasGrupoRepository;
+    protected $almacenRepository;
+    protected $proveedorRepository;
+    protected $marcaRepository;
 
     public function __construct(CategoriaProductoRepositoryInterface $categoriaRepository,
                                 RangoPrecioRepositoryInterface $rangoRepository,
@@ -25,7 +31,10 @@ class ConfiguracionService implements ConfiguracionServiceInterface
                                 CalculadoraRepositoryInterface $calculadoraRepository,
                                 ComisionRepositoryInterface $comisionRepository,
                                 CaracteristicasRepositoryInterface $caracteristicasRepository,
-                                CaracteristicasGrupoRepositoryInterface $caracteristicasGrupoRepository)
+                                CaracteristicasGrupoRepositoryInterface $caracteristicasGrupoRepository,
+                                AlmacenRepositoryInterface $almacenRepository,
+                                ProveedorRepositoryInterface $proveedorRepository,
+                                MarcaProductoRepositoryInterface $marcaRepository)
     {
         $this->categoriaRepository = $categoriaRepository;
         $this->rangoRepository = $rangoRepository;
@@ -34,10 +43,25 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         $this->comisionRepository = $comisionRepository;
         $this->caracteristicasRepository = $caracteristicasRepository;
         $this->caracteristicasGrupoRepository = $caracteristicasGrupoRepository;
+        $this->almacenRepository = $almacenRepository;
+        $this->proveedorRepository = $proveedorRepository;
+        $this->marcaRepository = $marcaRepository;
+    }
+
+    public function getAllAlmacenes(){
+        return $this->almacenRepository->all();
+    }
+
+    public function getAllProveedores(){
+        return $this->proveedorRepository->all();
     }
 
     public function getAllCategorias(){
         return $this->categoriaRepository->all();
+    }
+
+    public function getAllMarcas(){
+        return $this->marcaRepository->all();
     }
 
     public function getAllRangos(){
@@ -89,12 +113,27 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         }
     }
 
+    public function deleteCaracteristicaXGrupo($idGrupo,$idCaracteristica){
+        if($idGrupo && $idCaracteristica){
+            $this->caracteristicasGrupoRepository->remove($idGrupo,$idCaracteristica);
+        }
+    }
+
     public function createCaracteristica($descripcion){
         if($descripcion){
             $data = ['idCaracteristica' => $this->getNewIdCaracteristica(),
                     'especificacion' => $descripcion,
                     'tipo' => 'FILTRO'];
             $this->caracteristicasRepository->create($data);
+        }
+    }
+
+    public function removeCaracteristica($idCaracteristica){
+        if($idCaracteristica){
+            $caracteristicaModel = $this->caracteristicasRepository->getOne('idCaracteristica',$idCaracteristica)->Caracteristicas_Grupo;
+            if(count($caracteristicaModel) < 1){
+                $this->caracteristicasRepository->remove($idCaracteristica);
+            }
         }
     }
 
