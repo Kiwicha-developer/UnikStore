@@ -101,17 +101,19 @@ class ConfiguracionController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
 
-    public function especificaciones(){
+    public function especificaciones($idCategoria){
         $userModel = $this->headerService->getModelUser();
         
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
                 $categorias = $this->configuracionService->getAllCategorias();
+                $categoria = $this->configuracionService->getOneCategoria(decrypt($idCategoria));
                 $spects = $this->configuracionService->getAllEspecificaciones();
                 
                 return view('configespecificaciones',['user' => $userModel,
                                         'pagina' => 'especificaciones',
                                         'categorias' => $categorias,
+                                        'categoria' => $categoria,
                                         'caracteristicas' => $spects
                 ]);
             }
@@ -266,6 +268,34 @@ class ConfiguracionController extends Controller
                     $this->headerService->sendFlashAlerts('Error','Hubo un error en la operacion','error','btn-danger');
                     return back()->withInput();
                 }
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function createAlmacen(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $descripcion = $request->input('descripcion');
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                $this->configuracionService->createAlmacen($descripcion);
+                return back();
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function createProveedor(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $razSocial = $request->input('razonsocial');
+        $nombreComercial = $request->input('nombrecomercial');
+        $ruc = $request->input('ruc');
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                $this->configuracionService->createProveedor($razSocial,$nombreComercial,$ruc);
+                return back();
             }
         }    
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');

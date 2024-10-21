@@ -54,6 +54,10 @@ class ProveedorRepository implements ProveedorRepositoryInterface
         $producto->update($productoData);
         return $producto;
     }
+
+    public function getLast(){
+        return Preveedor::orderBy('idProveedor', 'desc')->first();
+    }
     
     private function validateColumns($column){
         if (!in_array($column, $this->modelColumns)) {

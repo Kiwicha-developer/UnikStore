@@ -14,6 +14,7 @@ use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\CalculadoraController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\PdfController;
 
 //scripts
 use App\Http\Controllers\ScriptController;
@@ -88,8 +89,8 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/configuracion/web', [ConfiguracionController::class, 'web'])->name('configweb');
     Route::get('/configuracion/calculos', [ConfiguracionController::class, 'calculos'])->name('configcalculos');
     Route::get('/configuracion/productos', [ConfiguracionController::class, 'productos'])->name('configproductos');
-    Route::get('/configuracion/especificaciones', [ConfiguracionController::class, 'especificaciones'])->name('configespecificaciones');
     Route::get('/configuracion/inventario', [ConfiguracionController::class, 'inventario'])->name('configinventario');
+    Route::get('/configuracion/especificaciones/{idCategoria}', [ConfiguracionController::class, 'especificaciones'])->name('configespecificaciones');
     Route::post('/configuracion/createcaracteristica', [ConfiguracionController::class, 'createCaracteristica'])->name('createcaracteristica');
     Route::post('/configuracion/removecaracteristica', [ConfiguracionController::class, 'removeCaracteristica'])->name('removecaracteristica');
     Route::post('/configuracion/updatecomision', [ConfiguracionController::class, 'updateComision'])->name('updatecomision');
@@ -97,7 +98,10 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/configuracion/updatecorreos', [ConfiguracionController::class, 'updateCorreos'])->name('updatecorreos');
     Route::post('/configuracion/insertcaracteristicaxgrupo', [ConfiguracionController::class, 'insertCaracteristicaXGrupo'])->name('insertcaracteristicaxgrupo');
     Route::post('/configuracion/deletecaracteristicaxgrupo', [ConfiguracionController::class, 'deleteCaracteristicaXGrupo'])->name('deletecaracteristicaxgrupo');
-  
+    Route::post('/configuracion/createalamcen', [ConfiguracionController::class, 'createAlmacen'])->name('createalmacen');
+    Route::post('/configuracion/createproveedor', [ConfiguracionController::class, 'createProveedor'])->name('createproveedor');
+
+    Route::get('/generateSerialPdf/{idDocumento}', [PdfController::class, 'generateSerialPdf'])->name('generarSeriesPdf');
 });
 
 

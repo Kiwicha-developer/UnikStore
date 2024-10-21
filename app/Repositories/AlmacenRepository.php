@@ -54,6 +54,10 @@ class AlmacenRepository implements AlmacenRepositoryInterface
         $producto->update($productoData);
         return $producto;
     }
+
+    public function getLast(){
+        return Almacen::orderBy('idAlmacen', 'desc')->first();
+    }
     
     private function validateColumns($column){
         if (!in_array($column, $this->modelColumns)) {

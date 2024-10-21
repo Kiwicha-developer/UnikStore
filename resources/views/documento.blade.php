@@ -21,6 +21,7 @@
         </div>
     </div>
     <br>
+    <br>
     <form action="{{route('insertingreso',[encrypt($documento->idComprobante)])}}" method="POST">
         @csrf
     <div class="row">
@@ -58,6 +59,10 @@
                     <label class="form-label">Importe Total:</label>
                     <input type="number" id="importe-total-comprobante" name="comprobante[total]" step="0.01" class="form-control" value="0.00" readonly>
                 </div>
+            </div>
+            @else
+            <div class="col-md-12 mb-4">
+                <a class="btn btn-danger" href="{{route('generarSeriesPdf',[$documento->idComprobante])}}"><i class="bi bi-file-earmark-pdf"></i> Series</a>
             </div>
             @endif
             <ul class="list-group" id="ul-ingreso" style="max-height: 60vh;overflow-x: hidden; overflow-y: auto;">

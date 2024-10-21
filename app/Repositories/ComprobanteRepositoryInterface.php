@@ -13,4 +13,5 @@ interface ComprobanteRepositoryInterface
     public function remove($id);
     public function validateDuplicity($number,$type,$idProveedor);
     public function getLast();
+    public function getAllRegistrosByComprobanteId($id);
 }

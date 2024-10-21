@@ -36,7 +36,7 @@
                 </select>
             </div>
             <div class="mb-3 col-6 col-md-3">
-                <label for="grupo-product" id="grupo-label" class="form-label">Grupo:</label>
+                <label for="grupo-product" id="grupo-label" class="form-label">Grupo (No se podra modificar despues):</label>
                 <select name="grupo" id="grupo-product" class="form-select">
                         <option value="" {{ old('grupo') ? '' : 'selected' }}>-Elige un grupo-</option>
                     @foreach($grupos as $grupo)
@@ -220,7 +220,7 @@
        
         <div class="row mt-4 pt-4">
               <div class="col-12 text-center">
-                  <button type="submit" onclick="manejarSubmit()" class="btn btn-success " id="btnRegistrar" >Registrar <i class="bi bi-floppy"></i></button>
+                  <button type="submit" onclick="manejarSubmit()"class="btn btn-success " id="btnRegistrar" >Registrar <i class="bi bi-floppy"></i></button>
               </div>
         </div>
       </form>

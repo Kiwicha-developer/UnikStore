@@ -10,4 +10,5 @@ interface AlmacenRepositoryInterface
     public function searchList($column,$data);
     public function create(array $data);
     public function update($id, array $data);
+    public function getLast();
 }

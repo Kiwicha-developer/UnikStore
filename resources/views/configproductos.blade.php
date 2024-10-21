@@ -21,7 +21,7 @@
             <h3><i class="{{$categoria->iconCategoria}}"></i> {{$categoria->nombreCategoria}}  </h3>
         </div>
         <div class="col-md-4 border-bottom border-secondary text-end">
-            <button class="btn btn-success"><i class="bi bi-house-add-fill"></i></button>
+            <button class="btn btn-success"><i class="bi bi-database-fill-add"></i></button>
         </div>
         <div class="col-md-12 pt-2 mb-0 bg-list">
             <div class="row">
@@ -42,7 +42,7 @@
             <h3>Marcas</h3>
         </div>
         <div class="col-md-4 border-bottom border-secondary text-end">
-            <button class="btn btn-success"><i class="bi bi-house-add-fill"></i></button>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#marcaModal"><i class="bi bi-bookmark-plus-fill"></i></button>
         </div>
         <div class="col-md-12 pt-2 mb-0 bg-list">
             <div class="row">
@@ -57,5 +57,22 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="marcaModal" tabindex="-1" aria-labelledby="marcaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="marcaModalLabel">Modal title</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary"><i class="bi bi-floppy-fill"></i> Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </div>
 @endsection

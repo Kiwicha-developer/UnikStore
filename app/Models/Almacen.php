@@ -13,7 +13,7 @@ class Almacen extends Model
 
     protected $guarded = ['idAlmacen'];
     
-    protected $fillable = ['descripcion'
+    protected $fillable = ['idAlmacen','descripcion'
                             ];
 
     

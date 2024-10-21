@@ -70,8 +70,7 @@
         </div>
     </div>
     <div id="category-container">
-        @foreach ($categorias as $categoria)
-        <div class="row div-spect" data-category="{{$categoria->idCategoria}}">
+        <div class="row" >
             <div class="col-md-9 d-flex align-items-center pt-1">
                 <a class="fs-4 text-secondary" href="javascript:void(0)" onclick="viewCaracteristicas()" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Caracteristicas"><i class="bi bi-arrow-left-circle"></i></a>
                 <h3 class="mt-2 ms-1"><i class="{{$categoria->iconCategoria}}"></i> {{$categoria->nombreCategoria}}</h3>
@@ -83,7 +82,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         @foreach ($categorias as $cat)
-                            <li><a class="dropdown-item" href="#" onclick="viewDivSpect({{$cat->idCategoria}})">{{$cat->nombreCategoria}}</a></li>
+                            <li><a class="dropdown-item" href="{{route('configespecificaciones',[encrypt($cat->idCategoria)])}}" >{{$cat->nombreCategoria}}</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -124,8 +123,9 @@
             </div>
             @endforeach
     </div>
-    @endforeach
     </div>
+    <br>
+    <br>
     <form action="{{route('insertcaracteristicaxgrupo')}}" method="POST">
         @csrf
         <div class="modal fade" id="spectXGrupoModal" tabindex="-1" aria-labelledby="spectXGrupoModalLabel" aria-hidden="true">
@@ -225,17 +225,7 @@
 </div>
 <script>
      var dataSpects = Object.values(@json($caracteristicas));
-        
-        function viewDivSpect(idCategory){
-            let divSpects = document.querySelectorAll('.div-spect');
-            divSpects.forEach(function(x){
-                if(x.dataset.category == idCategory){
-                    x.style.display = 'flex';
-                }else{
-                    x.style.display = 'none';
-                }
-            });
-        }
+
 
         function viewCaracteristicas(){
             let categoryContainer = document.getElementById('category-container');
@@ -352,7 +342,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-                viewDivSpect(1);
                 disableButtonSave();
                 document.getElementById('caracteristicas-container').style.display = 'none';
                 document.getElementById('caracteristicas-container').style.transform = 'translateX(-100%)';

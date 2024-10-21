@@ -24,6 +24,7 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     protected $almacenRepository;
     protected $proveedorRepository;
     protected $marcaRepository;
+    protected $headerService;
 
     public function __construct(CategoriaProductoRepositoryInterface $categoriaRepository,
                                 RangoPrecioRepositoryInterface $rangoRepository,
@@ -34,7 +35,8 @@ class ConfiguracionService implements ConfiguracionServiceInterface
                                 CaracteristicasGrupoRepositoryInterface $caracteristicasGrupoRepository,
                                 AlmacenRepositoryInterface $almacenRepository,
                                 ProveedorRepositoryInterface $proveedorRepository,
-                                MarcaProductoRepositoryInterface $marcaRepository)
+                                MarcaProductoRepositoryInterface $marcaRepository,
+                                HeaderServiceInterface $headerService)
     {
         $this->categoriaRepository = $categoriaRepository;
         $this->rangoRepository = $rangoRepository;
@@ -46,6 +48,11 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         $this->almacenRepository = $almacenRepository;
         $this->proveedorRepository = $proveedorRepository;
         $this->marcaRepository = $marcaRepository;
+        $this->headerService = $headerService;
+    }
+
+    public function getOneCategoria($idCategoria){
+        return $this->categoriaRepository->getOne('idCategoria',$idCategoria);
     }
 
     public function getAllAlmacenes(){
@@ -107,9 +114,13 @@ class ConfiguracionService implements ConfiguracionServiceInterface
 
     public function insertCaracteristicaXGrupo($idGrupo,$idCaracteristica){
         if($idGrupo && $idCaracteristica){
-            $data = ['idGrupoProducto' => $idGrupo,
-                    'idCaracteristica' => $idCaracteristica];
-            $this->caracteristicasGrupoRepository->create($data);
+            $modelo = $this->caracteristicasGrupoRepository->getOne($idGrupo,$idCaracteristica);
+            if(!$modelo){
+                $data = ['idGrupoProducto' => $idGrupo,
+                'idCaracteristica' => $idCaracteristica];
+                $this->caracteristicasGrupoRepository->create($data);
+            }
+            
         }
     }
 
@@ -121,10 +132,13 @@ class ConfiguracionService implements ConfiguracionServiceInterface
 
     public function createCaracteristica($descripcion){
         if($descripcion){
-            $data = ['idCaracteristica' => $this->getNewIdCaracteristica(),
-                    'especificacion' => $descripcion,
-                    'tipo' => 'FILTRO'];
-            $this->caracteristicasRepository->create($data);
+            $modelo = $this->caracteristicasRepository->getOne('especificacion',$descripcion);
+            if(!$modelo){
+                $data = ['idCaracteristica' => $this->getNewIdCaracteristica(),
+                        'especificacion' => $descripcion,
+                        'tipo' => 'FILTRO'];
+                $this->caracteristicasRepository->create($data);
+            }
         }
     }
 
@@ -137,9 +151,49 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         }
     }
 
+    public function createAlmacen($desc){
+        if($desc){
+            $almacenValidate = $this->almacenRepository->getOne('descripcion',$desc);
+            if(!$almacenValidate){
+                $data = ['idAlmacen' => $this->getNewIdAlmacen(),
+                        'descripcion' => $desc];
+                $this->almacenRepository->create($data);
+            }else{
+                $this->headerService->sendFlashAlerts('Error','Almacen repetido','error','btn-danger');
+            }
+        }
+    }
+
+    public function createProveedor($razonSocial,$nombreComercial,$ruc){
+        if($razonSocial && $nombreComercial && $ruc){
+            $validateProveedor = $this->proveedorRepository->getOne('rucProveedor',$ruc);
+            if(!$validateProveedor){
+                $data = ['idProveedor' => $this->getNewIdProveedor(),
+                        'nombreProveedor' => $nombreComercial,
+                        'razSocialProveedor' => $razonSocial,
+                        'rucProveedor' => $ruc];
+                $this->proveedorRepository->create($data);
+            }else{
+                $this->headerService->sendFlashAlerts('Error','Proveedor repetido','error','btn-danger');
+            }
+        }
+    }
+
+    private function getNewIdProveedor(){
+        $proveedor = $this->proveedorRepository->getLast();
+        $id = $proveedor ? $proveedor->idProveedor : 0;
+        return $id + 1;
+    }
+
     private function getNewIdCaracteristica(){
         $caracteristica = $this->caracteristicasRepository->getLast();
         $id = $caracteristica ? $caracteristica->idCaracteristica : 0;
+        return $id + 1;
+    }
+
+    private function getNewIdAlmacen(){
+        $almacen = $this->almacenRepository->getLast();
+        $id = $almacen ? $almacen->idAlmacen : 0;
         return $id + 1;
     }
 }

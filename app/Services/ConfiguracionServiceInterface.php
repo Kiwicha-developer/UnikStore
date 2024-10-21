@@ -9,6 +9,7 @@ interface ConfiguracionServiceInterface
     public function getAllMarcas();
     public function getAllRangos();
     public function getAllEmpresas();
+    public function getOneCategoria($idCategoria);
     public function updateCorreoEmpresa($id,$correo);
     public function updateComisionEmpresa($id,$comision);
     public function updateCalculadora($igv,$fact);
@@ -18,4 +19,6 @@ interface ConfiguracionServiceInterface
     public function removeCaracteristica($idCaracteristica);
     public function insertCaracteristicaXGrupo($idGrupo,$idCaracteristica);
     public function deleteCaracteristicaXGrupo($idGrupo,$idCaracteristica);
+    public function createAlmacen($desc);
+    public function createProveedor($razonSocial,$nombreComercial,$ruc);
 }

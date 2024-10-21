@@ -77,6 +77,8 @@ use App\Services\ConfiguracionService;
 use App\Services\ConfiguracionServiceInterface;
 use App\Services\EgresoProductoService;
 use App\Services\EgresoProductoServiceInterface;
+use App\Services\PdfService;
+use App\Services\PdfServiceInterface;
 use App\Services\PlataformaService;
 use App\Services\PlataformaServiceInterface;
 
@@ -98,6 +100,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PlataformaServiceInterface::class,PlataformaService::class);
         $this->app->bind(EgresoProductoServiceInterface::class,EgresoProductoService::class);
         $this->app->bind(ConfiguracionServiceInterface::class,ConfiguracionService::class);
+        $this->app->bind(PdfServiceInterface::class,PdfService::class);
         
         $this->app->bind(CalculadoraRepositoryInterface::class, CalculadoraRepository::class);
         $this->app->bind(UsuarioRepositoryInterface::class, UsuarioRepository::class);
@@ -125,6 +128,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EmpresaRepositoryInterface::class,EmpresaRepository::class);
         $this->app->bind(CaracteristicasRepositoryInterface::class,CaracteristicasRepository::class);
         $this->app->bind(CaracteristicasGrupoRepositoryInterface::class,CaracteristicasGrupoRepository::class);
+        
     }
 
     /**

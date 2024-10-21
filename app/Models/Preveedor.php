@@ -5,12 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Preveedor extends Model
 {
- 
+    public $timestamps = false;
     protected $table = 'Preveedor';
 
     protected $guarded = ['idProveedor'];
     
-    protected $fillable = ['nombreProveedor',
+    protected $fillable = ['idProveedor',
+                            'nombreProveedor',
                             'razSocialProveedor',
                             'rucProveedor'
                             ];
