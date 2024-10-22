@@ -22,16 +22,16 @@
             @endphp
             @foreach($usuarios as $us)
             <div class="row w-100 border shadow rounded-3 ms-0 pt-2 pb-2 mb-3">
-                <div class="col-5 col-md-7">
+                <div class="col-6 col-md-7">
                     <h4><i class="bi bi-person-badge"></i> {{$us->user}}</h4>
                 </div>
-                <div class="col-5 col-md-5 pt-1 d-flex justify-content-end text-end">
+                <div class="col-6 col-md-5 pt-1 d-flex justify-content-end text-end">
                     <h5 class="text-end me-2 {{ $us->estadoUsuario == true ? 'text-success' : 'text-danger' }}">{{ $us->estadoUsuario == true ? 'ACTIVO' : 'INACTIVO' }}</h5>
                     <button class="btn btn-info text-light" 
                     onclick='getUser({{$us->idUser}},"{{ $us->user }}",{{$us->estadoUsuario ? 1 : 0}},@json($us->Accesos))'
                     data-clicked="false" type="button" data-bs-toggle="modal" data-bs-target="#modalUpdateUser"><i class="bi bi-pencil-fill"></i></button>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <h6 class="text-secondary mb-1">Accesos</h6>
                     <div class="row">
                     @foreach ($us->Accesos as $acceso)
@@ -43,7 +43,7 @@
                     @endforeach
                     </div>
                 </div>
-                <div class="col-7 col-md-4 d-flex flex-column justify-content-end  pt-2">
+                <div class="col-12 col-md-4 d-flex flex-column justify-content-end  pt-2">
                     <h6 class="text-secondary text-end"><a href="#" data-clicked="false" onclick="getIdPass({{$us->idUser}})" type="button" data-bs-toggle="modal" data-bs-target="#modalNewPass">Reestablecer contraseña</a></h6>
                 </div>
             </div>

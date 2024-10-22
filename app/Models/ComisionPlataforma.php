@@ -11,9 +11,12 @@ class ComisionPlataforma extends Model
     
     protected $primaryKey = 'idComisionPlataforma';
 
-    protected $guarded = ['idComisionPlataforma','idPlataforma'];
+    protected $guarded = ['idComisionPlataforma'];
     
-    protected $fillable = ['comision'
+    protected $fillable = ['idComisionPlataforma',
+                            'idPlataforma',
+                            'flete',
+                            'comision'
                             ];
 
     

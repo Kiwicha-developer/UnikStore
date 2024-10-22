@@ -17,15 +17,15 @@
     <br>
     <div id="caracteristicas-container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-8 col-md-6">
                 <h3 class="mt-2">Especificaciones 
                     <a class="fs-4" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#createSpectModal">
                         <i class="bi bi-plus-circle" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Nueva especificacion"></i>
                     </a>
                 </h3>
             </div>
-            <div class="col-md-6 text-end pt-2">
-                <a class="fs-4 text-secondary" onclick="viewCategoriasXGrupos()" href="javascript:void(0)"  data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Categorias y Grupos">
+            <div class="col-4 col-md-6 text-end pt-2">
+                <a class="fs-4 text-secondary" onclick="viewCategoriasXGrupos()" href="javascript:void(0)" >
                     <i class="bi bi-arrow-right-circle"></i>
                 </a>
             </div>
@@ -71,11 +71,11 @@
     </div>
     <div id="category-container">
         <div class="row" >
-            <div class="col-md-9 d-flex align-items-center pt-1">
-                <a class="fs-4 text-secondary" href="javascript:void(0)" onclick="viewCaracteristicas()" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Caracteristicas"><i class="bi bi-arrow-left-circle"></i></a>
+            <div class="col-7 col-md-9 d-flex align-items-center pt-1">
+                <a class="fs-4 text-secondary" href="javascript:void(0)" onclick="viewCaracteristicas()"><i class="bi bi-arrow-left-circle"></i></a>
                 <h3 class="mt-2 ms-1"><i class="{{$categoria->iconCategoria}}"></i> {{$categoria->nombreCategoria}}</h3>
             </div>
-            <div class="col-md-3 d-flex align-items-center justify-content-end">
+            <div class="col-5 col-md-3 d-flex align-items-center justify-content-end">
                 <div class="btn-group dropstart">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         Categorias
@@ -93,10 +93,10 @@
             @foreach ($categoria->GrupoProducto as $grupo)
             <div class="col-md-12 mt-2">
                 <div class="row border shadow rounded-3 mb-3">
-                    <div class="col-md-6 d-flex align-items-center border-bottom border-secondary">
+                    <div class="col-8 col-md-6 d-flex align-items-center border-bottom border-secondary">
                         <h5 class="pt-1">{{$grupo->nombreGrupo}}</h5>
                     </div>
-                    <div class="col-md-6 border-bottom border-secondary text-end pt-1 pb-1">
+                    <div class="col-4 col-md-6 border-bottom border-secondary text-end pt-1 pb-1">
                         <button class="btn btn-sm btn-success" onclick="sendGrupoToModal({{$grupo->idGrupoProducto}},'{{$grupo->nombreGrupo}}')" data-bs-toggle="modal" data-bs-target="#spectXGrupoModal">
                             <i class="bi bi-plus-lg"></i>
                         </button>
@@ -104,7 +104,7 @@
                     <div class="col-md-12 bg-list">
                         <div class="row pt-2 pe-2 pb-1">
                             @foreach ($grupo->Caracteristicas_Grupo as $caracteristica)
-                            <div class="col-md-2 mb-1">
+                            <div class="col-4 col-md-2 mb-1">
                                 <div class="row ms-1 h-100 border bg-light rounded-2 truncate">
                                     <small>
                                         <a href="javascript:void(0)" class="text-dark link-danger" 

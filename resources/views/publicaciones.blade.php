@@ -6,13 +6,13 @@
 <div class="container">
     <br>
     <div class="row">
-        <div class="col-7 col-md-8">
+        <div class="col-12 col-md-8">
             <h2><i class="bi bi-megaphone-fill"></i> Publicaciones</h2>
         </div>
-        <div class="col-md-2 text-end">
+        <div class="col-6 col-md-2 text-end">
             <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}" >
         </div>
-        <div class="col-5 col-md-2 text-end">
+        <div class="col-6 col-md-2 text-end">
             <div class="btn-group dropstart">
               <button type="button" class="btn btn-success" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-plus-lg"></i> Nueva
@@ -75,7 +75,9 @@
                           <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{$public->titulo}}">{{$public->sku}}</small>
                       </div>
                       <div class="col-4 col-md-2">
-                          <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{$public->Producto->modelo}}">{{$public->Producto->codigoProducto}}</small>
+                          <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{$public->Producto->modelo}}">
+                            <a href="{{route('producto',[encrypt($public->Producto->idProducto)])}}" class="decoration-link">{{$public->Producto->codigoProducto}}</a>
+                        </small>
                       </div>
                       <div class="col-md-1 d-none d-sm-block">
                           <small>{{number_format($public->precioPublicacion,2)}}</small>
@@ -108,10 +110,10 @@
           </div>
           <div class="modal-footer ">
               <div class="row w-100">
-                  <div class="col-md-4 d-flex align-items-end ps-0">
+                  <div class="col-4 col-md-4 d-flex align-items-end ps-0">
                       <small><a type="button" class="text-danger mb-0" onclick="sendData('delete')"> Borrar publicaci&oacuten</a></small>
                   </div>
-                  <div class="col-8 text-end">
+                  <div class="col-8 col-md-8 text-end">
                       <input type="hidden" id="hidden-id" name="id">
                       <input type="hidden" id="hidden-data" name="data">
                       <button type="button" class="btn btn-warning" onclick="sendData('change')"><i class="bi bi-check2"></i> Actualizar</button>

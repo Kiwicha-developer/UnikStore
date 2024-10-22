@@ -49,14 +49,17 @@ class ConfiguracionController extends Controller
                 $calculos = $this->calculadoraService->get();
                 
                 $empresas = $this->configuracionService->getAllEmpresas();
+
+                $plataformas = $this->configuracionService->getAllPlataformas();
                 
-                    return view('configcalculos',['user' => $userModel,
-                                            'pagina' => 'calculos',
-                                            'empresas' => $empresas,
-                                            'calculos' => $calculos,
-                                            'categorias' => $categorias,
-                                            'rangos' =>$rangos
-                    ]);
+                return view('configcalculos',['user' => $userModel,
+                                        'pagina' => 'calculos',
+                                        'empresas' => $empresas,
+                                        'calculos' => $calculos,
+                                        'categorias' => $categorias,
+                                        'rangos' =>$rangos,
+                                        'plataformas' => $plataformas
+                ]);
             }
         }
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
@@ -268,6 +271,27 @@ class ConfiguracionController extends Controller
                     $this->headerService->sendFlashAlerts('Error','Hubo un error en la operacion','error','btn-danger');
                     return back()->withInput();
                 }
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function updateCuentasBancarias(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $idCuenta = $request->input('id');
+        $titular = $request->input('titular');
+        $numeroCuenta = $request->input('cuenta');
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if($idCuenta && $titular && $numeroCuenta){
+                    $this->configuracionService->updateCuentaBancaria($idCuenta,$titular,$numeroCuenta);
+                    return back();
+                }else{
+                    $this->headerService->sendFlashAlerts('Faltan Datos','Faltan datos para completar las transaccion','warning','btn-warning');
+                    return back();
+                }
+                dd($request);
             }
         }    
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');

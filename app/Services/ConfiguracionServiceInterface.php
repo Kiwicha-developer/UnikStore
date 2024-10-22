@@ -9,8 +9,10 @@ interface ConfiguracionServiceInterface
     public function getAllMarcas();
     public function getAllRangos();
     public function getAllEmpresas();
+    public function getAllPlataformas();
     public function getOneCategoria($idCategoria);
     public function updateCorreoEmpresa($id,$correo);
+    public function updateCuentaBancaria($id,$titular,$cuenta);
     public function updateComisionEmpresa($id,$comision);
     public function updateCalculadora($igv,$fact);
     public function updateComisionValue($idGrupo,$idRango,$comision);

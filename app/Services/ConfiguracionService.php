@@ -7,8 +7,10 @@ use App\Repositories\CaracteristicasGrupoRepositoryInterface;
 use App\Repositories\CaracteristicasRepositoryInterface;
 use App\Repositories\CategoriaProductoRepositoryInterface;
 use App\Repositories\ComisionRepositoryInterface;
+use App\Repositories\CuentasTransferenciaRepositoryInterface;
 use App\Repositories\EmpresaRepositoryInterface;
 use App\Repositories\MarcaProductoRepositoryInterface;
+use App\Repositories\PlataformaRepositoryInterface;
 use App\Repositories\ProveedorRepositoryInterface;
 use App\Repositories\RangoPrecioRepositoryInterface;
 
@@ -25,6 +27,8 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     protected $proveedorRepository;
     protected $marcaRepository;
     protected $headerService;
+    protected $cuentasTransferenciaRepository;
+    protected $plataformasRepository;
 
     public function __construct(CategoriaProductoRepositoryInterface $categoriaRepository,
                                 RangoPrecioRepositoryInterface $rangoRepository,
@@ -36,7 +40,9 @@ class ConfiguracionService implements ConfiguracionServiceInterface
                                 AlmacenRepositoryInterface $almacenRepository,
                                 ProveedorRepositoryInterface $proveedorRepository,
                                 MarcaProductoRepositoryInterface $marcaRepository,
-                                HeaderServiceInterface $headerService)
+                                HeaderServiceInterface $headerService,
+                                CuentasTransferenciaRepositoryInterface $cuentasTransferenciaRepository,
+                                PlataformaRepositoryInterface $plataformasRepository)
     {
         $this->categoriaRepository = $categoriaRepository;
         $this->rangoRepository = $rangoRepository;
@@ -49,10 +55,18 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         $this->proveedorRepository = $proveedorRepository;
         $this->marcaRepository = $marcaRepository;
         $this->headerService = $headerService;
+        $this->cuentasTransferenciaRepository = $cuentasTransferenciaRepository;
+        $this->plataformasRepository = $plataformasRepository;
     }
 
     public function getOneCategoria($idCategoria){
         return $this->categoriaRepository->getOne('idCategoria',$idCategoria);
+    }
+
+    public function getAllPlataformas(){
+        return $this->plataformasRepository->all()->reject(function($plataforma){
+            return $plataforma->tipoPlataforma == 'RED SOCIAL';
+        });
     }
 
     public function getAllAlmacenes(){
@@ -83,6 +97,16 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         if($id && $correo){
             $data = ['correoEmpresa' => $correo];
             $this->empresaRepository->update($id,$data);
+        }
+    }
+
+    public function updateCuentaBancaria($id,$titular,$cuenta){
+        if($id && $titular && $cuenta){
+            $data = ['titular' => $titular,
+                    'numeroCuenta' => $cuenta];
+            $this->cuentasTransferenciaRepository->update($id,$data);
+        }else{
+            $this->headerService->sendFlashAlerts('Faltan Datos','Faltan datos para completar las transaccion','warning','btn-warning');
         }
     }
 

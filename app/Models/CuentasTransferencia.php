@@ -7,14 +7,17 @@ use Illuminate\Support\Facades\Cache;
 
 class CuentasTransferencia extends Model
 {
- 
+    public $timestamps = false;
     protected $table = 'CuentasTransferencia';
     
     protected $primaryKey = 'idCuentaBancaria';
 
-    protected $guarded = ['idCuentaBancaria','idBanco','idEmpresa'];
+    protected $guarded = ['idCuentaBancaria'];
     
-    protected $fillable = ['numeroCuenta',
+    protected $fillable = ['idCuentaBancaria',
+                            'idBanco',
+                            'idEmpresa',
+                            'numeroCuenta',
                             'tipoMoneda',
                             'tipoCuenta',
                             'titular'

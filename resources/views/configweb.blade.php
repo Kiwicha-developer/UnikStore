@@ -35,7 +35,7 @@
                 @foreach($empresas as $empresa)
                 <div class="col-md-6">
                     <label>{{$empresa->nombreComercial}}:</label>
-                    <input type="text" name="correos[{{$empresa->idEmpresa}}]" class="form-control input-edit" value="{{$empresa->correoEmpresa}}">
+                    <input type="text" name="correos[{{$empresa->idEmpresa}}]" maxlength="50" class="form-control input-edit" value="{{$empresa->correoEmpresa}}">
                 </div>
                 @endforeach
             </div>
@@ -48,7 +48,7 @@
             <div class="row ">
                 <div class="col-md-12">
                     <h3>Datos Bancarios</h3>
-                    <p class="text-secondary">N&uacutemeros de cuenta registrados para la web.</p>
+                    <p class="text-secondary">N&uacute;meros de cuenta registrados para la web.</p>
                 </div>
             </div>
         </div><div class="col-md-12">
@@ -66,22 +66,22 @@
                               <ul class="list-group">
                                 <li class="list-group-item bg-sistema-uno text-light">
                                     <div class="row text-center">
-                                        <div class="col-md-2">
+                                        <div class="col-3 col-md-2 text-start">
                                             <h6>Bancos</h6>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-6 col-md-3">
                                             <h6>N&uacutemeros de cuenta</h6>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-3 col-md-2">
                                             <h6>Tipo</h6>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-1 text-start d-none d-md-block">
                                             <h6>Moneda</h6>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 d-none d-md-block">
                                             <h6>Titular</h6>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-1 d-none d-md-block">
                                             <h6>Editar</h6>
                                         </div>
                                     </div>
@@ -89,23 +89,26 @@
                                 @foreach($empresa->CuentasTransferencia->sortBy('idBanco') as $cuenta)
                                 <li class="list-group-item {{$cuenta->tipoCuenta == 'INTERBANCARIA' ? 'bg-list' : ''}}">
                                     <div class="row">
-                                        <div class="col-md-2 fw-bold">
+                                        <div class="col-3 col-md-2 fw-bold">
                                             <small style="color:{{$cuenta->Banco->colorBanco}}">{{$cuenta->Banco->nombreBanco}}</small>
                                         </div>
-                                        <div class="col-md-3 text-center">
+                                        <div class="col-6 col-md-3 text-center">
                                             <small>{{$cuenta->numeroCuenta}}</small>
                                         </div>
-                                        <div class="col-md-2 text-center">
+                                        <div class="col-3 col-md-2 text-center truncate">
                                             <small>{{$cuenta->tipoCuenta}}</small>
                                         </div>
-                                        <div class="col-md-1 text-center">
+                                        <div class="col-3 col-md-1 text-start">
                                             <small>{{$cuenta->tipoMoneda}}</small>
                                         </div>
-                                        <div class="col-md-3 text-center">
+                                        <div class="col-6 col-md-3 text-center">
                                             <small>{{$cuenta->titular}}</small>
                                         </div>
-                                        <div class="col-md-1 text-center">
-                                            <button class="btn" data-bs-toggle="modal" data-bs-target="#cuentasBancariasModal"><i class="bi bi-pencil"></i></button>
+                                        <div class="col-3 col-md-1 text-center">
+                                            <button class="btn" onclick="sendDataToModalCuentas({{$cuenta->idCuentaBancaria}},'{{$cuenta->Banco->nombreBanco}}','{{$cuenta->tipoCuenta}}','{{$cuenta->titular}}','{{$cuenta->numeroCuenta}}')" 
+                                                data-bs-toggle="modal" data-bs-target="#cuentasBancariasModal">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </li>
@@ -120,24 +123,39 @@
         </div>
     </div>
     <br>
-    <div class="modal fade" id="cuentasBancariasModal" tabindex="-1" aria-labelledby="cuentasBancariasModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cuentasBancariasModalLabel">Example</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body ps-0 pe-0 pt-0">
-            </div>
-            <div class="modal-footer">
-                <input type="hidden" name="grupo" id="comisionHiddenGrup" value="">
-                <input type="hidden" id="categoryModalComision" name="category" value="{{ old('category', 1) }}">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Actualizar <i class="bi bi-floppy"></i></button>
-            </div>
+    <form action="{{route('updatecuentasbancarias')}}" method="POST">
+        @csrf
+        <div class="modal fade" id="cuentasBancariasModal" tabindex="-1" aria-labelledby="cuentasBancariasModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <h5 class="modal-title" id="cuentasBancariasModalLabel">Cuenta <span id="span-modal-cuenta"></span></h5>
+                        <small id="small-modal-cuenta" class="text-secondary"></small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label">Titular:</label>
+                            <input type="text" class="form-control" maxlength="50" name="titular" value="" id="input-titular-modal-cuenta">
+                            <input type="hidden" name="id" id="hidden-modal-cuenta" value="">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Numero de cuenta:</label>
+                            <input type="text" class="form-control" maxlength="30" name="cuenta" value="" id="input-cuenta-modal-cuenta">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Actualizar <i class="bi bi-floppy"></i></button>
+                </div>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 <script>
     let isDisabledCalGeneral = false;
@@ -159,6 +177,20 @@
         btnEditCorreoEmpresa.forEach(function(x) {
             x.disabled = isDisabledCorreos;
         });
+    }
+
+    function sendDataToModalCuentas(id,banco,tipo,titular,cuenta){
+        let spanModal = document.getElementById('span-modal-cuenta');
+        let smallModal = document.getElementById('small-modal-cuenta');
+        let inputTitular = document.getElementById('input-titular-modal-cuenta');
+        let inputCuenta = document.getElementById('input-cuenta-modal-cuenta');
+        let hiddenModal = document.getElementById('hidden-modal-cuenta');
+
+        spanModal.textContent = banco;
+        smallModal.textContent = tipo;
+        inputTitular.value = titular;
+        inputCuenta.value = cuenta;
+        hiddenModal.value = id;
     }
 
     document.addEventListener('DOMContentLoaded', function() {

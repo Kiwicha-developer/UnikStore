@@ -139,10 +139,48 @@
     <br>
     <div class="row border shadow rounded-3 pt-2 pb-2">
         <div class="col-md-12">
-            <div class="row">
-                <h3>Calculos por Plataforma</h3>
-                <p class="text-secondary">Valores que se aplican a los precios por plataforma digital.</p>
-            </div>
+            <h3>Calculos por Plataforma</h3>
+            <p class="text-secondary">Valores que se aplican a los precios por plataforma digital.</p>
+        </div>
+        <div class="col-md-12">
+            <ul class="list-group">
+                @foreach ($plataformas as $plataforma)
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <img src="{{asset('storage/'. $plataforma->imagenPlataforma)}}" alt="" class="border w-100">
+                            </div>
+                            <div class="col-md-7">
+                                <h4>{{$plataforma->nombrePlataforma}}</h4>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <button class="btn btn-sm btn-success"><i class="bi bi-trash-fill"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <ul class="list-group list-group-flush" >
+                                @foreach ($plataforma->ComisionPlataforma as $comision)
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="text-secondary">Comision</label>
+                                                <h6>{{$comision->comision}}</h6>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <label class="text-secondary">Flete</label>
+                                                <h6>{{$comision->flete}}</h6>
+                                            </div>
+                                            <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
+                                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
         </div>
     </div>
     <br>

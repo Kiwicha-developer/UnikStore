@@ -61,6 +61,8 @@ use App\Repositories\IngresoProductoRepositoryInterface;
 use App\Repositories\IngresoProductoRepository;
 use App\Repositories\ComisionRepositoryInterface;
 use App\Repositories\ComisionRepository;
+use App\Repositories\CuentasTransferenciaRepository;
+use App\Repositories\CuentasTransferenciaRepositoryInterface;
 use App\Repositories\DetalleComprobanteRepositoryInterface;
 use App\Repositories\DetalleComprobanteRepository;
 use App\Repositories\EgresoProductoRepository;
@@ -128,7 +130,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EmpresaRepositoryInterface::class,EmpresaRepository::class);
         $this->app->bind(CaracteristicasRepositoryInterface::class,CaracteristicasRepository::class);
         $this->app->bind(CaracteristicasGrupoRepositoryInterface::class,CaracteristicasGrupoRepository::class);
-        
+        $this->app->bind(CuentasTransferenciaRepositoryInterface::class,CuentasTransferenciaRepository::class);
     }
 
     /**

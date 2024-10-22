@@ -41,11 +41,11 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-3 mb-2">
+        <div class="col-6 col-md-3 mb-2">
             <label class="form-label">Fecha de publicaci&oacuten:</label>
             <input type="date" name="fecha" value="{{old('fecha')}}" class="form-control" id="fecha-public">
         </div>
-        <div class="col-md-2 mb-2">
+        <div class="col-6 col-md-2 mb-2">
             <label class="form-label">Precio:</label>
             <input type="number" value="{{old('precio')}}" name="precio" class="form-control" step="0.01" aria-describedby="basic-addon1" id="precio-public">
         </div>

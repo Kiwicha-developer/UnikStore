@@ -18,11 +18,11 @@
     <div class="row">
         @foreach($plataformas as $plata)
         <div class="col-md-12 border shadow mb-3 rounded-3">
-            <div class="row border-bottom shadow pb-1">
+            <div class="row border-bottom shadow pb-1 pt-1">
               <div class="col-3 col-md-1 pe-0">
                 <img src="{{asset('storage/'.$plata->imagenPlataforma)}}" alt="{{$plata->nombrePlataforma}}" class="rounded-3 w-100 mt-1" >
             </div>
-                <div class="col-6 col-md-9">
+                <div class="col-6 col-md-9 d-flex align-items-center justify-content-start pt-2">
                     <h3>{{$plata->nombrePlataforma}}</h3>
                 </div>
                 <div class="col-3 col-md-2 text-end">

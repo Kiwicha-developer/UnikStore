@@ -13,7 +13,7 @@
             <h2 class="text-end d-none d-sm-none d-md-block">{{$documento->numeroComprobante}}</h2>
             <h2 class="d-block d-sm-none">{{$documento->numeroComprobante}}</h2>
         </div>
-        <div class="col-md-6 d-none d-sm-none d-md-block">
+        <div class="col-md-6 d-none d-md-block">
             <h4 class="text-secondary">RUC: {{$documento->Preveedor->rucProveedor}}</h4>
         </div>
         <div class="col-6 col-md-6 text-end">
@@ -21,21 +21,20 @@
         </div>
     </div>
     <br>
-    <br>
     <form action="{{route('insertingreso',[encrypt($documento->idComprobante)])}}" method="POST">
         @csrf
     <div class="row">
         <div class="col-md-12 mb-3">
             @if($validate)
             <div class="row mb-2">
-                <div class="col-md-2">
+                <div class="col-6 col-md-2">
                     <label class="form-label">Moneda:</label>
                     <select class="form-select" name="comprobante[moneda]">
                         <option value="SOL">Soles</option>
                         <option value="DOLAR">Dolares</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-6 col-md-2">
                   <label class="form-label" style="color:red" id="select-label-adquisicion">Adquisici&oacuten</label>
                   <select class="form-select" onchange="changeLabel(this,'select-label-adquisicion')" id="select-adquisicion" name="comprobante[adquisicion]">
                       <option class="text-danger" value="" selected>-Elige una adquisici&oacuten-</option>
@@ -44,7 +43,7 @@
                       @endforeach
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-6 col-md-2">
                     <label class="form-label" style="color:red" id="select-label-almacen">Almac&eacuten</label>
                     <select class="form-select" onchange="changeLabel(this,'select-label-almacen')" id="select-almacen" name="comprobante[almacen]">
                         <option class="text-danger" value="">-Elige una ubicaci&oacuten-</option>
@@ -53,9 +52,9 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 d-none d-md-block">
                 </div>
-                <div class="col-md-2 text-end">
+                <div class="col-6 col-md-2 text-end">
                     <label class="form-label">Importe Total:</label>
                     <input type="number" id="importe-total-comprobante" name="comprobante[total]" step="0.01" class="form-control" value="0.00" readonly>
                 </div>
@@ -69,23 +68,26 @@
               @if($validate)
               <li class="list-group-item bg-sistema-uno text-light text-center fw-normal fs-5" style="position:sticky;top:0;z-index:1000">
                 <div class="row text-center">
-                    <div class="col-md-1 ">
-                        <small>Cant.</small>
+                    <div class="col-1 col-md-1">
+                        <small class="d-none d-md-inline">Cant.</small>
+                        <small class="d-md-none">#</small>
                     </div>
-                    <div class="col-md-4 text-start">
+                    <div class="col-4 col-md-4 text-start">
                         <small>Producto</small>
                     </div>
-                    <div class="col-md-2 ">
+                    <div class="col-2 d-none d-md-block">
                         <small>U.M.</small>
                     </div>
-                    <div class="col-md-2">
-                        <small>Precio Unitario</small>
+                    <div class="col-2 col-md-2">
+                        <small class="d-none d-md-inline">Precio Unitario</small>
+                        <small class="d-md-none">P.U</small>
                     </div>
-                    <div class="col-md-2">
-                        <small>Precio Total</small>
+                    <div class="col-2 col-md-2">
+                        <small class="d-none d-md-inline">Precio Total</small>
+                        <small class="d-md-none">P.T</small>
                     </div>
-                    <div class="col-md-1">
-                        <button type="button" class="btn h-100 pt-0 pb-0 hidden-button text-light" data-bs-toggle="modal" data-bs-target="#registerModal"><i class="bi bi-cart-plus-fill fs-4"></i></button>
+                    <div class="col-3 col-md-1 text-end">
+                        <button type="button" class="btn h-100 pt-0 pb-0 hidden-button text-light border hover-sistema-uno" data-bs-toggle="modal" data-bs-target="#registerModal"><i class="bi bi-cart-plus-fill fs-4"></i></button>
                     </div>
                 </div>
               </li>
@@ -227,7 +229,7 @@
                         
                     </ul>
                 </div>
-                <div class="col-md-6">
+                <div class="col-6 col-md-6">
                     <label class="form-label">Unidad de Medida</label>
                     <select class="form-select input-modal-product" id="modal-select-medida">
                         <option value="">-Elige una medida-</option>
@@ -236,7 +238,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-6  mb-3">
+                <div class="col-6 col-md-6  mb-3">
                   <label class="form-label">Precio por unidad:</label>
                     <input type="number" step="0.01" class="form-control input-modal-product" value="" id="modal-input-price">
                 </div>

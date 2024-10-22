@@ -16,17 +16,17 @@
     </div>
     <br>
     <div class="row border shadow rounded-3 pt-2 mb-4">
-        <div class="col-md-8 border-bottom border-secondary">
+        <div class="col-9 col-md-8 border-bottom border-secondary">
             <h3>Almacenes</h3>
             <small class="text-secondary">Configuracion de almacen relacionado al inventario .</small>
         </div>
-        <div class="col-md-4 border-bottom border-secondary text-end"  data-bs-toggle="modal" data-bs-target="#almacenModal">
+        <div class="col-3 col-md-4 border-bottom border-secondary text-end"  data-bs-toggle="modal" data-bs-target="#almacenModal">
             <button class="btn btn-success"><i class="bi bi-house-add-fill"></i></button>
         </div>
         <div class="col-md-12 pt-2 mb-0 bg-list">
             <div class="row">
                 @foreach ($almacenes as $almacen)
-                <div class="col-md-3 pb-2">
+                <div class="col-6 col-md-3 pb-2">
                     <div class="row bg-light border ms-2 me-2 pt-2">
                         <h5><i class="bi bi-house-door"></i>{{$almacen->descripcion}}</h5>
                     </div>
@@ -37,11 +37,11 @@
     </div>
 
     <div class="row border shadow rounded-3 pt-2  mb-4">
-        <div class="col-md-8 border-bottom border-secondary">
+        <div class="col-9 col-md-8 border-bottom border-secondary">
             <h3>Proveedores</h3>
             <small class="text-secondary">Configuracion de proveedores para los ingresos y seguimiento de stock.</small>
         </div>
-        <div class="col-md-4 border-bottom border-secondary text-end">
+        <div class="col-3 col-md-4 border-bottom border-secondary text-end">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#proveedorModal"><i class="bi bi-plus-lg"></i> <i class="bi bi-truck"></i></button>
         </div>
         <div class="col-md-12 pt-2 pb-2 bg-list">

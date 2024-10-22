@@ -122,30 +122,31 @@
         divRow.classList.add('row');
         
         let divColCantidad = document.createElement('div');
-        divColCantidad.classList.add('col-md-1','text-center');
+        divColCantidad.classList.add('col-1','col-md-1','text-center');
         let h5Cantidad = document.createElement('h5');
         h5Cantidad.textContent = 0;
         h5Cantidad.id = 'header-cantidad-product-' + inputHiddenProduct.value;
         divColCantidad.appendChild(h5Cantidad);
         
         let divColProduct = document.createElement('div');
-        divColProduct.classList.add('col-md-4','d-flex');
+        divColProduct.classList.add('col-4','col-md-4','d-flex','truncate');
         let h5Product = document.createElement('h5');
         h5Product.classList.add('h-100','text-uppercase');
         h5Product.innerHTML  = productInput.value + "&nbsp;";
         let smallProduct = document.createElement('small');
+        smallProduct.classList.add('d-none','d-md-block');
         smallProduct.textContent = productInput.dataset.cod;
         divColProduct.appendChild(h5Product);
         divColProduct.appendChild(smallProduct);
         
         let divColMedida = document.createElement('div');
-        divColMedida.classList.add('col-md-2','text-center');
+        divColMedida.classList.add('d-none','d-md-block','col-md-2','text-center');
         let pMedida = document.createElement('p');
         pMedida.textContent = selectModalMedida.value;
         divColMedida.appendChild(pMedida);
         
         let divColPrecioUnitario = document.createElement('div');
-        divColPrecioUnitario.classList.add('col-md-2','text-center');
+        divColPrecioUnitario.classList.add('col-2','col-md-2','text-center');
         let pPrecioUnitario = document.createElement('p');
         pPrecioUnitario.textContent = inputModalPrice.value;
         pPrecioUnitario.dataset.price = inputModalPrice.value;
@@ -153,7 +154,7 @@
         divColPrecioUnitario.appendChild(pPrecioUnitario);
         
         let divColPrecioTotal = document.createElement('div');
-        divColPrecioTotal.classList.add('col-md-2','text-center');
+        divColPrecioTotal.classList.add('col-2','col-md-2','text-center');
         let h5TotalPrice = document.createElement('h5');
         h5TotalPrice.textContent = '0';
         h5TotalPrice.dataset.total = '0';
@@ -161,7 +162,7 @@
         divColPrecioTotal.appendChild(h5TotalPrice);
         
         let divColButtons = document.createElement('div');
-        divColButtons.classList.add('col-md-1','pe-0','ps-0','text-end');
+        divColButtons.classList.add('col-3','col-md-1','pe-0','ps-0','text-end');
         let buttonAdd = document.createElement('button');
         buttonAdd.classList.add('btn','btn-success','btn-sm');
         buttonAdd.type = 'button';
@@ -209,7 +210,7 @@
         divRow.classList.add('row');
         
         let divColSerialNumber = document.createElement('div');
-        divColSerialNumber.classList.add('col-md-3');
+        divColSerialNumber.classList.add('col-6','col-md-3');
         let divInputGroup = document.createElement('div');
         divInputGroup.classList.add('input-group','input-group-sm');
         let inputSerialNumber = document.createElement('input');
@@ -229,7 +230,7 @@
         divColSerialNumber.appendChild(divInputGroup);
         
         let divColEstado = document.createElement('div');
-        divColEstado.classList.add('col-md-2');
+        divColEstado.classList.add('col-4','col-md-2');
         let selectEstado = document.createElement('select');
         selectEstado.classList.add('form-select','form-select-sm');
         selectEstado.name = 'detalle['+id+'][ingreso]['+cont+'][estado]';
@@ -243,7 +244,7 @@
         divColEstado.appendChild(selectEstado);
         
         let divColObservacion = document.createElement('div');
-        divColObservacion.classList.add('col-md-6');
+        divColObservacion.classList.add('d-none','d-md-block','col-md-6');
         let inputObservacion = document.createElement('input');
         inputObservacion.classList.add('form-control','form-control-sm');
         inputObservacion.type="text";
@@ -252,7 +253,7 @@
         divColObservacion.appendChild(inputObservacion);
         
         let divColDelete = document.createElement('div');
-        divColDelete.classList.add('col-md-1','text-end');
+        divColDelete.classList.add('col-2','col-md-1','text-end');
         let btnDelete = document.createElement('button');
         btnDelete.classList.add('btn','btn-danger','btn-sm');
         btnDelete.innerHTML = '<i class="bi bi-x-lg"></i>' ;
