@@ -143,46 +143,68 @@
             <p class="text-secondary">Valores que se aplican a los precios por plataforma digital.</p>
         </div>
         <div class="col-md-12">
-            <ul class="list-group">
+            
+            <div class="accordion accordion-flush" id="accordionFlushPlataforma">
+                @php
+                    $count = 0;
+                @endphp
                 @foreach ($plataformas as $plataforma)
-                    <li class="list-group-item">
-                        <div class="row">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-heading-{{$count}}">
+                        <div class="row pt-2">
                             <div class="col-md-1">
                                 <img src="{{asset('storage/'. $plataforma->imagenPlataforma)}}" alt="" class="border w-100">
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-md-9 pt-2">
                                 <h4>{{$plataforma->nombrePlataforma}}</h4>
                             </div>
-                            <div class="col-md-4 text-end">
-                                <button class="btn btn-sm btn-success"><i class="bi bi-trash-fill"></i></button>
+                            <div class="col-md-2 text-end">
+                                <div class="row">
+                                    <div class="col-md-9 text-end">
+                                        <button class="btn btn-sm btn-success" onclick="sendIdToModalPlataforma('modal-comisionxplataforma-id','modal-comisionxplataforma-title',{{$plataforma->idPlataforma}},'{{$plataforma->nombrePlataforma}}')" data-bs-toggle="modal" data-bs-target="#createPlataformaModal">
+                                            <i class="bi bi-plus-lg"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3 ps-0">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-{{$count}}" aria-expanded="false" aria-controls="flush-collapse-{{$count}}">
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <ul class="list-group list-group-flush" >
+                    </h2>
+                    <div id="flush-collapse-{{$count}}" class="accordion-collapse collapse" aria-labelledby="flush-heading-{{$count}}" data-bs-parent="#accordionFlushPlataforma">
+                        <div class="accordion-body">
+                            <ul class="list-group list-group-flush">
                                 @foreach ($plataforma->ComisionPlataforma as $comision)
-                                    <li class="list-group-item">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label class="text-secondary">Comision</label>
-                                                <h6>{{$comision->comision}}</h6>
-                                            </div>
-                                            <div class="col-md-4 text-center">
-                                                <label class="text-secondary">Flete</label>
-                                                <h6>{{$comision->flete}}</h6>
-                                            </div>
-                                            <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
-                                                <button class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></button>
-                                            </div>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label class="text-secondary">Comision</label>
+                                            <h6>{{$comision->comision}}</h6>
                                         </div>
-                                    </li>
+                                        <div class="col-md-4 text-center">
+                                            <label class="text-secondary">Flete</label>
+                                            <h6>{{$comision->flete}}</h6>
+                                        </div>
+                                        <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
+                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePlataformaModal"><i class="bi bi-trash-fill"></i></button>
+                                        </div>
+                                    </div>
+                                </li>
                                 @endforeach
                             </ul>
                         </div>
-                    </li>
+                    </div>
+                </div>
+                @php
+                    $count ++;
+                @endphp
                 @endforeach
-            </ul>
+            </div>
         </div>
     </div>
+    <br>
     <br>
     <form action="{{route('updatecomision')}}" method="POST">
         @csrf
@@ -219,70 +241,141 @@
             </div>
         </div>
         </div>
-        </form>
+    </form>
+    <form action="{{route('createcomisionplataforma')}}" method="post">
+        @csrf
+        <div class="modal fade" id="createPlataformaModal" tabindex="-1" aria-labelledby="createPlataformaModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createPlataformaModalLabel">Nueva Comision <span id="modal-comisionxplataforma-title"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="hidden" name="plataforma" id="modal-comisionxplataforma-id"  value="">
+                            <div class="col-md-12">
+                                <label class="form-label">Comision:</label>
+                                <input type="number" oninput="validateModalComision()" class="form-control" name="comision" step="0.01" >
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Flete:</label>
+                                <input type="number" oninput="validateModalComision()" class="form-control" name="flete" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="modal-comisionxplataforma-btn">Guardar <i class="bi bi-floppy"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form action="" method="post">
+        <div class="modal fade" id="deletePlataformaModal" tabindex="-1" aria-labelledby="deletePlataformaModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deletePlataformaModalLabel">¿Estas seguro de eliminar esta comision?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" value="" name="id">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Borrar <i class="bi bi-trash-fill"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 <script>
     let isDisabledCalGeneral = false;
     let isDisabledCorreos = false;
+
+    function sendIdToModalPlataforma(hidden,text,id,title){
+        let inputHidden = document.getElementById(hidden);
+        let inputText = document.getElementById(text);
+
+        inputHidden.value = id;
+        inputText.textContent = title;
+    }
+
     function modalComision(titulo,grupo,categoria){
-            let tituloComision = document.getElementById('comisionModalLabel');
-            let divComision = document.getElementById('div-comision-' + grupo);
-            let listComisiones = divComision.querySelectorAll('.hidden-comision');
-            let hiddenGroup = document.getElementById('comisionHiddenGrup');
-            let hiddenCategory = document.getElementById('categoryModalComision');
-            
-            
-            listComisiones.forEach(function(x){
-                let liComision = document.getElementById('comisionModalList-' + x.dataset.rango);
-                
-                liComision.value = x.value;
-            });
-            
-            hiddenGroup.value = grupo;
-            hiddenCategory.value = categoria;
-            
-            tituloComision.textContent = 'Comisiones: ' + titulo;
-        }
-
-        function viewElementsComision(category){
-            @foreach($categorias as $categoria)
-                if(category == {{$categoria->idCategoria}}){
-                    let divCategory  = document.querySelectorAll('.divCategory-' + {{$categoria->idCategoria}});
-                    divCategory.forEach(function(x){
-                        x.style.display = 'block';
-                    });
-                }else{
-                    let divCategory  = document.querySelectorAll('.divCategory-' + {{$categoria->idCategoria}});
-                    divCategory.forEach(function(x){
-                        x.style.display = 'none';
-                    });
-                }
-            @endforeach
-        }
-
-        function calculateGeneralDisabled() {
-            let btnSaveCalculos = document.getElementById('btnSaveCalculos');
-            let divCalculosGenerales = document.getElementById('calculos-generales');
-            let btnEditCalcGeneral = divCalculosGenerales.querySelectorAll('.input-edit'); 
+        let tituloComision = document.getElementById('comisionModalLabel');
+        let divComision = document.getElementById('div-comision-' + grupo);
+        let listComisiones = divComision.querySelectorAll('.hidden-comision');
+        let hiddenGroup = document.getElementById('comisionHiddenGrup');
+        let hiddenCategory = document.getElementById('categoryModalComision');
         
-            isDisabledCalGeneral = !isDisabledCalGeneral;
+        
+        listComisiones.forEach(function(x){
+            let liComision = document.getElementById('comisionModalList-' + x.dataset.rango);
             
-            if(isDisabledCalGeneral){
-                btnSaveCalculos.style.display = 'none';
+            liComision.value = x.value;
+        });
+        
+        hiddenGroup.value = grupo;
+        hiddenCategory.value = categoria;
+        
+        tituloComision.textContent = 'Comisiones: ' + titulo;
+    }
+
+    function viewElementsComision(category){
+        @foreach($categorias as $categoria)
+            if(category == {{$categoria->idCategoria}}){
+                let divCategory  = document.querySelectorAll('.divCategory-' + {{$categoria->idCategoria}});
+                divCategory.forEach(function(x){
+                    x.style.display = 'block';
+                });
             }else{
-                btnSaveCalculos.style.display = 'inline-flex';
+                let divCategory  = document.querySelectorAll('.divCategory-' + {{$categoria->idCategoria}});
+                divCategory.forEach(function(x){
+                    x.style.display = 'none';
+                });
             }
-        
-            btnEditCalcGeneral.forEach(function(x) {
-                x.disabled = isDisabledCalGeneral;
-            });
-        }
+        @endforeach
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            calculateGeneralDisabled();
-            let oldCategoryComision = document.getElementById('categoryModalComision').value;
-            viewElementsComision(oldCategoryComision);
-                
+    function calculateGeneralDisabled() {
+        let btnSaveCalculos = document.getElementById('btnSaveCalculos');
+        let divCalculosGenerales = document.getElementById('calculos-generales');
+        let btnEditCalcGeneral = divCalculosGenerales.querySelectorAll('.input-edit'); 
+    
+        isDisabledCalGeneral = !isDisabledCalGeneral;
+        
+        if(isDisabledCalGeneral){
+            btnSaveCalculos.style.display = 'none';
+        }else{
+            btnSaveCalculos.style.display = 'inline-flex';
+        }
+    
+        btnEditCalcGeneral.forEach(function(x) {
+            x.disabled = isDisabledCalGeneral;
+        });
+    }
+
+    function validateModalComision(){
+        let divModal = document.getElementById('createPlataformaModal');
+        let btnModal = document.getElementById('modal-comisionxplataforma-btn');
+        let inputs = divModal.querySelectorAll('input');
+        let disabledBtn = false;
+
+        inputs.forEach(function(x){
+            if(x.value == ''){
+                disabledBtn = true;
+            }
+        });
+        
+        btnModal.disabled = disabledBtn;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        calculateGeneralDisabled();
+        let oldCategoryComision = document.getElementById('categoryModalComision').value;
+        viewElementsComision(oldCategoryComision);
+        validateModalComision();
     });
 </script>
 @endsection

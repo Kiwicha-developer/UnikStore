@@ -6,6 +6,7 @@ use App\Repositories\CalculadoraRepositoryInterface;
 use App\Repositories\CaracteristicasGrupoRepositoryInterface;
 use App\Repositories\CaracteristicasRepositoryInterface;
 use App\Repositories\CategoriaProductoRepositoryInterface;
+use App\Repositories\ComisionPlataformaRepositoryInterface;
 use App\Repositories\ComisionRepositoryInterface;
 use App\Repositories\CuentasTransferenciaRepositoryInterface;
 use App\Repositories\EmpresaRepositoryInterface;
@@ -29,6 +30,7 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     protected $headerService;
     protected $cuentasTransferenciaRepository;
     protected $plataformasRepository;
+    protected $comisionPlataformaRepository;
 
     public function __construct(CategoriaProductoRepositoryInterface $categoriaRepository,
                                 RangoPrecioRepositoryInterface $rangoRepository,
@@ -42,7 +44,8 @@ class ConfiguracionService implements ConfiguracionServiceInterface
                                 MarcaProductoRepositoryInterface $marcaRepository,
                                 HeaderServiceInterface $headerService,
                                 CuentasTransferenciaRepositoryInterface $cuentasTransferenciaRepository,
-                                PlataformaRepositoryInterface $plataformasRepository)
+                                PlataformaRepositoryInterface $plataformasRepository,
+                                ComisionPlataformaRepositoryInterface $comisionPlataformaRepository)
     {
         $this->categoriaRepository = $categoriaRepository;
         $this->rangoRepository = $rangoRepository;
@@ -57,6 +60,7 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         $this->headerService = $headerService;
         $this->cuentasTransferenciaRepository = $cuentasTransferenciaRepository;
         $this->plataformasRepository = $plataformasRepository;
+        $this->comisionPlataformaRepository = $comisionPlataformaRepository;
     }
 
     public function getOneCategoria($idCategoria){
@@ -201,6 +205,20 @@ class ConfiguracionService implements ConfiguracionServiceInterface
                 $this->headerService->sendFlashAlerts('Error','Proveedor repetido','error','btn-danger');
             }
         }
+    }
+
+    public function createComisionPlataforma($idPlataforma,$comision,$flete){
+        $data = ['idComisionPlataforma' => $this->getNewIdComisionPlataforma(),
+                'idPlataforma' => $idPlataforma,
+                'comision' => $comision,
+                'flete' => $flete];
+        $this->comisionPlataformaRepository->create($data);
+    }
+
+    private function getNewIdComisionPlataforma(){
+        $comision = $this->comisionPlataformaRepository->getLast();
+        $id = $comision ? $comision->idComisionPlataforma : 0;
+        return $id + 1;
     }
 
     private function getNewIdProveedor(){

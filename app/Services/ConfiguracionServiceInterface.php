@@ -23,4 +23,5 @@ interface ConfiguracionServiceInterface
     public function deleteCaracteristicaXGrupo($idGrupo,$idCaracteristica);
     public function createAlmacen($desc);
     public function createProveedor($razonSocial,$nombreComercial,$ruc);
+    public function createComisionPlataforma($idPlataforma,$comision,$flete);
 }

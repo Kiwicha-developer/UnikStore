@@ -43,6 +43,8 @@ use App\Repositories\CaracteristicasGrupoRepository;
 use App\Repositories\CaracteristicasGrupoRepositoryInterface;
 use App\Repositories\CaracteristicasRepository;
 use App\Repositories\CaracteristicasRepositoryInterface;
+use App\Repositories\ComisionPlataformaRepository;
+use App\Repositories\ComisionPlataformaRepositoryInterface;
 use App\Repositories\InventarioRepositoryInterface;
 use App\Repositories\InventarioRepository;
 use App\Repositories\ProveedorInventarioRepositoryInterface;
@@ -131,6 +133,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CaracteristicasRepositoryInterface::class,CaracteristicasRepository::class);
         $this->app->bind(CaracteristicasGrupoRepositoryInterface::class,CaracteristicasGrupoRepository::class);
         $this->app->bind(CuentasTransferenciaRepositoryInterface::class,CuentasTransferenciaRepository::class);
+        $this->app->bind(ComisionPlataformaRepositoryInterface::class,ComisionPlataformaRepository::class);
     }
 
     /**

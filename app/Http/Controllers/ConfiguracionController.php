@@ -326,4 +326,22 @@ class ConfiguracionController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
 
+    public function createComisionPlataforma(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $idPlataforma = $request->input('plataforma');
+        $comision = $request->input('comision');
+        $flete = $request->input('flete');
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if(isset($idPlataforma) && isset($comision) && isset($flete)){
+                    $this->configuracionService->createComisionPlataforma($idPlataforma,$comision,$flete);
+                }
+                return back();
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
 }

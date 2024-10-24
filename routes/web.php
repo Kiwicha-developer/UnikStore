@@ -86,24 +86,33 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/update-estado-publicacion', [PublicacionController::class, 'updateEstado'])->name('update-estado-publicacion');
     Route::get('/searchpublicacion', [PublicacionController::class, 'searchPublicacion'])->name('searchpublicacion');
     
+    //Configuracion-WEB
     Route::get('/configuracion/web', [ConfiguracionController::class, 'web'])->name('configweb');
-    Route::get('/configuracion/calculos', [ConfiguracionController::class, 'calculos'])->name('configcalculos');
-    Route::get('/configuracion/productos', [ConfiguracionController::class, 'productos'])->name('configproductos');
-    Route::get('/configuracion/inventario', [ConfiguracionController::class, 'inventario'])->name('configinventario');
-    Route::get('/configuracion/especificaciones/{idCategoria}', [ConfiguracionController::class, 'especificaciones'])->name('configespecificaciones');
-    Route::post('/configuracion/createcaracteristica', [ConfiguracionController::class, 'createCaracteristica'])->name('createcaracteristica');
-    Route::post('/configuracion/removecaracteristica', [ConfiguracionController::class, 'removeCaracteristica'])->name('removecaracteristica');
-    Route::post('/configuracion/updatecomision', [ConfiguracionController::class, 'updateComision'])->name('updatecomision');
-    Route::post('/configuracion/updatecalculos', [ConfiguracionController::class, 'updateCalculos'])->name('updatecalculos');
     Route::post('/configuracion/updatecorreos', [ConfiguracionController::class, 'updateCorreos'])->name('updatecorreos');
     Route::post('/configuracion/updatecuentasbancarias', [ConfiguracionController::class, 'updateCuentasBancarias'])->name('updatecuentasbancarias');
+
+    //Configuracion-CALCULOS
+    Route::get('/configuracion/calculos', [ConfiguracionController::class, 'calculos'])->name('configcalculos');
+    Route::post('/configuracion/updatecalculos', [ConfiguracionController::class, 'updateCalculos'])->name('updatecalculos');
+    Route::post('/configuracion/updatecomision', [ConfiguracionController::class, 'updateComision'])->name('updatecomision');
+    Route::post('/configuracion/createcomisionplataforma', [ConfiguracionController::class, 'createComisionPlataforma'])->name('createcomisionplataforma');
+
+    //Configuracion-PRODUCTOS
+    Route::get('/configuracion/productos', [ConfiguracionController::class, 'productos'])->name('configproductos');
+
+    //Configuracion-ESPECIFICACIONES
+    Route::get('/configuracion/especificaciones/{idCategoria}', [ConfiguracionController::class, 'especificaciones'])->name('configespecificaciones');
     Route::post('/configuracion/insertcaracteristicaxgrupo', [ConfiguracionController::class, 'insertCaracteristicaXGrupo'])->name('insertcaracteristicaxgrupo');
     Route::post('/configuracion/deletecaracteristicaxgrupo', [ConfiguracionController::class, 'deleteCaracteristicaXGrupo'])->name('deletecaracteristicaxgrupo');
+    Route::post('/configuracion/createcaracteristica', [ConfiguracionController::class, 'createCaracteristica'])->name('createcaracteristica');
+    Route::post('/configuracion/removecaracteristica', [ConfiguracionController::class, 'removeCaracteristica'])->name('removecaracteristica');
+
+    //Configuracion-INVENTARIO
+    Route::get('/configuracion/inventario', [ConfiguracionController::class, 'inventario'])->name('configinventario');
     Route::post('/configuracion/createalamcen', [ConfiguracionController::class, 'createAlmacen'])->name('createalmacen');
     Route::post('/configuracion/createproveedor', [ConfiguracionController::class, 'createProveedor'])->name('createproveedor');
 
     Route::get('/generateSerialPdf/{idDocumento}', [PdfController::class, 'generateSerialPdf'])->name('generarSeriesPdf');
 });
-
 
 

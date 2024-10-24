@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories;
 
-interface ComisionRepositoryInterface{
+interface ComisionPlataformaRepositoryInterface{
     public function all();
     public function getOne($column,$data);
     public function getAllByColumn($column,$data);
@@ -9,4 +9,5 @@ interface ComisionRepositoryInterface{
     public function searchList($column,$data);
     public function create(array $data);
     public function update($idRango,$idGrupo, array $data);
+    public function getLast();
 }
