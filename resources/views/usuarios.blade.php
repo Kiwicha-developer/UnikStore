@@ -43,7 +43,7 @@
                     @endforeach
                     </div>
                 </div>
-                <div class="col-12 col-md-4 d-flex flex-column justify-content-end  pt-2">
+                <div class="col-12 col-md-12 d-flex flex-column justify-content-end  pt-2">
                     <h6 class="text-secondary text-end"><a href="#" data-clicked="false" onclick="getIdPass({{$us->idUser}})" type="button" data-bs-toggle="modal" data-bs-target="#modalNewPass">Reestablecer contraseña</a></h6>
                 </div>
             </div>

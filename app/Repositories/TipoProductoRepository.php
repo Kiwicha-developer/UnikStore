@@ -2,66 +2,57 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
-use App\Models\GrupoProducto;
+use App\Models\TipoProducto;
 
-class GrupoProductoRepository implements GrupoProductoRepositoryInterface
+class TipoProductoRepository implements TipoProductoRepositoryInterface
 {
     protected $modelColumns;
 
     public function __construct()
     {
         // Define las columnas válidas
-        $this->modelColumns = (new GrupoProducto())->getFillable();
+        $this->modelColumns = (new TipoProducto())->getFillable();
     }
     
     public function all()
     {
-        return GrupoProducto::all();
+        return TipoProducto::all();
     }
 
     public function getOne($column, $data)
     {
         $this->validateColumns($column);
-        return GrupoProducto::where($column,'=', $data)->first();
+        return TipoProducto::where($column,'=', $data)->first();
     }
 
     public function getAllByColumn($column, $data)
     {
         $this->validateColumns($column);
-        return GrupoProducto::where($column,'=', $data)->get();
+        return TipoProducto::where($column,'=', $data)->get();
     }
 
     public function searchOne($column, $data)
     {
         $this->validateColumns($column);
-        return GrupoProducto::where($column, 'LIKE', '%' . $data . '%')->first();
+        return TipoProducto::where($column, 'LIKE', '%' . $data . '%')->first();
     }
 
     public function searchList($column, $data)
     {
         $this->validateColumns($column);
-        return GrupoProducto::where($column, 'LIKE', '%' . $data . '%')->get();
-    }
-    
-    public function getSpecs($idGrupo){
-        $caracteristicasGrupo = DB::select('CALL sp_get_caracteristicaxgrupo(?)', [$idGrupo]);
-        return $caracteristicasGrupo;
+        return TipoProducto::where($column, 'LIKE', '%' . $data . '%')->get();
     }
 
     public function create(array $productoData)
     {
-        return GrupoProducto::create($productoData);
+        return TipoProducto::create($productoData);
     }
 
     public function update($idProducto, array $productoData)
     {
-        $producto = GrupoProducto::findOrFail($idProducto);
+        $producto = TipoProducto::findOrFail($idProducto);
         $producto->update($productoData);
         return $producto;
-    }
-
-    public function getLast(){
-        return GrupoProducto::orderBy('idGrupoProducto', 'desc')->first();
     }
     
     private function validateColumns($column){

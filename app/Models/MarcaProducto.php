@@ -2,11 +2,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class MarcaProducto extends Model
 {
- 
+    public $timestamps = false;
+    
     protected $table = 'MarcaProducto';
+
+    protected $primaryKey = 'idMarca';
 
     protected $guarded = ['idMarca'];
     

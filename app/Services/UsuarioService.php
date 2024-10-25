@@ -52,6 +52,11 @@ class UsuarioService implements UsuarioServiceInterface
         $this->userRepository->updatePass($id,$pass);
     }
 
+    public function updateBandeja($id,$bandeja){
+        $data = ['bandeja' => $bandeja ? $bandeja : null];
+        $this->userRepository->update($id,$data);
+    }
+
     public function updateAccesos($user,$state,$accesos){
         if($user){
             $this->accesosRepository->deleteByUser($user);

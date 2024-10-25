@@ -10,6 +10,7 @@ interface ConfiguracionServiceInterface
     public function getAllRangos();
     public function getAllEmpresas();
     public function getAllPlataformas();
+    public function getAllTipoProductos();
     public function getOneCategoria($idCategoria);
     public function updateCorreoEmpresa($id,$correo);
     public function updateCuentaBancaria($id,$titular,$cuenta);
@@ -24,4 +25,7 @@ interface ConfiguracionServiceInterface
     public function createAlmacen($desc);
     public function createProveedor($razonSocial,$nombreComercial,$ruc);
     public function createComisionPlataforma($idPlataforma,$comision,$flete);
+    public function deleteComisionPlataforma($idComisionPlataforma);
+    public function createMarcaProducto($nombre,$img);
+    public function createGrupoProducto($categoria,$grupo,$tipo,$img);
 }

@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 
 class GrupoProducto extends Model
 {
+    public $timestamps = false;
+    
     protected $table = 'GrupoProducto';
     
     protected $primaryKey = 'idGrupoProducto';

@@ -44,6 +44,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/usuario/nuevo', [UsuarioController::class, 'create'])->name('nuevousuario');
     Route::post('/usuario/createuser', [UsuarioController::class, 'createUser'])->name('createuser');
     Route::post('/usuario/updatepass', [UsuarioController::class, 'updatePass'])->name('updatepass');
+    Route::post('/usuario/updatebandeja', [UsuarioController::class, 'updateBandeja'])->name('updatebandeja');
     Route::post('/usuario/updateuser', [UsuarioController::class, 'updateUser'])->name('updateuser');
     
     Route::get('/productos/buscarproducto', [ProductoController::class, 'searchProduct'])->name('buscarproducto');
@@ -96,9 +97,12 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/configuracion/updatecalculos', [ConfiguracionController::class, 'updateCalculos'])->name('updatecalculos');
     Route::post('/configuracion/updatecomision', [ConfiguracionController::class, 'updateComision'])->name('updatecomision');
     Route::post('/configuracion/createcomisionplataforma', [ConfiguracionController::class, 'createComisionPlataforma'])->name('createcomisionplataforma');
+    Route::post('/configuracion/deletecomisionplataforma', [ConfiguracionController::class, 'deleteComisionPlataforma'])->name('deletecomisionplataforma');
 
     //Configuracion-PRODUCTOS
     Route::get('/configuracion/productos', [ConfiguracionController::class, 'productos'])->name('configproductos');
+    Route::post('/configuracion/insertmarca', [ConfiguracionController::class, 'createMarcaProducto'])->name('insertmarca');
+    Route::post('/configuracion/insertgrupo', [ConfiguracionController::class, 'createGrupoProducto'])->name('insertgrupo');
 
     //Configuracion-ESPECIFICACIONES
     Route::get('/configuracion/especificaciones/{idCategoria}', [ConfiguracionController::class, 'especificaciones'])->name('configespecificaciones');

@@ -188,7 +188,7 @@
                                             <h6>{{$comision->flete}}</h6>
                                         </div>
                                         <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
-                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deletePlataformaModal"><i class="bi bi-trash-fill"></i></button>
+                                            <button class="btn btn-danger btn-sm" onclick="sendIdToModalPlataforma('modal-deletecomisionxplataforma-hidden','modal-deletecomisionxplataforma-title',{{$comision->idComisionPlataforma}},'{{$plataforma->nombrePlataforma}}')" data-bs-toggle="modal" data-bs-target="#deletePlataformaModal"><i class="bi bi-trash-fill"></i></button>
                                         </div>
                                     </div>
                                 </li>
@@ -272,16 +272,20 @@
             </div>
         </div>
     </form>
-    <form action="" method="post">
+    <form action="{{route('deletecomisionplataforma')}}" method="post">
+        @csrf
         <div class="modal fade" id="deletePlataformaModal" tabindex="-1" aria-labelledby="deletePlataformaModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deletePlataformaModalLabel">¿Estas seguro de eliminar esta comision?</h5>
+                        <div class="row">
+                            <h5 class="modal-title" id="deletePlataformaModalLabel">¿Estas seguro de eliminar esta comision?</h5>
+                            <small class="text-secondary" id="modal-deletecomisionxplataforma-title"></small>
+                        </div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-footer">
-                        <input type="hidden" value="" name="id">
+                        <input type="hidden" value="" name="id" id="modal-deletecomisionxplataforma-hidden">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-danger">Borrar <i class="bi bi-trash-fill"></i></button>
                     </div>

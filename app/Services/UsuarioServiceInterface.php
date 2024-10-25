@@ -11,4 +11,5 @@ interface UsuarioServiceInterface
     public function createUser(array $array);
     public function updatePass($id,$pass);
     public function updateAccesos($user,$state,$accesos);
+    public function updateBandeja($id,$bandeja);
 }

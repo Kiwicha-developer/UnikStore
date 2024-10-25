@@ -187,11 +187,15 @@
                             <div class="border shadow pt-2 pb-3 rounded-3 bg-light" style="position:absolute;width:100%;left:-10%;z-index:9000;display:none" id="options-user">
                                 <div class="row text-dark text-center">
                                     <div class="col-md-12 mt-1">
-                                        <small><a class=" text-decoration-none text-secondary link-hover"><i class="bi bi-journal-bookmark-fill" ></i> Pendientes</a></small>
+                                        <small>
+                                            <a href="#" onclick="getIdPass({{ $user->idUser }},'id-modal-bandeja'); return false;" class=" text-decoration-none text-secondary link-hover" data-bs-toggle="modal" data-bs-target="#modalBandeja">
+                                                <i class="bi bi-journal-bookmark-fill" ></i> Pendientes
+                                            </a>
+                                        </small>
                                     </div>
                                     <div class="col-md-12 mt-1">
                                         <small>
-                                            <a href="#" onclick="getIdPass({{ $user->idUser }}); return false;" class="text-decoration-none text-secondary link-hover" data-bs-toggle="modal" data-bs-target="#modalNewPass">
+                                            <a href="#" onclick="getIdPass({{ $user->idUser }},'id-modal-password'); return false;" class="text-decoration-none text-secondary link-hover" data-bs-toggle="modal" data-bs-target="#modalNewPass">
                                                 <i class="bi bi-arrow-clockwise"></i> Reestablecer Contrase&ntildea
                                             </a>
                                         </small>
@@ -263,7 +267,7 @@
          <div class="modal-body">
            <div class="row">
                <div class="col-12 mb-2">
-                   <input type="hidden" name="id" value="1" class="form-control" id="id-modal-password">
+                   <input type="hidden" name="id" value="" class="form-control" id="id-modal-password">
                    <label class="form-label">Nueva contraseña</label>
                    <input type="password" name="pass" class="form-control" id="pass-modal-password">
                    <small id="passwordError" class="text-danger"></small>
@@ -282,6 +286,31 @@
        </div>
      </div>
    </div>
+   </form>
+   <form action="{{route('updatebandeja')}}" method="post">
+    @csrf
+        <div class="modal fade" id="modalBandeja" tabindex="-1" aria-labelledby="bandejaModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="bandejaModalLabel">Pendientes</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row" style="height: 300px">
+                            <div class="col-md-12 h-100">
+                                <input type="hidden" name="id" value="" class="form-control" id="id-modal-bandeja">
+                                <textarea name="bandeja" type="text" maxlength="3000" class="form-control h-100" style="width: 100%; overflow-y: auto;">{{$user->bandeja}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" id="btn-reestablecer-modal-password" class="btn btn-primary"><i class="bi bi-floppy-fill"></i> Actualizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
    </form>
     </main>
     <footer>

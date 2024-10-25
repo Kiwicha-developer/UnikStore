@@ -75,6 +75,8 @@ use App\Repositories\PublicacionRepositoryInterface;
 use App\Repositories\PublicacionRepository;
 use App\Repositories\RangoPrecioRepository;
 use App\Repositories\RangoPrecioRepositoryInterface;
+use App\Repositories\TipoProductoRepository;
+use App\Repositories\TipoProductoRepositoryInterface;
 use App\Repositories\VistaRepository;
 use App\Repositories\VistaRepositoryInterface;
 use App\Services\ConfiguracionService;
@@ -134,6 +136,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CaracteristicasGrupoRepositoryInterface::class,CaracteristicasGrupoRepository::class);
         $this->app->bind(CuentasTransferenciaRepositoryInterface::class,CuentasTransferenciaRepository::class);
         $this->app->bind(ComisionPlataformaRepositoryInterface::class,ComisionPlataformaRepository::class);
+        $this->app->bind(TipoProductoRepositoryInterface::class,TipoProductoRepository::class);
     }
 
     /**

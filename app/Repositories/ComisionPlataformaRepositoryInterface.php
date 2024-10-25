@@ -8,6 +8,7 @@ interface ComisionPlataformaRepositoryInterface{
     public function searchOne($column,$data);
     public function searchList($column,$data);
     public function create(array $data);
-    public function update($idRango,$idGrupo, array $data);
+    public function update($id, array $comisionData);
+    public function delete($id);
     public function getLast();
 }

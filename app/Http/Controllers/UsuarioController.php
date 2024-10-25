@@ -95,6 +95,15 @@ class UsuarioController extends Controller
         $this->headerService->sendFlashAlerts('Contraseña actualizada','Actualizacion correcta','success','btn-success');
         return redirect()->back();
     }
+
+    public function updateBandeja(Request $request){
+        $id = $request->input('id');
+        $bandeja = $request->input('bandeja');
+        if(isset($id)){
+            $this->usuarioService->updateBandeja($id,$bandeja);
+        }
+        return redirect()->back();
+    }
     
     public function updateUser(Request $request){
         //variables de la cabecera

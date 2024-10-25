@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories;
 
-interface GrupoProductoRepositoryInterface
+interface TipoProductoRepositoryInterface
 {
     public function all();
     public function getOne($column,$data);
@@ -10,6 +10,4 @@ interface GrupoProductoRepositoryInterface
     public function searchList($column,$data);
     public function create(array $data);
     public function update($id, array $data);
-    public function getLast();
-    public function getSpecs($id);
 }

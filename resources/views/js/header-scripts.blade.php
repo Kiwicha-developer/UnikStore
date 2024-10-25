@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-function getIdPass(id){
-    let inputHidden = document.getElementById('id-modal-password');
+function getIdPass(id,input){
+    let inputHidden = document.getElementById(input);
     
     inputHidden.value = id;
 }

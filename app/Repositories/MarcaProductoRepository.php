@@ -54,6 +54,10 @@ class MarcaProductoRepository implements MarcaProductoRepositoryInterface
         $producto->update($productoData);
         return $producto;
     }
+
+    public function getLast(){
+        return MarcaProducto::orderBy('idMarca', 'desc')->first();
+    }
     
     private function validateColumns($column){
         if (!in_array($column, $this->modelColumns)) {

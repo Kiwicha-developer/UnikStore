@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class TipoProducto extends Model
 {
@@ -12,7 +13,8 @@ class TipoProducto extends Model
     
     protected $primaryKey = 'idTipoProducto';
     
-    protected $fillable = ['tipoProducto',
+    protected $fillable = ['idTipoProducto',
+                            'tipoProducto',
                             'slugTipo'
                             ];
 

@@ -92,11 +92,13 @@ class ConfiguracionController extends Controller
             if($acceso->idVista == 7){
                 $categorias = $this->configuracionService->getAllCategorias();
                 $marcas = $this->configuracionService->getAllMarcas();
+                $tipos = $this->configuracionService->getAllTipoProductos();
 
                 return view('configproductos',['user' => $userModel,
                                         'pagina' => 'productos',
                                         'categorias' => $categorias,
-                                        'marcas' => $marcas
+                                        'marcas' => $marcas,
+                                        'tipos' => $tipos
                 ]);
             }
         }
@@ -344,4 +346,52 @@ class ConfiguracionController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
 
+    public function deleteComisionPlataforma(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $idComisionPlataforma = $request->input('id');
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if(isset($idComisionPlataforma)){
+                    $this->configuracionService->deleteComisionPlataforma($idComisionPlataforma);
+                }
+                return back();
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function createMarcaProducto(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $nombre = $request->input('nombre');
+        $img = $request->file('img');
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if(isset($nombre) && isset($img)){
+                    $this->configuracionService->createMarcaProducto($nombre,$img);
+                }
+                return back();
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function createGrupoProducto(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $categoria = $request->input('categoria');
+        $grupo = $request->input('grupo');
+        $img = $request->file('img');
+        $tipo = $request->input('tipo');
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if(isset($categoria) && isset($grupo) && isset($img) && isset($tipo)){
+                    $this->configuracionService->createGrupoProducto($categoria,$grupo,$tipo,$img);
+                }
+                return back();
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
 }

@@ -43,11 +43,15 @@ class ComisionPlataformaRepository implements ComisionPlataformaRepositoryInterf
         return ComisionPlataforma::create($ComisionData);
     }
 
-    public function update($idRango,$idGrupo, array $comisionData){
-        $comision = ComisionPlataforma::where('idGrupoProducto','=',$idGrupo)
-                            ->where('idRango','=', $idRango)->first();
+    public function update($id, array $comisionData){
+        $comision = ComisionPlataforma::findOrFail($id);
         $comision->update($comisionData);
         return $comision;
+    }
+
+    public function delete($id){
+        $comision = ComisionPlataforma::findOrFail($id);
+        $comision->delete();
     }
 
     public function getLast(){

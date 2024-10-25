@@ -49,7 +49,9 @@
                         @endforeach
                         <div class="col-md-3 pb-2">
                             <div class="row bg-light text-center border rounded-3 ms-2 me-2 h-100">
-                                <button class="btn btn-success"><i class="bi bi-plus-lg"></i></button>
+                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#grupoModal" onclick="sendGrupoData('{{$categoria->idCategoria}}','{{$categoria->nombreCategoria}}')">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -85,7 +87,57 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="marcaModal" tabindex="-1" aria-labelledby="marcaModalLabel" aria-hidden="true">
+    <form action="{{route('insertgrupo')}}" method="post" enctype="multipart/form-data" id="form-insert-grupo">
+        @csrf
+        <div class="modal fade" id="grupoModal" tabindex="-1" aria-labelledby="grupoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="row">
+                            <h1 class="modal-title fs-5" id="grupoModalLabel">Nuevo Grupo</h1>
+                            <small class="text-secondary" id="title-modal-grupo"></small>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="body-modal-grupo">
+                        <div class="row">
+                            <input type="hidden" name="categoria" value="" id="hidde-modal-grupo">
+                            <div class="col-md-4" id="drop-area-grupo" class="drop-area">
+                                <input class="d-none" id="file-modal-grupo" name="img" type="file" accept="image/*">
+                                <img src="https://placehold.co/300x300"  alt="Click to upload" id="img-modal-grupo" class="w-100 border border-secondary rounded-3" style="cursor: pointer; object-fit: cover;">
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="form-label">Nombre del Grupo:</label>
+                                        <input type="text" maxlength="50" class="form-control" name="grupo">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label">Tipo de producto</label>
+                                        <select name="tipo" class="form-select">
+                                            <option value="" selected>-Elige-</option>
+                                            @foreach ($tipos as $tipo)
+                                            <option value="{{$tipo->idTipoProducto}}">{{$tipo->tipoProducto}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" onclick="validateForm('form-insert-grupo')" class="btn btn-primary" id="btn-modal-grupo"><i class="bi bi-floppy-fill"></i> Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form action="{{route('insertmarca')}}" method="post" enctype="multipart/form-data" id="form-insert-marca">
+        @csrf
+        <div class="modal fade" id="marcaModal" tabindex="-1" aria-labelledby="marcaModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -98,7 +150,7 @@
                         <label class="form-label">Nombre de la Marca:</label>
                         <input type="text" maxlength="50" class="form-control" name="nombre" id="">
                     </div>
-                    <div class="col-md-12" id="drop-area" class="drop-area">
+                    <div class="col-md-12" id="drop-area-marca" class="drop-area">
                         <input class="d-none" id="file-modal-marca" name="img" type="file" accept="image/*">
                         <img src="https://placehold.co/1000x400"  alt="Click to upload" id="img-modal-marca" class="w-100 border border-secondary rounded-3" style="cursor: pointer; object-fit: cover;">
                     </div>
@@ -106,34 +158,83 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-primary" id="btn-modal-marca"><i class="bi bi-floppy-fill"></i> Guardar</button>
+              <button type="button" onclick="validateForm('form-insert-marca')" class="btn btn-primary" id="btn-modal-marca"><i class="bi bi-floppy-fill"></i> Guardar</button>
             </div>
           </div>
         </div>
       </div>
+    </form>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        setupDropArea('drop-area', 'file-modal-marca', 'img-modal-marca', 1000, 400);
+        setupDropArea('drop-area-marca', 'file-modal-marca', 'img-modal-marca', 1000, 400);
+        setupDropArea('drop-area-grupo', 'file-modal-grupo', 'img-modal-grupo', 300, 300);
         validateButton('btn-modal-marca','body-modal-marcas');
+        validateButton('btn-modal-grupo','body-modal-grupo');
     });
 
-    function validateButton(button,modal){
-        let btnModal = document.getElementById(button);
-        let modalBody = document.getElementById(modal);
-        inputsModal = modalBody.querySelectorAll('input');
+    function validateForm(id){
+        let formPost = document.getElementById(id);
+        let confirmacion = confirm('No se podra eliminar ¿Estas seguro(a)?');
 
-        let disabledBtn = Array.from(inputsModal).some(input => {
-            if (input.type === 'file') {
-                return input.files.length === 0;
+        if(confirmacion){
+            formPost.submit();
+        }
+
+    }
+
+    function sendGrupoData(categoria,title){
+        let inputHidden = document.getElementById('hidde-modal-grupo');
+        let titleModal = document.getElementById('title-modal-grupo');
+
+        inputHidden.value = categoria;
+        titleModal.textContent = title;
+    }
+
+    function validateButton(button, modal) {
+        const btnModal = document.getElementById(button);
+        const modalBody = document.getElementById(modal);
+        const inputsModal = modalBody.querySelectorAll('input');
+        const selectModal = modalBody.querySelector('select');
+        
+        function validate() {
+            let disableBtn = false;
+
+            inputsModal.forEach(function(x) {
+                if (x.type === 'file') {
+                    if (x.files.length < 1) {
+                        disableBtn = true;
+                    }
+                } else {
+                    if (x.value === '') {
+                        disableBtn = true;
+                    }
+                }
+            });
+
+            if(selectModal != null){
+                if(selectModal.value == ''){
+                    disableBtn = true;
+                }
+            }
+
+            btnModal.disabled = disableBtn;
+        }
+
+        inputsModal.forEach(function(x) {
+            if (x.type === 'file') {
+                x.addEventListener('change', validate);
             } else {
-                return input.value === '';
+                x.addEventListener('input', validate);
             }
         });
 
-        btnModal.disabled = disabledBtn;
-    }
+        if(selectModal != null){
+            selectModal.addEventListener('change',validate);
+        }
 
+        validate();
+    }
     function setupDropArea(dropAreaId, fileInputId, imgElementId, maxWidth, maxHeight) {
         const dropArea = document.getElementById(dropAreaId);
         const fileInput = document.getElementById(fileInputId);

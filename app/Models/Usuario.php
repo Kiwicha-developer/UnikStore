@@ -13,7 +13,7 @@ class Usuario extends Model
 
     protected $guarded = ['pass'];
     
-    protected $fillable = ['idUser','user','idCargo','tokenSesion','registroSesion','horaSesion','estadoUsuario'
+    protected $fillable = ['idUser','user','idCargo','tokenSesion','registroSesion','horaSesion','estadoUsuario','bandeja'
                             ];
 
     protected $hidden = [

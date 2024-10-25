@@ -171,12 +171,12 @@
         @foreach($producto->Inventario as $inventario)
         <div class="col-6 col-md-2">
             <label for="precio-producto" class="form-label">Stock {{$inventario->Almacen->descripcion}}:</label>
-            <input name="stock[{{$inventario->idAlmacen}}]" value="{{$inventario->stock}}" type="number" class="form-control input-edit" step="0.01" disabled>
+            <input name="stock[{{$inventario->idAlmacen}}]" value="{{$inventario->stock}}" type="number" class="form-control input-edit"  disabled>
         </div>
         @endforeach
         <div class="col-6 col-md-2">
             <label for="precio-producto" class="form-label">Stock {{$producto->Inventario_Proveedor->Preveedor->nombreProveedor}}:</label>
-            <input name="stockproveedor" value="{{$producto->Inventario_Proveedor->stock}}" type="number" class="form-control input-edit" step="0.01" disabled>
+            <input name="stockproveedor" value="{{$producto->Inventario_Proveedor->stock}}" type="number" class="form-control input-edit" disabled>
         </div>
         <div class="col-6 col-md-3">
                 <label for="grupo-product" id="proveedor-label" class="form-label">Proveedor:</label>

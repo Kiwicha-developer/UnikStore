@@ -10,10 +10,13 @@ use App\Repositories\ComisionPlataformaRepositoryInterface;
 use App\Repositories\ComisionRepositoryInterface;
 use App\Repositories\CuentasTransferenciaRepositoryInterface;
 use App\Repositories\EmpresaRepositoryInterface;
+use App\Repositories\GrupoProductoRepositoryInterface;
 use App\Repositories\MarcaProductoRepositoryInterface;
 use App\Repositories\PlataformaRepositoryInterface;
 use App\Repositories\ProveedorRepositoryInterface;
 use App\Repositories\RangoPrecioRepositoryInterface;
+use App\Repositories\TipoProductoRepositoryInterface;
+use Exception;
 
 class ConfiguracionService implements ConfiguracionServiceInterface
 {
@@ -31,6 +34,11 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     protected $cuentasTransferenciaRepository;
     protected $plataformasRepository;
     protected $comisionPlataformaRepository;
+    protected $grupoRepository;
+    protected $tipoProductoRepository;
+
+    private $pathMarca = '/home3/unikstor/public_html/images/marcas';
+    private $pathGrupo = '/home3/unikstor/public_html/images/grupos';
 
     public function __construct(CategoriaProductoRepositoryInterface $categoriaRepository,
                                 RangoPrecioRepositoryInterface $rangoRepository,
@@ -45,7 +53,9 @@ class ConfiguracionService implements ConfiguracionServiceInterface
                                 HeaderServiceInterface $headerService,
                                 CuentasTransferenciaRepositoryInterface $cuentasTransferenciaRepository,
                                 PlataformaRepositoryInterface $plataformasRepository,
-                                ComisionPlataformaRepositoryInterface $comisionPlataformaRepository)
+                                ComisionPlataformaRepositoryInterface $comisionPlataformaRepository,
+                                GrupoProductoRepositoryInterface $grupoRepository,
+                                TipoProductoRepositoryInterface $tipoProductoRepository)
     {
         $this->categoriaRepository = $categoriaRepository;
         $this->rangoRepository = $rangoRepository;
@@ -61,6 +71,8 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         $this->cuentasTransferenciaRepository = $cuentasTransferenciaRepository;
         $this->plataformasRepository = $plataformasRepository;
         $this->comisionPlataformaRepository = $comisionPlataformaRepository;
+        $this->grupoRepository = $grupoRepository;
+        $this->tipoProductoRepository = $tipoProductoRepository;
     }
 
     public function getOneCategoria($idCategoria){
@@ -95,6 +107,10 @@ class ConfiguracionService implements ConfiguracionServiceInterface
 
     public function getAllEmpresas(){
         return $this->empresaRepository->all();
+    }
+
+    public function getAllTipoProductos(){
+        return $this->tipoProductoRepository->all();
     }
 
     public function updateCorreoEmpresa($id,$correo){
@@ -213,6 +229,58 @@ class ConfiguracionService implements ConfiguracionServiceInterface
                 'comision' => $comision,
                 'flete' => $flete];
         $this->comisionPlataformaRepository->create($data);
+    }
+
+    public function deleteComisionPlataforma($idComisionPlataforma){
+        $this->comisionPlataformaRepository->delete($idComisionPlataforma);
+    }
+
+    public function createMarcaProducto($nombre,$img){
+        $imgService = new ImageService();
+        $data = ['idMarca' => $this->getNewIdMarca(),
+                'nombreMarca' => $nombre,
+                'imagenMarca' => ''
+                ];
+        $this->marcaRepository->create($data);
+        $newMarca = $this->marcaRepository->getOne('idMarca',$data['idMarca']);
+        $updateData = ['imagenMarca' => 'marcas/IMGPRO'.$newMarca->slugMarca.'.webp' ];
+        try{
+            $imgService->createImage($img,$newMarca->slugMarca,$this->pathMarca);
+        }catch(Exception $e){
+            throw new \InvalidArgumentException("Error al crear Imagen de marca");
+        }
+        $this->marcaRepository->update($newMarca->idMarca,$updateData);
+    }
+
+    public function createGrupoProducto($categoria,$grupo,$tipo,$img){
+        $imgService = new ImageService();
+        $data = ['idGrupoProducto' => $this->getNewIdGrupo(),
+                'nombreGrupo' => $grupo,
+                'idCategoria' => $categoria,
+                'idTipoProducto' => $tipo,
+                'imagenGrupo' => ''
+                ];
+        $this->grupoRepository->create($data);
+        $newGrupo = $this->grupoRepository->getOne('idGrupoProducto',$data['idGrupoProducto']);
+        $updateData = ['imagenGrupo' => 'grupos/IMGPRO'.$newGrupo->slugGrupo.'.webp' ];
+        try{
+            $imgService->createImage($img,$newGrupo->slugGrupo,$this->pathGrupo);
+        }catch(Exception $e){
+            throw new \InvalidArgumentException("Error al crear Imagen de grupo");
+        }
+        $this->grupoRepository->update($newGrupo->idGrupoProducto,$updateData);
+    }
+
+    private function getNewIdMarca(){
+        $marca = $this->marcaRepository->getLast();
+        $id = $marca ? $marca->idMarca : 0;
+        return $id + 1;
+    }
+
+    private function getNewIdGrupo(){
+        $grupo = $this->grupoRepository->getLast();
+        $id = $grupo ? $grupo->idGrupoProducto : 0;
+        return $id + 1;
     }
 
     private function getNewIdComisionPlataforma(){
