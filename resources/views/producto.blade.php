@@ -142,7 +142,11 @@
                 <h3>Datos clave</h3>
             </div>
             <div class="col-6 text-end">
-                <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+                @foreach ($user->Accesos as $access)
+                    @if($access->idVista  == 7)
+                        <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+                    @endif
+                @endforeach
             </div>
         </div>
         <div class="col-md-4">
@@ -165,7 +169,11 @@
                 <h3>Inventario disponible</h3>
             </div>
             <div class="col-6 text-end">
-                <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+                @foreach ($user->Accesos as $access)
+                    @if($access->idVista  == 8)
+                    <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+                    @endif
+                @endforeach
             </div>
         </div>
         @foreach($producto->Inventario as $inventario)
