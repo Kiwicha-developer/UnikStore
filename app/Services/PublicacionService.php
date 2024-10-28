@@ -31,7 +31,9 @@ class PublicacionService implements PublicacionServiceInterface
                                                 'sku' => $details->sku,
                                                 'fechaPublicacion' => $details->fechaPublicacion->format('Y-m-d'),
                                                 'idPublicacion' => $details->idPublicacion,
-                                                'titulo' => $details->titulo
+                                                'titulo' => $details->titulo,
+                                                'user' => $details->Usuario->user,
+                                                'estado' => $details->estado
                                             ];
                                         });
         return $publicaciones;
@@ -52,7 +54,7 @@ class PublicacionService implements PublicacionServiceInterface
     public function getAllPubliByMonth($month){
         Carbon::setLocale('es');
         $carbonMonth = Carbon::createFromFormat('Y-m', $month);
-        return $this->publicacionRepository->getByMonth($carbonMonth->month)->sortByDesc('fechaPublicacion');
+        return $this->publicacionRepository->getByMonth($carbonMonth->month,$carbonMonth->year)->sortByDesc('fechaPublicacion');
     }
     
     public function insertPublicacion(array $data){
@@ -60,7 +62,7 @@ class PublicacionService implements PublicacionServiceInterface
         if($data){
             $tienda = $this->cuentasPlataformaRepository->getOne('idCuentaPlataforma',$data['idCuentaPlataforma']);
             $skuValidation = $this->publicacionRepository->validateSkuDuplicity($data['sku'],$tienda->idPlataforma); 
-            if(is_null($skuValidation)){
+            if(!$skuValidation){
                 $newId = $this->getNewId();
                 $user = $this->headerService->getModelUser();
                 
@@ -81,33 +83,21 @@ class PublicacionService implements PublicacionServiceInterface
         return $message;
     }
     
-    public function updatePublicacion($id,$type){
+    public function updatePublicacion($id,$titulo,$precio,$estado){
         $message = '';
-        if($id && $type){
-            $publicacion = $this->publicacionRepository->getOne('idPublicacion',$id);
-            $data = array();
-            if($type == 'delete'){
-                $data = ['estado' => -1,
-                        'fechaPublicacion' => now()];
-            }else{
-                if($publicacion->estado == -1){
-                    $message = 'No puedes activar una publicacion borrada';
-                    return $message;
-                }else{
-                    if($publicacion->estado == 1 ){
-                        $data = ['estado' => 0,
-                        'fechaPublicacion' => now()];
-                    }else if($publicacion->estado == 0 ){
-                        $data = ['estado' => 1,
-                        'fechaPublicacion' => now()];
-                    }
-                }
-            }
-            $this->publicacionRepository->update($id,$data);
-            $message = 'Publicacion actualizada';
+        $publicacion = $this->publicacionRepository->getOne('idPublicacion',$id);
+        $data = ['titulo' => $titulo,
+                'precioPublicacion' => $precio,
+                'fechaPublicacion' => now()];
+
+        if($publicacion->estado == -1){
+            $data['estado'] = -1;
+            $message = 'No puedes activar una publicacion borrada';
         }else{
-            $message = 'Datos Faltantes';
+            $data['estado'] = $estado;
         }
+        $this->publicacionRepository->update($id,$data);
+        $message = 'Publicacion actualizada';
         return $message;
     }
     

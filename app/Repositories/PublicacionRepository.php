@@ -43,8 +43,10 @@ class PublicacionRepository implements PublicacionRepositoryInterface
         return Publicacion::where($column, 'LIKE', '%' . $data . '%')->get();
     }
     
-    public function getByMonth($month){
-        return Publicacion::whereMonth('fechaPublicacion', $month)->get();
+    public function getByMonth($month,$year){
+        return Publicacion::whereMonth('fechaPublicacion', $month)
+                      ->whereYear('fechaPublicacion', $year)
+                      ->get();
     }
 
     public function searchByEgreso($data){
@@ -54,8 +56,7 @@ class PublicacionRepository implements PublicacionRepositoryInterface
     public function validateSkuDuplicity($sku,$idPlataforma){
         return Publicacion::join('CuentasPlataforma','CuentasPlataforma.idCuentaPlataforma','=','Publicacion.idCuentaPlataforma')
                                     ->where('Publicacion.sku','=',$sku)
-                                    ->where('CuentasPlataforma.idPlataforma','=',$idPlataforma)
-                                    ->where('Publicacion.estado','=',-1)->first();
+                                    ->where('CuentasPlataforma.idPlataforma','=',$idPlataforma)->first();
     }
 
     public function create(array $data)

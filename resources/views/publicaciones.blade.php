@@ -4,15 +4,28 @@
 
 @section('content')
 <div class="container">
+    <div class="bg-secondary" id="hidden-body" style="position:fixed;left:0;width:100vw;height:100vh;z-index:998;opacity:0.5;display:none">
+    </div>
     <br>
     <div class="row">
+        <div class="col-md-4">
+            <div class="input-group mb-3" style="z-index:1000" >
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" placeholder="SKU..." id="search">
+                <ul class="list-group w-100" style="position:absolute;top:100%;z-index:1000" id="suggestions">
+                </ul>
+              </div>
+        </div>
+        <div class="col-md-5">
+
+        </div>
+        <div class="col-6 col-md-3 text-end">
+            <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}" >
+        </div>
         <div class="col-12 col-md-8">
             <h2><i class="bi bi-megaphone-fill"></i> Publicaciones</h2>
         </div>
-        <div class="col-6 col-md-2 text-end">
-            <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}" >
-        </div>
-        <div class="col-6 col-md-2 text-end">
+        <div class="col-6 col-md-4 text-end">
             <div class="btn-group dropstart">
               <button type="button" class="btn btn-success" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-plus-lg"></i> Nueva
@@ -72,7 +85,9 @@
                           <small>{{$public->CuentasPlataforma->nombreCuenta}}</small>
                       </div>
                       <div class="col-4 col-md-2">
-                          <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{$public->titulo}}">{{$public->sku}}</small>
+                        <a href="javascript:void(0)" class="decoration-link" onclick="ShareId({{$public->idPublicacion}},'{{$public->titulo}}',{{$public->precioPublicacion}},{{$public->estado}})" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{$public->titulo}}">{{$public->sku}}</small>
+                        </a>
                       </div>
                       <div class="col-4 col-md-2">
                           <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{$public->Producto->modelo}}">
@@ -84,7 +99,7 @@
                       </div>
                       <div class="col-6 col-md-1">
                           <small >
-                              <a href="#" onclick="ShareId({{$public->idPublicacion}})" class="{{$public->estado == 1 ? 'text-success' : ($public->estado == 0 ? 'text-danger ' : 'text-danger text-decoration-line-through')}}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                              <a href="javascript:void(0)"  class="{{$public->estado == 1 ? 'text-success' : ($public->estado == 0 ? 'text-danger ' : 'text-danger text-decoration-line-through')}}" >
                                     {{$public->estado == 1 ? 'Activo' : ($public->estado == 0 ? 'Inactivo' : 'Borrado')}}
                                 </a>
                           </small>
@@ -105,43 +120,167 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">&#191;Estas seguro(a) de deshabilitar/habilitar la publicaci&oacuten?<span id="proba"></span></h5>
+            <h5 class="modal-title" id="exampleModalLabel">Publicaci&oacute;n <span id="titlepubli"></span></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <div class="modal-body">
+            <div class="row">
+                <input type="hidden" name="idpubli" value="" id="hidden-id">
+                <div class="col-md-12">
+                    <label class="form-label">Titulo:</label>
+                    <input type="text" name="titulo" class="form-control" id="title-text" value="">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Precio:</label>
+                    <input type="number" step="0.01" name="precio" class="form-control" id="price-number" value="">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Estado:</label>
+                    <select name="estado" id="estado-select" class="form-select">
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
+                        <option value="-1">Borrado</option>
+                    </select>
+                </div>
+            </div>
+          </div>
           <div class="modal-footer ">
-              <div class="row w-100">
-                  <div class="col-4 col-md-4 d-flex align-items-end ps-0">
-                      <small><a type="button" class="text-danger mb-0" onclick="sendData('delete')"> Borrar publicaci&oacuten</a></small>
-                  </div>
-                  <div class="col-8 col-md-8 text-end">
-                      <input type="hidden" id="hidden-id" name="id">
-                      <input type="hidden" id="hidden-data" name="data">
-                      <button type="button" class="btn btn-warning" onclick="sendData('change')"><i class="bi bi-check2"></i> Actualizar</button>
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> No</button>
-                  </div>
-              </div>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-floppy-fill"></i> Actualizar</button>
           </div>
         </div>
       </div>
     </div>
     </form>
+    <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="row">
+                  <div class="col-12">
+                      <h5 id="titlepublicacion-modal-detail">[titulo de la publicacion]</h5>
+                  </div>
+                  <div class="col-6 text-secondary">
+                      <h6 id="sku-modal-detail">[numero de sku]</h6>
+                  </div>
+                  <div class="col-6 text-end">
+                      <span id="user-modal-detail">[usuario]</span>
+                  </div>
+                  <div class="col-6">
+                      <span id="state-modal-detail">[Estado]</span>
+                  </div>
+                  <div class="col-6 text-end">
+                      <span id="date-modal-detail">[fechadepubli]</span>
+                  </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </div>
 <script>
-    function sendData(data) {
-        // Establece el valor de un campo oculto en el formulario
-        document.getElementById('hidden-data').value = data;
-        
-        // Puedes agregar l���gica adicional aqu��� si es necesario
-        
-        // Env���a el formulario
-        document.getElementById('estadoForm').submit();
-      }
+    document.getElementById('search').addEventListener('input', function() {
+        let query = this.value;
+        let hiddenBody = document.getElementById('hidden-body');
+        if (query.length > 2) { // Comenzar la b��squeda despu��s de 3 caracteres
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', `/searchpublicacion?query=${query}`, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let data = JSON.parse(xhr.responseText);
+                    let suggestions = document.getElementById('suggestions');
+                    hiddenBody.style.display = 'block';
+                    suggestions.innerHTML = '';
 
-    function ShareId(id){
-        let inputId = document.getElementById('hidden-id');
-        
-        inputId.value = id;
+                        data.forEach(item => {
+                            let li = document.createElement('li');
+                            li.classList.add('list-group-item', 'hover-sistema-uno');
+                            li.style.cursor = "pointer";
+                            
+                            let divRow = document.createElement('div');
+                            divRow.classList.add('row');
+                            
+                            let divColProduct = document.createElement('div');
+                            divColProduct.classList.add('col-12','col-md-12', 'text-start');
+                            let smallProduct = document.createElement('small');
+                            smallProduct.textContent = item.titulo;
+                            divColProduct.appendChild(smallProduct);
+                            
+                            let divColSerial = document.createElement('div');
+                            divColSerial.classList.add('col-6','col-md-6','text-secondary');
+                            let smallSerial = document.createElement('small');
+                            smallSerial.textContent = item.sku;
+                            divColSerial.appendChild(smallSerial);
+                            
+                            let divColDate = document.createElement('div');
+                            divColDate.classList.add('col-6','col-md-6','text-secondary','text-end');
+                            let smallDate = document.createElement('small');
+                            smallDate.textContent = item.fechaPublicacion;
+                            divColDate.appendChild(smallDate);
+                            
+                            li.addEventListener('click', function() {
+                                document.getElementById('search').value = item.sku; 
+                                suggestions.innerHTML = ''; 
+                                dataModalDetalle(item.titulo,item.sku,item.estado,item.user,item.fechaPublicacion)
+                            });
+                            
+                            divRow.appendChild(divColProduct);
+                            divRow.appendChild(divColSerial);
+                            divRow.appendChild(divColDate);
+                            li.appendChild(divRow);
+                            suggestions.appendChild(li);
+                        });
+                }
+            };
+            xhr.send();
+        } else {
+            document.getElementById('suggestions').innerHTML = ''; // Limpiar si hay menos de 3 caracteres
+            hiddenBody.style.display = 'none';
+        }
+    });
+
+function hideSuggestions(event) {
+    let suggestions = document.getElementById('suggestions');
+    let hiddenBody = document.getElementById('hidden-body');
+    if (!suggestions.contains(event.target) && event.target.id !== 'search') {
+        suggestions.innerHTML = ''; // Oculta las sugerencias
+        hiddenBody.style.display = 'none';
     }
+}
+
+document.addEventListener('click', hideSuggestions);
+
+function dataModalDetalle(publicacion,sku,estado,usuario,fecha){
+    let myModal = new bootstrap.Modal(document.getElementById('detalleModal'));
+    let title = document.getElementById('titlepublicacion-modal-detail');
+    let skuModal = document.getElementById('sku-modal-detail');
+    let state = document.getElementById('state-modal-detail');
+    let user = document.getElementById('user-modal-detail');
+    let date = document.getElementById('date-modal-detail');
+    
+    title.textContent = publicacion;
+    skuModal.textContent = sku;
+    state.textContent = estado == 1 ? 'Activo' : (estado == 0 ? 'Inactivo' : 'Borrado');
+    user.textContent = usuario;
+    date.textContent = fecha;
+    
+    myModal.show();
+}
+   
+function ShareId(id,title,price,estado){
+    let inputId = document.getElementById('hidden-id');
+    let inputTextTitle = document.getElementById('title-text');
+    let inputNumberPrice = document.getElementById('price-number');
+    let selectEstado = document.getElementById('estado-select');
+    
+    inputId.value = id;
+    inputTextTitle.value = title;
+    inputNumberPrice.value = price;
+    selectEstado.value = estado;
+}
 </script>
 <script>
     document.getElementById('month').addEventListener('change', function() {

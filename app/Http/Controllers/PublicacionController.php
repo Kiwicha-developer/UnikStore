@@ -97,14 +97,15 @@ class PublicacionController extends Controller
     
     public function updateEstado(Request $request){
         $userModel = $this->headerService->getModelUser();
-        $id = $request->input('id');
-        $data = $request->input('data');
-        
+        $id = $request->input('idpubli');
+        $titulo = $request->input('titulo');
+        $precio = $request->input('precio');
+        $estado = $request->input('estado');
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 1){
-                if($id && $data){
-                    $message = $this->publicacionService->updatePublicacion($id,$data);
-                    $this->headerService->sendFlashAlerts($message,'','warning','btn-success');
+                if(isset($id) && isset($titulo) && isset($precio) && isset($estado)){
+                    $message = $this->publicacionService->updatePublicacion($id,$titulo,$precio,$estado);
+                    $this->headerService->sendFlashAlerts($message,' ','warning','btn-success');
                     return back();
                 }else{
                     $this->headerService->sendFlashAlerts('Ocurrio un error','Faltan datos','error','btn-danger');

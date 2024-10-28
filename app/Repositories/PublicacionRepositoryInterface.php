@@ -8,7 +8,7 @@ interface PublicacionRepositoryInterface
     public function getAllByColumn($column,$data);
     public function searchOne($column,$data);
     public function searchList($column,$data);
-    public function getByMonth($month);
+    public function getByMonth($month,$year);
     public function validateSkuDuplicity($sku,$idPlataforma);
     public function create(array $data);
     public function update($id, array $data);

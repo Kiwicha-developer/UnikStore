@@ -321,7 +321,6 @@ class ProductoController extends Controller
             if($acceso->idVista == 2){
                 $arrayProduct = array();
                 $arrayProveedor = array();
-                
                 $titulo = $request->input('titulo');
                 $marca = $request->input('marca');
                 $precio = 0;
@@ -382,6 +381,10 @@ class ProductoController extends Controller
                     
                     if (!is_null($estado)) {
                         $arrayProduct['estadoProductoWeb'] = $estado;
+                    }
+
+                    if (!is_null($marca)) {
+                        $arrayProduct['idMarca'] = $marca;
                     }
                     
                     $this->productoService->updateProduct(decrypt($idProducto),$arrayProduct,$request->file('imgone'),$request->file('imgtwo'),$request->file('imgtree'),$request->file('imgfour'));

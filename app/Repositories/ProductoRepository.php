@@ -96,6 +96,7 @@ class ProductoRepository implements ProductoRepositoryInterface
     
     public function update($idProducto, array $productoData)
     {
+        dd($productoData);
         $producto = Producto::findOrFail($idProducto);
         $producto->update($productoData);
         return $producto;

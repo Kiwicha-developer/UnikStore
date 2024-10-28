@@ -54,7 +54,6 @@ class ComprobanteService implements ComprobanteServiceInterface
         Carbon::setLocale('es');
         $fechacompleta = $date. '-01';
         $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
-        
         return $this->comprobanteRepository->getAllByMonth($carbonMonth);
     }
     

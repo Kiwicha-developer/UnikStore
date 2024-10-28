@@ -29,8 +29,9 @@ class ComprobanteRepository implements ComprobanteRepositoryInterface
     public function getAllByMonth($month)
     {
         return Comprobante::whereMonth('fechaRegistro', $month)
-                                    ->orderBy('fechaRegistro','desc')
-                                    ->get();
+                            ->whereYear('fechaRegistro', $month)
+                            ->orderBy('fechaRegistro','desc')
+                            ->get();
     }
     
     public function searchOne($column, $data)
