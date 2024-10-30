@@ -306,7 +306,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" id="btn-reestablecer-modal-password" class="btn btn-primary"><i class="bi bi-floppy-fill"></i> Actualizar</button>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-floppy-fill"></i> Actualizar</button>
                     </div>
                 </div>
             </div>

@@ -119,27 +119,31 @@
         const inputs = segmento.querySelectorAll(".input-edit");
         
         let aux = true;
+
+        if(boton){
+            boton.addEventListener('click', () => {
+                if(aux){
+                    inputs.forEach(function(input) {
+                        input.disabled = false;
+                    });
+                }else{
+                    inputs.forEach(function(input) {
+                        input.disabled = true;
+                    });
+                }
+                
+                if(aux){
+                    aux = false;
+                }else{
+                    aux = true;
+                }
+                
+                disableSave();
+                
+            });
+        }
         
-        boton.addEventListener('click', () => {
-            if(aux){
-                inputs.forEach(function(input) {
-                    input.disabled = false;
-                });
-            }else{
-                inputs.forEach(function(input) {
-                    input.disabled = true;
-                });
-            }
-            
-            if(aux){
-                aux = false;
-            }else{
-                aux = true;
-            }
-            
-            disableSave();
-            
-        });
+        
     });
     
     function disableSave() {
