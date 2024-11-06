@@ -105,12 +105,12 @@
                     <div class="col-md-8"></div>
                     <div class="mb-3 col-md-6">
                         <label for="precio-producto" class="form-label">Sin IGV:</label>
-                         <input type="number" name="precio" value="{{number_format($producto->precioDolar, 2)}}"id="precio-product"  aria-label="Last name" class="form-control input-edit price-product" step="0.01" disabled>
+                         <input type="number" name="precio" value="{{number_format($producto->precioDolar, 2, '.', '')}}"id="precio-product"  aria-label="Last name" class="form-control input-edit price-product" step="0.01" disabled>
                     </div>
                     <div class="col-md-6"></div>
                     <div class="mb-3 col-md-6">
                         <label for="precio-producto" class="form-label">Con IGV:</label>
-                         <input type="number"  value="{{number_format($producto->precioDolar * $igv, 2)}}" id="precio-product-igv"   class="form-control input-edit price-product" step="0.01" disabled>
+                         <input type="number"  value="{{number_format($producto->precioDolar * $igv, 2, '.', '')}}" id="precio-product-igv"   class="form-control input-edit price-product" step="0.01" disabled>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
                 <div class="row">
                     <div class="mb-3 col-md-4">
                         <label for="precio-producto" class="form-label">Utilidad:</label>
-                         <input type="number"  value="{{number_format($producto->gananciaExtra, 2)}}" name="ganancia" id="precio-product-ganancia"  class="form-control input-edit price-product" step="0.01" disabled>
+                         <input type="number"  value="{{number_format($producto->gananciaExtra, 2, '.', '')}}" name="ganancia" id="precio-product-ganancia"  class="form-control input-edit price-product" step="0.01" disabled>
                     </div>
                     <div class="col-md-8"></div>
                     <div class="mb-3 col-md-4">

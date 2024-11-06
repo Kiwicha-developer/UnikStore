@@ -15,6 +15,5 @@ interface ProductoRepositoryInterface
     public function update($idProducto, array $data);
     public function updateSpecs($idCaracteristica,$id,$description);
     public function getCodes();
-    public function getSpecs($id);
     public function validateSerial($id,$serial);
 }

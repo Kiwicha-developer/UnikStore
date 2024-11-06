@@ -5,6 +5,7 @@ use App\Repositories\AlmacenRepositoryInterface;
 use App\Repositories\CalculadoraRepositoryInterface;
 use App\Repositories\CaracteristicasGrupoRepositoryInterface;
 use App\Repositories\CaracteristicasRepositoryInterface;
+use App\Repositories\CaracteristicasSugerenciasRepositoryInterface;
 use App\Repositories\CategoriaProductoRepositoryInterface;
 use App\Repositories\ComisionPlataformaRepositoryInterface;
 use App\Repositories\ComisionRepositoryInterface;
@@ -36,6 +37,7 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     protected $comisionPlataformaRepository;
     protected $grupoRepository;
     protected $tipoProductoRepository;
+    protected $sugerenciaRepository;
 
     private $pathMarca = '/home3/unikstor/public_html/images/marcas';
     private $pathGrupo = '/home3/unikstor/public_html/images/grupos';
@@ -55,7 +57,8 @@ class ConfiguracionService implements ConfiguracionServiceInterface
                                 PlataformaRepositoryInterface $plataformasRepository,
                                 ComisionPlataformaRepositoryInterface $comisionPlataformaRepository,
                                 GrupoProductoRepositoryInterface $grupoRepository,
-                                TipoProductoRepositoryInterface $tipoProductoRepository)
+                                TipoProductoRepositoryInterface $tipoProductoRepository,
+                                CaracteristicasSugerenciasRepositoryInterface $sugerenciaRepository)
     {
         $this->categoriaRepository = $categoriaRepository;
         $this->rangoRepository = $rangoRepository;
@@ -73,6 +76,11 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         $this->comisionPlataformaRepository = $comisionPlataformaRepository;
         $this->grupoRepository = $grupoRepository;
         $this->tipoProductoRepository = $tipoProductoRepository;
+        $this->sugerenciaRepository = $sugerenciaRepository;
+    }
+
+    public function getOneCaracteristica($idCaracteristica){
+        return $this->caracteristicasRepository->getOne('idCaracteristica',$idCaracteristica);
     }
 
     public function getOneCategoria($idCategoria){
@@ -180,7 +188,7 @@ class ConfiguracionService implements ConfiguracionServiceInterface
             if(!$modelo){
                 $data = ['idCaracteristica' => $this->getNewIdCaracteristica(),
                         'especificacion' => $descripcion,
-                        'tipo' => 'FILTRO'];
+                        'tipo' => 'DETALLE'];
                 $this->caracteristicasRepository->create($data);
             }
         }
@@ -191,6 +199,29 @@ class ConfiguracionService implements ConfiguracionServiceInterface
             $caracteristicaModel = $this->caracteristicasRepository->getOne('idCaracteristica',$idCaracteristica)->Caracteristicas_Grupo;
             if(count($caracteristicaModel) < 1){
                 $this->caracteristicasRepository->remove($idCaracteristica);
+            }
+        }
+    }
+
+    public function updateOrCreateCaracteristica($id,$tipo,$updates,$creates){
+        if(isset($tipo)){
+            $arrayCaracteristica = ['tipo' => $tipo];
+            $this->caracteristicasRepository->update($id,$arrayCaracteristica);
+        }
+
+        if(isset($updates)){
+            foreach($updates as $idSugerencia => $sugerencia){
+                $arraySugerencia = ['sugerencia' => $sugerencia];
+                $this->sugerenciaRepository->update($idSugerencia,$arraySugerencia);
+            }
+        }
+
+        if(isset($creates)){
+            foreach($creates as $create){
+                $arrayNewSugerencia = ['idSugerencia' => $this->getNewIdSugerencia(),
+                                        'idCaracteristica' => $id,
+                                        'sugerencia' => $create];
+                $this->sugerenciaRepository->create($arrayNewSugerencia);
             }
         }
     }
@@ -271,6 +302,10 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         $this->grupoRepository->update($newGrupo->idGrupoProducto,$updateData);
     }
 
+    public function removeSugerencia($idSugerencia){
+        $this->sugerenciaRepository->remove($idSugerencia);
+    }
+
     private function getNewIdMarca(){
         $marca = $this->marcaRepository->getLast();
         $id = $marca ? $marca->idMarca : 0;
@@ -304,6 +339,12 @@ class ConfiguracionService implements ConfiguracionServiceInterface
     private function getNewIdAlmacen(){
         $almacen = $this->almacenRepository->getLast();
         $id = $almacen ? $almacen->idAlmacen : 0;
+        return $id + 1;
+    }
+
+    private function getNewIdSugerencia(){
+        $sugerencia = $this->sugerenciaRepository->getLast();
+        $id = $sugerencia ? $sugerencia->idSugerencia : 0;
         return $id + 1;
     }
 }

@@ -35,6 +35,10 @@ class Caracteristicas extends Model
         return $this->hasMany(Caracteristicas_Producto::class,'idCaracteristica','idCaracteristica');
     }
 
+    public function Caracteristicas_Sugerencias(){
+        return $this->hasMany(Caracteristicas_Sugerencias::class,'idCaracteristica','idCaracteristica');
+    }
+
     /**
      * Obtener las relaciones del modelo.
      */

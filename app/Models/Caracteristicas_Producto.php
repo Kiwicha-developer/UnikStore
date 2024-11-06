@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class Caracteristicas_Producto extends Model
 {
     public $timestamps = false;
-    protected $table = 'Caracteristicas_producto';
+    protected $table = 'Caracteristicas_Producto';
     protected $primaryKey = ['idCaracteristica','idProducto'];
     public $incrementing = false;
     protected $keyType = 'int';

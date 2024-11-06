@@ -57,9 +57,9 @@
                                     @endforeach
                                 </div>
                                 <div class="col-md-1 text-end">
-                                    <button class="btn btn-danger {{count($caracteristica->Caracteristicas_Grupo) == 0 ? '' : 'd-none'}}" data-bs-toggle="modal" 
-                                        data-bs-target="#removeSpectModal" onclick="sendDataToRemove({{$caracteristica->idCaracteristica}},'{{$caracteristica->especificacion}}')">
-                                        <i class="bi bi-trash3-fill"></i>
+                                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" 
+                                        data-bs-target="#removeSpectModal" onclick='sendDataToEdit({{$caracteristica->idCaracteristica}},"{{$caracteristica->tipo}}","{{$caracteristica->especificacion}}",@json($caracteristica->Caracteristicas_Sugerencias))'>
+                                        <i class="bi bi-pencil-fill"></i>
                                     </button>
                                 </div>
                             </div>
@@ -202,30 +202,79 @@
         </div>
     </div>
     </form>
-    <form action="{{route('removecaracteristica')}}" method="POST">
+    <form action="{{route('updatecaracteristica')}}" method="POST">
         @csrf
     <div class="modal fade" id="removeSpectModal" tabindex="-1" aria-labelledby="removeSpectModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="removeSpectModalLabel">Eliminar Especificaci&oacute;n 
-                        <span id="title-modal-deleteespecificacion">gruponame</span>?
+                    <h5 class="modal-title" id="removeSpectModalLabel">
+                        <span id="title-modal-editespecificacion"></span>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <input type="hidden" value="f" id="hidden-modal-deleteespecificacion" name="caracteristica">
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" value="" id="hidden-modal-editespecificacion" name="id">
+                        <input type="hidden" value="" id="operacion-modal-editespecificacion" name="operacion">
+                        <div class="col-12">
+                            <label class="form-label">Tipo de caracteristica:</label>
+                            <select name="tipo" id="tipo-modal-editespecificacion" class="form-select">
+                                <option value="FILTRO">Filtro</option>
+                                <option value="DETALLE">Detalle</option>
+                            </select>
+                        </div>
+                        <div class="col-12" id="filtros-modal-editespecificacion">
+
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash3-fill"></i> Borrar</button>
+                    <div class="row w-100">
+                        <div class="col-4">
+                            <button type="submit" onclick="changeOperacionModal('DELETE')" class="btn btn-danger"><i class="bi bi-trash3-fill"></i> Borrar</button>
+                        </div>
+                        <div class="col-8 text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" onclick="changeOperacionModal('UPDATE')" class="btn btn-success ms-1"><i class="bi bi-floppy-fill"></i> Actualizar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     </form>
+    <form action="{{route('removesugerencia')}}" method="post" id="form-delete-sugerencia">
+        @csrf
+        <input type="hidden" name="sugerencia" value="" id="hidden-delete-sugerencia">
+    </form>
 </div>
 <script>
      var dataSpects = Object.values(@json($caracteristicas));
 
+     function sendDataToRemoveSugerencia(idSugerencia) {
+        // Mostrar un cuadro de confirmación
+        let confirmDelete = confirm("¿Estás seguro de que quieres eliminar esta sugerencia?");
+
+        // Si el usuario confirma la eliminación
+        if (confirmDelete) {
+            // Obtén el formulario y el campo oculto
+            let formDelete = document.getElementById('form-delete-sugerencia');
+            let inputHide = document.getElementById('hidden-delete-sugerencia');
+            
+            // Establece el valor del campo oculto con el idSugerencia
+            inputHide.value = idSugerencia;
+            
+            // Envía el formulario
+            formDelete.submit();
+        }
+    }
+
+        function changeOperacionModal(valor){
+            let inputOperacion = document.getElementById('operacion-modal-editespecificacion');
+
+            inputOperacion.value = valor;
+        }
 
         function viewCaracteristicas(){
             let categoryContainer = document.getElementById('category-container');
@@ -333,12 +382,99 @@
             hiddenSpect.value = spect;
         }
 
-        function sendDataToRemove(spect,title){
-            let tituloModal = document.getElementById('title-modal-deleteespecificacion');
-            let hiddenModal = document.getElementById('hidden-modal-deleteespecificacion');
+        function sendDataToEdit(spect,tipo,title,sugerencias){
+            let tituloModal = document.getElementById('title-modal-editespecificacion');
+            let hiddenModal = document.getElementById('hidden-modal-editespecificacion');
+            let tipoSelectModal = document.getElementById('tipo-modal-editespecificacion');
+            let divFiltros = document.getElementById('filtros-modal-editespecificacion');
 
             tituloModal.textContent = title;
             hiddenModal.value = spect;
+            tipoSelectModal.value = tipo;
+            divFiltros.innerHTML = '';
+
+            if(tipo == 'FILTRO'){
+                let rowCab = document.createElement('div');
+                rowCab.classList.add('row');
+
+                let divColLabel = document.createElement('div');
+                divColLabel.classList.add('col-6');
+
+                let divColBtnAdd = document.createElement('div');
+                divColBtnAdd.classList.add('col-6','text-end');
+                
+                let labelFiltros = document.createElement('label');
+                labelFiltros.classList.add('form-label','mt-2');
+                labelFiltros.textContent = 'Sugerencias:';
+                divColLabel.appendChild(labelFiltros);
+
+                let btnAddSugerencia = document.createElement('button');
+                btnAddSugerencia.classList.add('btn','btn-success','btn-sm','mt-2');
+                btnAddSugerencia.type = 'button';
+                btnAddSugerencia.innerHTML = '<i class="bi bi-plus-lg"></i>';
+                btnAddSugerencia.addEventListener('click',function(event){
+                    let newLiSugerencia = document.createElement('li');
+                    newLiSugerencia.classList.add('list-group-item','pt-0','pb-0','ps-0','pe-0');
+
+                    let newInputGroup = document.createElement('div');
+                    newInputGroup.classList.add('input-group');
+
+                    let newInput = document.createElement('input');
+                    newInput.type = 'text';
+                    newInput.classList.add('form-control','border-0');
+                    newInput.name = 'createsugerencia[]';
+                    newInputGroup.appendChild(newInput);
+
+                    let btnRemoveInput = document.createElement('button');
+                    btnRemoveInput.classList.add('btn','btn-outline-danger');
+                    btnRemoveInput.innerHTML = '<i class="bi bi-x-lg"></i>';
+                    btnRemoveInput.type = 'button';
+                    btnRemoveInput.addEventListener('click',function(event){
+                        newLiSugerencia.remove();
+                    });
+                    newInputGroup.appendChild(btnRemoveInput);
+
+                    newLiSugerencia.appendChild(newInputGroup);
+                    listaSugerencias.appendChild(newLiSugerencia);
+                });
+                divColBtnAdd.appendChild(btnAddSugerencia);
+
+                let listaSugerencias = document.createElement('ul');
+                listaSugerencias.classList.add('list-group','mt-2');
+
+                Object.values(sugerencias).forEach((valor) => {
+                    let liSugerencia = document.createElement('li');
+                    liSugerencia.classList.add('list-group-item','pt-0','pb-0','ps-0','pe-0');
+
+                    let inputGroup = document.createElement('div');
+                    inputGroup.classList.add('input-group');
+
+                    let inputSugerencia = document.createElement('input');
+                    inputSugerencia.type = 'text';
+                    inputSugerencia.classList.add('form-control','border-0');
+                    inputSugerencia.value = valor.sugerencia;
+                    inputSugerencia.name = 'updatesugerencia['+ valor.idSugerencia +']';
+                    inputGroup.appendChild(inputSugerencia);
+
+                    let btnDeleteSugerencia = document.createElement('button');
+                    btnDeleteSugerencia.classList.add('btn','btn-outline-danger');
+                    btnDeleteSugerencia.innerHTML = '<i class="bi bi-x-lg"></i>';
+                    btnDeleteSugerencia.type = 'button';
+                    btnDeleteSugerencia.addEventListener('click',function(event){
+                        sendDataToRemoveSugerencia(valor.idSugerencia);
+                    });
+                    inputGroup.appendChild(btnDeleteSugerencia);
+
+                    console.log( valor);
+                    liSugerencia.appendChild(inputGroup);
+                    listaSugerencias.appendChild(liSugerencia);
+                });
+                rowCab.appendChild(divColLabel);
+                rowCab.appendChild(divColBtnAdd);
+                
+                divFiltros.appendChild(rowCab);
+                divFiltros.appendChild(listaSugerencias);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {

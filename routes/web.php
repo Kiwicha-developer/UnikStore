@@ -109,7 +109,8 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/configuracion/insertcaracteristicaxgrupo', [ConfiguracionController::class, 'insertCaracteristicaXGrupo'])->name('insertcaracteristicaxgrupo');
     Route::post('/configuracion/deletecaracteristicaxgrupo', [ConfiguracionController::class, 'deleteCaracteristicaXGrupo'])->name('deletecaracteristicaxgrupo');
     Route::post('/configuracion/createcaracteristica', [ConfiguracionController::class, 'createCaracteristica'])->name('createcaracteristica');
-    Route::post('/configuracion/removecaracteristica', [ConfiguracionController::class, 'removeCaracteristica'])->name('removecaracteristica');
+    Route::post('/configuracion/updatecaracteristica', [ConfiguracionController::class, 'updateCaracteristica'])->name('updatecaracteristica');
+    Route::post('/configuracion/removesugerencia', [ConfiguracionController::class, 'removeSugerencia'])->name('removesugerencia');
 
     //Configuracion-INVENTARIO
     Route::get('/configuracion/inventario', [ConfiguracionController::class, 'inventario'])->name('configinventario');

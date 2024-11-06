@@ -147,21 +147,60 @@ class ConfiguracionController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
 
-    public function removeCaracteristica(Request $request){
+    public function updateCaracteristica(Request $request){
         $userModel = $this->headerService->getModelUser();
-        $idCaracteristica = $request->input('caracteristica');
+        $operacion = $request->input('operacion');
+        $idCaracteristica = $request->input('id');
+        $tipo = $request->input('tipo');
+        $updateSugerencias = $request->input('updatesugerencia');
+        $createSugerencias = $request->input('createsugerencia');
 
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
-                if($idCaracteristica){
-                    $this->configuracionService->removeCaracteristica($idCaracteristica);
-                    $this->headerService->sendFlashAlerts('Operacion exitosa','Datos eliminados correctamente','success','btn-success');
+                if($operacion == 'DELETE'){
+                    if(isset($idCaracteristica)){
+                        $caracteristicaModelo = $this->configuracionService->getOneCaracteristica($idCaracteristica);
+                        $validateDelete = count($caracteristicaModelo->Caracteristicas_Producto) + count($caracteristicaModelo->Caracteristicas_Grupo);
+                        if($validateDelete < 1){
+                            $this->configuracionService->removeCaracteristica($idCaracteristica);
+                            $this->headerService->sendFlashAlerts('Operacion exitosa','Datos eliminados correctamente','success','btn-success');
+                            return back();
+                        }
+                        $this->headerService->sendFlashAlerts('Error en la operacion','No puedes eliminar una especificacion si esta en uso.','warning','btn-danger');
+                        return back();
+                    }
+
+                    $this->headerService->sendFlashAlerts('Ocurrio un error','Hubo un error de operacion intentalo más tarde','warning','btn-danger');
+                    return back();
+                }else if($operacion == 'UPDATE'){
+                    if(isset($idCaracteristica) && isset($tipo)){
+                        $this->configuracionService->updateOrCreateCaracteristica($idCaracteristica,$tipo,$updateSugerencias,$createSugerencias);
+                        $this->headerService->sendFlashAlerts('Operacion exitosa','Datos actualizados correctamente','success','btn-success');
+                        return back();
+                    }
+                    $this->headerService->sendFlashAlerts('Ocurrio un error','Hubo un error de operacion intentalo más tarde','warning','btn-danger');
                     return back();
                 }else{
-                    $this->headerService->sendFlashAlerts('Faltan Datos','Verifica los campos de entrada','warning','btn-danger');
+                    $this->headerService->sendFlashAlerts('Ocurrio un error','Hubo un error de operacion intentalo más tarde','warning','btn-danger');
                     return back();
                 }
 
+            }
+        }    
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function removeSugerencia(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $sugerencia = $request->input('sugerencia');
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                if(isset($sugerencia)){
+                    $this->configuracionService->removeSugerencia($sugerencia);
+                    $this->headerService->sendFlashAlerts('Operacion exitosa','Datos eliminados correctamente','success','btn-success');
+                    return back();
+                }
             }
         }    
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta operacion','warning','btn-danger');

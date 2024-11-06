@@ -11,6 +11,7 @@ interface ConfiguracionServiceInterface
     public function getAllEmpresas();
     public function getAllPlataformas();
     public function getAllTipoProductos();
+    public function getOneCaracteristica($idCaracteristica);
     public function getOneCategoria($idCategoria);
     public function updateCorreoEmpresa($id,$correo);
     public function updateCuentaBancaria($id,$titular,$cuenta);
@@ -20,6 +21,7 @@ interface ConfiguracionServiceInterface
     public function getAllEspecificaciones();
     public function createCaracteristica($descripcion);
     public function removeCaracteristica($idCaracteristica);
+    public function updateOrCreateCaracteristica($id,$tipo,$updates,$creates);
     public function insertCaracteristicaXGrupo($idGrupo,$idCaracteristica);
     public function deleteCaracteristicaXGrupo($idGrupo,$idCaracteristica);
     public function createAlmacen($desc);
@@ -28,4 +30,5 @@ interface ConfiguracionServiceInterface
     public function deleteComisionPlataforma($idComisionPlataforma);
     public function createMarcaProducto($nombre,$img);
     public function createGrupoProducto($categoria,$grupo,$tipo,$img);
+    public function removeSugerencia($idSugerencia);
 }

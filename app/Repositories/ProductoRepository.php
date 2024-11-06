@@ -65,11 +65,6 @@ class ProductoRepository implements ProductoRepositoryInterface
         return $serial;
     }
     
-    public function getSpecs($id){
-        $specs = DB::select('CALL sp_get_detallexproducto(?)', [$id]);
-        return $specs;
-    }
-    
     public function searchIntensiveProducts($query){
         $productos = Producto::where('codigoProducto', 'LIKE', '%'.$query.'%')
                      ->orWhere('partNumber', 'LIKE', '%'.$query.'%')

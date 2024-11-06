@@ -126,18 +126,17 @@ class ProductoController extends Controller
             if($acceso->idVista == 2){
                 $producto = $this->productoService->getOneProductByColumn('idProducto',$idProducto);
                 $grupo = $this->productoService->getOneLabelGrupo($producto->idGrupo);
-                
-                $caracteristicasProducto = $this->productoService->getCaracteristicasByProduct($idProducto);
-                $caracteristicasGrupo = $this->productoService->getFilterSpecs($producto->idGrupo,$caracteristicasProducto);
-                
-                
-                
-                
+                $carGrupos = collect($producto->GrupoProducto->Caracteristicas_Grupo); 
+                $carProductos = collect($producto->Caracteristicas_Producto);
+                $options = $carGrupos->filter(function ($carGrupo) use ($carProductos) { 
+                    return !$carProductos->contains(function ($carProducto) use ($carGrupo) { 
+                        return $carGrupo->idCaracteristica == $carProducto->idCaracteristica; 
+                        }); 
+                    });
                 return view('createdetails',['user' => $userModel,
                                             'producto'=>$producto,
                                             'grupo'=>$grupo,
-                                            'caracteristicasxgrupo' => $caracteristicasGrupo,
-                                            'caracteristicasxproducto' => $caracteristicasProducto,
+                                            'options' => $options
                             ]);
             }
         }

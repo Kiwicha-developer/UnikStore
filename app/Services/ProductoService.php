@@ -43,21 +43,6 @@ class ProductoService implements ProductoServiceInterface
         $this->proveedorInventarioRepository = $proveedorInventarioRepository;
     }
     
-    public function getFilterSpecs($id,$caracteristicasProducto){
-        $caracteristicasGrupo = $this->grupoRepository->getSpecs($id);
-        
-        foreach($caracteristicasProducto as $carpro){
-            foreach($caracteristicasGrupo as $key => $cargrup){
-                if($carpro->idCaracteristica == $cargrup->idCaracteristica){
-                    unset($caracteristicasGrupo[$key]);
-                    break;
-                }
-            }
-        }
-        
-        return $caracteristicasGrupo;
-    }
-    
     public function getAllAlmacen(){
         $almacenes = $this->almacenRepository->all();
         return $almacenes;
@@ -145,11 +130,6 @@ class ProductoService implements ProductoServiceInterface
     public function getLastCodesProducts(){
         $codes = $this->productoRepository->getCodes();
         return $codes;
-    }
-    
-    public function getCaracteristicasByProduct($id){
-        $specs = $this->productoRepository->getSpecs($id);
-        return $specs;
     }
     
     public function searchAjaxProducts($column,$query){
@@ -280,11 +260,6 @@ class ProductoService implements ProductoServiceInterface
                 if($agotado && $proveedor < 1){
                     $array = array();
                     $array['estadoProductoWeb'] = 'AGOTADO';
-                    
-                    $this->productoRepository->update($producto->idProducto,$array);
-                }elseif(!$agotado){
-                    $array = array();
-                    $array['estadoProductoWeb'] = 'DISPONIBLE';
                     
                     $this->productoRepository->update($producto->idProducto,$array);
                 }

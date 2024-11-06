@@ -68,6 +68,11 @@ class Producto extends Model
     {
         return $this->hasMany(Publicacion::class, 'idProducto', 'idProducto');
     }
+
+    public function Caracteristicas_Producto()
+    {
+        return $this->hasMany(Caracteristicas_Producto::class, 'idProducto', 'idProducto');
+    }
     
     public function DetalleComprobante()
     {

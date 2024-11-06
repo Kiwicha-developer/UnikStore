@@ -5,7 +5,6 @@ interface ProductoServiceInterface
 {
     public function getAllProductsByColumn($column,$data);
     public function getOneProductByColumn($column,$data);
-    public function getCaracteristicasByProduct($id);
     public function searchProducts($input);
     public function insertProduct($array,$stock,$proveedor,$img1,$img2,$img3,$img4);
     public function updateProduct($id,$array,$img1,$img2,$img3,$img4);
@@ -15,7 +14,6 @@ interface ProductoServiceInterface
     public function getOneLabelGrupo($id);
     public function getAllLabelGrupo();
     public function getAllLabelGrupoXCategory($id);
-    public function getFilterSpecs($id,$productSpecs);
     public function getOneLabelCategory($id);
     public function getAllLabelCategory();
     public function getAllLabelMarca();
