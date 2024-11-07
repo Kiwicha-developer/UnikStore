@@ -437,6 +437,21 @@ class ProductoController extends Controller
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
         return redirect()->route('dashboard',['user' => $userModel]);
     }
+
+    public function deleteDetail($idProducto,Request $request){
+        $idCaracteristica = $request->input('idcaracteristica');
+        $userModel = $this->headerService->getModelUser();
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 2){
+                if(isset($idCaracteristica)){
+                    $this->productoService->deleteCaracteristicaXProduct(decrypt($idProducto),$idCaracteristica);
+                    return back();
+                }
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
     
     public function calculate(Request $request)
     {

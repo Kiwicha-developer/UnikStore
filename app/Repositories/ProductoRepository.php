@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Models\Caracteristicas_Producto;
 use Illuminate\Support\Facades\DB;
 use App\Models\Producto;
 use Exception;
@@ -106,7 +107,12 @@ class ProductoRepository implements ProductoRepositoryInterface
         }
          
     }
-    
+
+    public function deleteSpect($idProducto,$idCaracteristica){
+        $caracteristica = Caracteristicas_Producto::where('idProducto','=',$idProducto)->where('idCaracteristica','=',$idCaracteristica)->first();
+        $caracteristica->delete();
+    }
+
     private function validateColumns($column){
         if (!in_array($column, $this->modelColumns)) {
             throw new \InvalidArgumentException("La columna '$column' no es válida.");

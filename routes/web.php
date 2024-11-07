@@ -57,6 +57,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/producto/createdetails', [ProductoController::class, 'createDetails'])->name('createdetails');
     Route::post('/producto/updateproduct/{id}', [ProductoController::class, 'updateProduct'])->name('updateproduct');
     Route::post('/producto/insertorupdatedetails', [ProductoController::class, 'insertOrUpdateDetails'])->name('insertorupdatedetails');
+    Route::post('/producto/deletedetail/{idProducto}', [ProductoController::class, 'deleteDetail'])->name('deletedetail');
     
     Route::get('/ingresos/searchingresos', [IngresoController::class, 'searchIngreso'])->name('searchingresos');
     Route::get('/ingresos/{month}', [IngresoController::class, 'index'])->name('ingresos');

@@ -46,8 +46,8 @@
                     @if($car->Caracteristicas->tipo == 'FILTRO')
                         <select class="form-select" name="updatecaracteristicas[{{ $car->idCaracteristica }}]" value="{{$car->caracteristicaProducto}}">
                             <option value="">-Elige un valor-</option>
-                            @foreach ($car->Caracteristicas->Caracteristicas_Sugerencias as $sugerencia)
-                                <option value="{{$sugerencia->sugerencia}}">{{$sugerencia->sugerencia}}</option>
+                            @foreach ($car->Caracteristicas->Caracteristicas_Sugerencias->sortBy('sugerencia') as $sugerencia)
+                                <option value="{{$sugerencia->sugerencia}}" {{$sugerencia->sugerencia == $car->caracteristicaProducto ? 'selected' : ''}}>{{$sugerencia->sugerencia}}</option>
                             @endforeach
                         </select>
                     @else
@@ -65,7 +65,7 @@
               <select class="form-select" id="caracteristicaSelect" aria-label="">
                 <option value="none" selected>Caracteristica</option>
                 @foreach($options as $car)
-                    <option value="{{$car->idCaracteristica}}" data-tipo="{{$car->tipo}}">{{$car->Caracteristicas->especificacion}}</option>
+                    <option value="{{$car->idCaracteristica}}" data-tipo="{{$car->Caracteristicas->tipo}}" data-filtros='@json($car->Caracteristicas->Caracteristicas_Sugerencias->sortBy('sugerencia'))'>{{$car->Caracteristicas->especificacion}}</option>
                 @endforeach
               </select>
               <button class="btn btn-outline-secondary" onclick="addDiv()" id="btnAddDetail" type="button">Agregar</button>
@@ -82,21 +82,24 @@
     </form>
     <br>
     <br>
-    <div class="modal fade" id="modalDeleteSpect" tabindex="-1" aria-labelledby="deleteSpectModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title " id="deleteSpectModalLabel">Borrar <span id="title-delete-spect"></span> ?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" id="input-delete-spect" name="idcaracteristica" value="">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash-fill"></i> Borrar</button>
+    <form action="{{route('deletedetail',[encrypt($producto->idProducto)])}}" method="post">
+        @csrf
+        <div class="modal fade" id="modalDeleteSpect" tabindex="-1" aria-labelledby="deleteSpectModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="deleteSpectModalLabel">Borrar <span id="title-delete-spect"></span> ?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="input-delete-spect" name="idcaracteristica" value="">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash-fill"></i> Borrar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 <script>
     function sendDataToDeleteSpect(id,title){
@@ -131,8 +134,9 @@
             var selectedValue = selectedOption.value;
             var selectedText = selectedOption.text;
             var selectedTipo = selectedOption.dataset.tipo;
+            var selectedFiltros = JSON.parse(selectedOption.dataset.filtros);
 
-            console.log();
+            console.log(selectedFiltros);
             
             if (selectedValue === 'none') {
                 return; // No hacer nada si se selecciona la opción predeterminada
@@ -140,23 +144,49 @@
             
             let newDiv = document.createElement('div');
             let newSpan = document.createElement('span');
-            let newInput = document.createElement('input');
+            let newInput = '';
+            let newBtnDelete = document.createElement('button');
             
             newDiv.className = 'input-group mb-3';
             
             newSpan.className = 'input-group-text update-details label-car bg-sistema-light text-light';
             newSpan.textContent = selectedText;
+
+            if(selectedTipo == 'FILTRO'){
+                newInput = document.createElement('select');
+                newInput.className = 'form-select';
+                let defaultOption = document.createElement('option');
+                defaultOption.textContent = '-Elige un valor-';
+                defaultOption.value = '';
+                newInput.appendChild(defaultOption);
+                Object.values(selectedFiltros).forEach(valor => {
+                    let newOption = document.createElement('option');
+                    newOption.textContent = valor.sugerencia;
+                    newOption.value = valor.sugerencia;
+                    newInput.appendChild(newOption);
+                });
+                newInput.name = 'insertcaracteristicas[' + selectedValue + ']';
+            }else{
+                newInput = document.createElement('input');
+                newInput.className = 'form-control';
+                newInput.type = 'text';
+                newInput.maxLength  = 100;
+                newInput.placeholder = 'Característica';
+                newInput.name = 'insertcaracteristicas[' + selectedValue + ']';
+            }
             
-            newInput.className = 'form-control';
-            newInput.type = 'text';
-            newInput.maxLength  = 100;
-            newInput.placeholder = 'Característica';
-            newInput.name = 'insertcaracteristicas[' + selectedValue + ']';
-            
-            
+
+            newBtnDelete.className = 'btn btn-outline-danger';
+            newBtnDelete.type = 'button';
+            newBtnDelete.innerHTML = '<i class="bi bi-trash"></i>';
+            newBtnDelete.addEventListener('click',function(event){
+                newDiv.remove();
+                viewSelect(selectedOption);
+            });
             
             newDiv.appendChild(newSpan);
             newDiv.appendChild(newInput);
+            newDiv.appendChild(newBtnDelete);
             document.getElementById('containerDivs').appendChild(newDiv);
             
             hiddenSelect(selectedOption);
@@ -170,6 +200,11 @@
         function hiddenSelect(option) {
             option.classList.add('hidden');
             option.style.display = 'none';
+        }
+
+        function viewSelect(option) {
+            option.classList.remove('hidden');
+            option.style.display = 'block';
         }
         
         function sizeLabel(){

@@ -245,6 +245,10 @@ class ProductoService implements ProductoServiceInterface
             }
         }
     }
+
+    public function deleteCaracteristicaXProduct($idProducto,$idCaracteristica){
+        $this->productoRepository->deleteSpect($idProducto,$idCaracteristica);
+    }
     
     public function validateState($id){
         $producto = $this->productoRepository->getOne('idProducto',$id);

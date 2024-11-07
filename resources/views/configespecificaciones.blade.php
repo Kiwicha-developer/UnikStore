@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="col-md-1 text-end">
                                     <button class="btn btn-sm btn-success" data-bs-toggle="modal" 
-                                        data-bs-target="#removeSpectModal" onclick='sendDataToEdit({{$caracteristica->idCaracteristica}},"{{$caracteristica->tipo}}","{{$caracteristica->especificacion}}",@json($caracteristica->Caracteristicas_Sugerencias))'>
+                                        data-bs-target="#removeSpectModal" onclick='sendDataToEdit({{$caracteristica->idCaracteristica}},"{{$caracteristica->tipo}}","{{$caracteristica->especificacion}}",@json($caracteristica->Caracteristicas_Sugerencias->sortBy("sugerencia")))'>
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
                                 </div>

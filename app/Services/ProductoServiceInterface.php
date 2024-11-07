@@ -23,5 +23,5 @@ interface ProductoServiceInterface
     public function updateSeguimiento($idProducto,$array);
     public function getLastCodesProducts();
     public function searchAjaxProducts($column,$query);
-    
+    public function deleteCaracteristicaXProduct($idProducto,$idCaracteristica);
 }
