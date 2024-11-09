@@ -162,12 +162,10 @@
                     <h3>Cantidad disponible</h3>
                 </div>
             </div>
-            @foreach($almacenes as $almacen)
             <div class="col-6 col-md-2">
-                <label class="form-label">Stock {{$almacen->descripcion}}:</label>
-                <input name="stock[{{$almacen->idAlmacen}}]" value="{{old('stock[$almacen->idAlmacen]') ? old('stock[$almacen->idAlmacen]') : 0}}" type="number" class="form-control stock-product">
+                <label  class="form-label">Stock Minimo:</label>
+                <input name="stockminimo" value="{{old('stockminimo') ? old('stockminimo') : 0}}" type="number" class="form-control" >
             </div>
-            @endforeach
             <div class="col-6 col-md-2">
                 <label for="precio-producto" class="form-label">Stock Proveedor:</label>
                 <input name="stockproveedor" value="{{old('stockproveedor') ? old('stockproveedor') : 0}}" type="number" id="stockproveedor-product" class="form-control">

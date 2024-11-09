@@ -185,12 +185,12 @@ class ProductoController extends Controller
                 $marca = $request->input('marca');
                 $grupo = $request->input('grupo');
                 $estado = $request->input('estado');
-                $stock = $request->input('stock');
                 $stockproveedor = $request->input('stockproveedor');
                 $proveedor = $request->input('proveedor');
                 $descripcion = $request->input('desc');
                 $codigo = $request->input('codigo');
                 $tipoprecio = $request->input('tipoprecio');
+                $stockminimo = $request->input('stockminimo');
                 
                 if(!empty($tipoprecio)){
                     if($tipoprecio == 'SOL'){
@@ -283,11 +283,12 @@ class ProductoController extends Controller
                                 $arrayProduct['garantia'] = $garantia;
                                 $arrayProduct['descripcionProducto'] = $descripcion;
                                 $arrayProduct['estadoProductoWeb'] = $estado;
+                                $arrayProduct['stockMin'] = $stockminimo;
                                 
                                 $arrayProveedor['stock'] = $stockproveedor;
                                 $arrayProveedor['idProveedor'] = $proveedor;
                                 
-                                $success = $this->productoService->insertProduct($arrayProduct,$stock,$arrayProveedor,$img1,$img2,$img3,$img4);
+                                $success = $this->productoService->insertProduct($arrayProduct,$arrayProveedor,$img1,$img2,$img3,$img4);
                                 $idProducto = $success;
                                 
                                 $this->productoService->validateState($idProducto);
@@ -319,7 +320,6 @@ class ProductoController extends Controller
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 2){
                 $arrayProduct = array();
-                $arrayProveedor = array();
                 $titulo = $request->input('titulo');
                 $marca = $request->input('marca');
                 $precio = 0;
@@ -333,7 +333,7 @@ class ProductoController extends Controller
                 $proveedor = $request->input('proveedor');
                 $descripcion = $request->input('descripcion');
                 $tipoprecio = $request->input('tipoprecio');
-                
+                $stockminimo = $request->input('stockminimo');
                 try{
                     if(!is_null($titulo)){
                         $arrayProduct['nombreProducto'] = $titulo;
@@ -384,6 +384,10 @@ class ProductoController extends Controller
 
                     if (!is_null($marca)) {
                         $arrayProduct['idMarca'] = $marca;
+                    }
+
+                    if (!is_null($stockminimo)) {
+                        $arrayProduct['stockMin'] = $stockminimo;
                     }
                     
                     $this->productoService->updateProduct(decrypt($idProducto),$arrayProduct,$request->file('imgone'),$request->file('imgtwo'),$request->file('imgtree'),$request->file('imgfour'));

@@ -40,6 +40,10 @@ class ComprobanteService implements ComprobanteServiceInterface
         $this->headerService = $headerService;
         $this->inventarioRepository = $inventarioRepository;
     }
+
+    public function getAllRegistrosByComprobanteId($idComprobante){
+        return $this->comprobanteRepository->getAllRegistrosByComprobanteId($idComprobante);
+    }
     
      public function getAllAlmacen(){
         $almacenes = $this->almacenRepository->all();

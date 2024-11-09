@@ -6,7 +6,7 @@ interface ProductoServiceInterface
     public function getAllProductsByColumn($column,$data);
     public function getOneProductByColumn($column,$data);
     public function searchProducts($input);
-    public function insertProduct($array,$stock,$proveedor,$img1,$img2,$img3,$img4);
+    public function insertProduct($array,$proveedor,$img1,$img2,$img3,$img4);
     public function updateProduct($id,$array,$img1,$img2,$img3,$img4);
     public function validateState($id);
     public function insertOrUpdateCaracteristicas($id,$arrayCreate,$arrayUpdate);

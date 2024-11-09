@@ -21,37 +21,18 @@
         <div class="col-12">
                 <ul class="list-group ">
                         <li class="list-group-item d-flex bg-sistema-uno text-light" style="position:sticky; top: 0;z-index:800">
-                            <div class="row w-100 h-100 d-flex justify-content-center align-items-center" >
-                                <div class="col-6 col-md-4 text-center">
+                            <div class="row w-100 h-100 align-items-center" >
+                                <div class="col-6 col-md-6 text-center">
                                     <h6>Producto</h6>
-                                </div>
-                                <div class="col-md-1 d-none d-sm-block text-center">
-                                    <h6>Modelo</h6>
-                                </div>
-                                <div class="col-1 d-none d-sm-block text-center">
-                                    <h6>UPC</h6>
-                                </div>
-                                <div class="col-1 d-none d-sm-block text-center">
-                                    <h6>Garantía</h6>
-                                </div>
-                                <div class="col-2 col-md-1 text-center">
-                                    <h6>Marca</h6>
                                 </div>
                                 <div class="col-4 col-md-1 text-center">
                                     <h6><a style="cursor:pointer" onclick="changePriceList()">Precio <i class="bi bi-caret-down-fill"></i></a></h6>
                                 </div>
-                                <div class="col-2 d-none d-sm-block text-center">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h6>Stock</h6>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h6>Proveedor</h6>
-                                        </div>
-                                    </div>
+                                <div class="col-2 col-md-4 text-center">
+                                    <h6>Stock</h6>
                                 </div>
-                                <div class="d-none d-sm-block col-md-1 truncate">
-                                    <h6>Descripción</h6>
+                                <div class="col-2 col-md-1 text-center">
+                                    <h6>Proveedor</h6>
                                 </div>
                             </div>
                         </li>
@@ -64,64 +45,40 @@
                                         <img src="{{ asset('storage/'.$pro->imagenProducto1) }}" alt="Tooltip Imagen" style="width:100%" class="rounded-3">
                                     </div>
                                 </div>
-                                <div class="col-10 col-md-3"  data-bs-toggle="tooltip" data-bs-placement="top" title="Cod: {{$pro->codigoProducto}}">
-                                    <a class="link-sistema fw-bold"  href="{{route('producto',[encrypt($pro->idProducto)])}}">
-                                        <small>{{$pro->nombreProducto}}</small>
-                                    </a>
-                                    
-                                </div>
-                                <div class="col-6 col-md-1 text-center" >
-                                    <small  style="cursor:pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="SN: {{ $pro->partNumber == 0 ? 'Sin Part Number' : $pro->partNumber}}">
-                                        {{$pro->modelo}}
-                                    </small>
-                                </div>
-                                <div class="col-6 col-md-1 d-none d-sm-block text-center">
-                                    <small>{{$pro->UPC == 0 ? 'Sin UPC' : $pro->UPC}}</small>
-                                </div>
-                                <div class="col-3 col-md-1 d-none d-sm-block text-center">
-                                    <small>{{$pro->garantia}}</small>
-                                </div>
-                                <div class="col-3 col-md-1 text-center">
-                                    <small>{{$pro->MarcaProducto->nombreMarca}}</small>
+                                <div class="col-10 col-md-5">
+                                    <div class="row h-100">
+                                        <div class="col-12" data-bs-toggle="tooltip" data-bs-placement="top" title="Cod: {{$pro->codigoProducto}}">
+                                            <a class="link-sistema fw-bold"  href="{{route('producto',[encrypt($pro->idProducto)])}}">
+                                                <small>{{$pro->nombreProducto}}</small>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 d-flex flex-column justify-content-end text-start pb-2">
+                                            <small class="text-secondary">{{$pro->modelo}}</small>
+                                        </div>
+                                        <div class="col-6 d-flex flex-column justify-content-end text-end pb-2">
+                                            <small class="text-secondary">{{$pro->MarcaProducto->nombreMarca}}</small>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-2 col-md-1 text-center">
                                     <small data-value="{{$pro->precioDolar}}" class="price-list-product">${{$pro->precioDolar}}</small>
                                 </div>
-                                <div class="col-6 d-none d-sm-block col-md-2">
+                                <div class="col-6 d-none d-sm-block col-md-4">
                                     <div class="row text-center">
-                                        <div class="col-6">
-                                             @php
-                                                $hayStock = false;
-                                            @endphp
-                                        
                                             @foreach($pro->Inventario as $inventario)
-                                                @if($inventario->stock > 0)
+                                                <div class="col-6 {{$inventario->stock < $pro->stockMin ? 'text-danger' : ''}}">
                                                     <small>{{ $inventario->Almacen->descripcion }}</small>
                                                     <br>
                                                     <small>{{ $inventario->stock }}</small>
-                                                    @php
-                                                        $hayStock = true;
-                                                        break; // Termina el bucle cuando se encuentra inventario con stock
-                                                    @endphp
-                                                @endif
+                                                </div>
                                             @endforeach
                                         
-                                            @if(!$hayStock)
-                                                <small>Sin stock</small>
-                                            @endif
-                                        </div>
-                                        <div class="col-6">
-                                            <small>{{$pro->Inventario_Proveedor->Preveedor->nombreProveedor}}</small>
-                                            <br>
-                                            <small>{{$pro->Inventario_Proveedor->stock}}</small>
-                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-1 col-md-1 text-end">
-                                    <textarea style="position: absolute; left: -9999px;opacity: 0" id="descripcion-{{$pro->idProducto}}">{{$pro->descripcionProducto}}</textarea>
-                                    <button class="btn text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Click para copiar la descripción" onclick="copiarTexto({{$pro->idProducto}})">
-                                        <i class="bi bi-copy"></i>
-                                    </button>
+                                <div class="col-2 col-md-1 text-center">
+                                    <small>{{$pro->Inventario_Proveedor->Preveedor->nombreProveedor}}</small>
+                                    <br>
+                                    <small>{{$pro->Inventario_Proveedor->stock}}</small>
                                 </div>
                             </div>
                         </li>

@@ -26,6 +26,10 @@ class DocumentoController extends Controller
         //variables propias del controlador
         $documento = $this->comprobanteService->getOneById(decrypt($id));
         $ubicaciones = $this->comprobanteService->getAllAlmacen();
+        $registros = $this->comprobanteService->getAllRegistrosByComprobanteId(decrypt($id));
+        $registrosFiltrados = $registros->filter(function($register) {
+            return strpos($register->numeroSerie, 'UNK-') !== false;
+        });
         
         $estados = [['value' => 'NUEVO', 'name' => 'Nuevo'],
                     ['value' => 'ABIERTO', 'name' => 'Abierto'],
@@ -59,7 +63,8 @@ class DocumentoController extends Controller
                 'estados' => $estados,
                 'medidas' => $medidas,
                 'adquisiciones' => $adquisiciones,
-                'validate' => $bool
+                'validate' => $bool,
+                'pdf' => $registrosFiltrados
                 ]);
             }
         }

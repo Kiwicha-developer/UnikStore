@@ -15,7 +15,7 @@
         @csrf
     <div class="row">
         <div class="col-10 col-md-6 d-flex align-items-center">
-            <h3><a href="javascript:void(0)" onclick="window.history.back()" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> PRODUCTO: <span class="text-secondary">{{$producto->codigoProducto}}</span></h3>
+            <h3><a href="javascript:void(0);" onclick="history.back();" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> PRODUCTO: <span class="text-secondary">{{$producto->codigoProducto}}</span></h3>
         </div>
         <div class="col-2 col-md-6 text-end pt-2">
             <h5><a class="btn btn-secondary" href="{{route('details',[$producto->idProducto])}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Especificaciones"><i class="bi bi-layers"></i></a></h5>
@@ -169,34 +169,44 @@
                 <h3>Inventario disponible</h3>
             </div>
             <div class="col-6 text-end">
+                <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+                @php
+                    $ingresoEdit = "";
+                @endphp
                 @foreach ($user->Accesos as $access)
                     @if($access->idVista  == 8)
-                    <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+                    @php
+                        $ingresoEdit = "input-edit";
+                    @endphp
                     @endif
                 @endforeach
             </div>
         </div>
+        <div class="col-6 col-md-2">
+            <label  class="form-label">Stock Minimo:</label>
+            <input name="stockminimo" value="{{$producto->stockMin}}" type="number" class="form-control input-edit" disabled>
+        </div>
         @foreach($producto->Inventario as $inventario)
         <div class="col-6 col-md-2">
-            <label for="precio-producto" class="form-label">Stock {{$inventario->Almacen->descripcion}}:</label>
-            <input name="stock[{{$inventario->idAlmacen}}]" value="{{$inventario->stock}}" type="number" class="form-control input-edit"  disabled>
+            <label class="form-label">Stock {{$inventario->Almacen->descripcion}}:</label>
+            <input name="stock[{{$inventario->idAlmacen}}]" value="{{$inventario->stock}}" type="number" class="form-control {{$ingresoEdit}}"  disabled>
         </div>
         @endforeach
         <div class="col-6 col-md-2">
-            <label for="precio-producto" class="form-label">Stock {{$producto->Inventario_Proveedor->Preveedor->nombreProveedor}}:</label>
+            <label class="form-label">Stock {{$producto->Inventario_Proveedor->Preveedor->nombreProveedor}}:</label>
             <input name="stockproveedor" value="{{$producto->Inventario_Proveedor->stock}}" type="number" class="form-control input-edit" disabled>
         </div>
         <div class="col-6 col-md-3">
-                <label for="grupo-product" id="proveedor-label" class="form-label">Proveedor:</label>
-                <select name="proveedor" id="proveedor-product" class="form-select input-edit" disabled>
-                    @foreach($proveedor as $pro)
-                        <option  value="{{ $pro['idProveedor'] }}"
-                            {{ $producto->Inventario_Proveedor->Preveedor->idProveedor == $pro['idProveedor'] ? 'selected' : '' }}>
-                            {{ $pro['nombreProveedor'] }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+            <label for="grupo-product" id="proveedor-label" class="form-label">Proveedor:</label>
+            <select name="proveedor" id="proveedor-product" class="form-select input-edit" disabled>
+                @foreach($proveedor as $pro)
+                    <option  value="{{ $pro['idProveedor'] }}"
+                        {{ $producto->Inventario_Proveedor->Preveedor->idProveedor == $pro['idProveedor'] ? 'selected' : '' }}>
+                        {{ $pro['nombreProveedor'] }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
     </div>
     <div class="editButton row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
         <div class="row">

@@ -80,6 +80,10 @@
         let inputsModal = modalDiv.querySelectorAll('input');
         let selectModalMedida = document.getElementById('modal-select-medida');
         let inputModalPrice = document.getElementById('modal-input-price');
+
+        if (!productInput.value.trim()) {
+            return;
+        }
         
         let liBtnAdd = document.getElementById('li-btn-add');
         

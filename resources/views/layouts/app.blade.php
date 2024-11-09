@@ -178,7 +178,7 @@
                         </div>
                         <div class="col-6 col-md-9 d-flex justify-content-start align-items-center">
                             <img class="d-none d-sm-block" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
-                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology <span class="text-secondary">.v1.01</span></h5>
+                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.1</span></h5>
                         </div>
                         <div class="col-4 col-md-2" style="position:relative;z-index:9000">
                             <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav" style="cursor:pointer">

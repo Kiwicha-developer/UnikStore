@@ -21,7 +21,7 @@
         </div>
     </div>
     <br>
-    <form action="{{route('insertingreso',[encrypt($documento->idComprobante)])}}" method="POST">
+    <form action="{{route('insertingreso',[encrypt($documento->idComprobante)])}}" id="form-create-doc" method="POST">
         @csrf
     <div class="row">
         <div class="col-md-12 mb-3">
@@ -60,9 +60,11 @@
                 </div>
             </div>
             @else
-            <div class="col-md-12 mb-4">
-                <a class="btn btn-danger" href="{{route('generarSeriesPdf',[$documento->idComprobante])}}"><i class="bi bi-file-earmark-pdf"></i> Series</a>
-            </div>
+                @if(count($pdf) > 0)
+                    <div class="col-md-12 mb-4">
+                        <a class="btn btn-danger" href="{{route('generarSeriesPdf',[$documento->idComprobante])}}"><i class="bi bi-file-earmark-pdf"></i> Series</a>
+                    </div>
+                @endif
             @endif
             <ul class="list-group" id="ul-ingreso" style="max-height: 60vh;overflow-x: hidden; overflow-y: auto;">
               @if($validate)
@@ -179,7 +181,7 @@
         </div>
         @if($validate)
         <div class="col-md-12 text-center">
-            <button type="submit" class="btn btn-success" id="btnSubmit"  disabled><i class="bi bi-floppy-fill"></i> Registrar</button>
+            <button type="button" onclick="confirmForm()" class="btn btn-success" id="btnSubmit"  disabled><i class="bi bi-floppy-fill"></i> Registrar</button>
         </div>
         @endif
     </div>
@@ -256,5 +258,28 @@
     <br>
 </div>
 <script src="{{ route('js.documento-scripts') }}"></script>
+<script>
+    function confirmForm(){
+        let formDocumento = document.getElementById('form-create-doc');
+        Swal.fire({
+        title: '!!No podras modificar el documento despues!!',
+        text: '¿Estás seguro de que deseas continuar?',
+        icon: 'warning',
+        iconColor: '#00b1b9',
+        showCancelButton: true, 
+        confirmButtonText: 'Aceptar',  
+        cancelButtonText: 'Cancelar', 
+        customClass: {
+            confirmButton: 'btn-primary',  
+            cancelButton: 'btn btn-danger'
+        },
+        reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                formDocumento.submit();
+            }
+        });
+    }
+</script>
 
 @endsection

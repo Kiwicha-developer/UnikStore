@@ -157,10 +157,8 @@ class ProductoService implements ProductoServiceInterface
         return $productos;
     }
     
-    public function insertProduct($array,$stock,$proveedor,$img1,$img2,$img3,$img4){
+    public function insertProduct($array,$proveedor,$img1,$img2,$img3,$img4){
         $imgService = new ImageService();
-        
-        $agotado = false;
         $array['idProducto'] = $this->generarId();
         $array['imagenProducto1'] = 'productos/IMGPRO'.$array['idProducto'].'_1.webp';
         $array['imagenProducto2'] = 'productos/IMGPRO'.$array['idProducto'].'_2.webp';
@@ -168,13 +166,8 @@ class ProductoService implements ProductoServiceInterface
         $array['imagenProducto4'] = 'productos/IMGPRO'.$array['idProducto'].'_4.webp';
         $array['codigoProducto'] = $this->generarCodigo($array['codigoProducto']);
         
-        foreach($stock as $almacen => $cantidad){
-            if($cantidad < 1){
-                $agotado = true;
-            }
-        }
         
-        if(!$agotado || $proveedor['stock'] > 0){
+        if($proveedor['stock'] > 0){
             $array['estadoProductoWeb'] = $array['estadoProductoWeb'];
         }else{
             if($array['estadoProductoWeb'] == 'DESCONTINUADO'){
@@ -187,7 +180,7 @@ class ProductoService implements ProductoServiceInterface
             $newProducto = $this->productoRepository->create($array);
             
             if($newProducto){
-                $this->insertInventory($array['idProducto'],$stock);
+                $this->insertInventory($array['idProducto']);
                 $this->createSeguimiento($array['idProducto'],$proveedor);
                 $imgService->createImage($img1,$array['idProducto'].'_1',$this->path);
                 $imgService->createImage($img2,$array['idProducto'].'_2',$this->path);
@@ -297,21 +290,22 @@ class ProductoService implements ProductoServiceInterface
         }
     }
     
-    private function insertInventory($idProducto,$array){
+    private function insertInventory($idProducto){
         if (!$idProducto) {
             return null;
         }
     
         try {
-            array_map(function($almacen, $stock) use ($idProducto) {
+            $almacenes = $this->almacenRepository->all();
+            foreach($almacenes as $almacen){
                 $data = [
                     'idProducto' => $idProducto,
-                    'idAlmacen' => $almacen,
-                    'stock' => $stock
+                    'idAlmacen' => $almacen->idAlmacen,
+                    'stock' => 0
                 ];
-    
+
                 $this->inventarioRepository->create($data);
-            }, array_keys($array), $array);
+            }
     
             return true;
         } catch (Exception $e) {

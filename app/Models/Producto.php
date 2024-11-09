@@ -34,6 +34,7 @@ class Producto extends Model
                             'imagenProducto3',
                             'imagenProducto4',
                             'estadoProductoWeb',
+                            'stockMin',
                             'slugProducto'
                             ];
 
@@ -47,6 +48,7 @@ class Producto extends Model
         'idProducto' => 'int',
         'idMarca' => 'int',
         'idGrupo' => 'int',
+        'stockMin' => 'int',
         'precioDolar' => 'float',
         'gananciaExtra' => 'float'
     ];
