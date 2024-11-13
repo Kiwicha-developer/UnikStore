@@ -66,6 +66,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/ingreso/insertcomprobante', [IngresoController::class, 'insertComprobante'])->name('insertcomprobante');
     
     Route::get('/documento/searchdocument', [DocumentoController::class, 'searchDocument'])->name('searchdocument');
+    Route::get('/documento/validateseries', [DocumentoController::class, 'validateSeries'])->name('validateseries');
     Route::get('/documento/{id}/{bool}', [DocumentoController::class, 'index'])->name('documento');
     Route::get('/documentos/{date}', [DocumentoController::class, 'list'])->name('documentos');
     

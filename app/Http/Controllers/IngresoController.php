@@ -117,6 +117,7 @@ class IngresoController extends Controller
                     $array['moneda'] = 'SOL';
                     $array['totalCompra'] = 0;
                     $array['fechaRegistro'] = now();
+                    $array['estado'] = 'PENDIENTE';
                     
                     $operation = $this->comprobanteService->insertComprobante($array);
                     if($operation){

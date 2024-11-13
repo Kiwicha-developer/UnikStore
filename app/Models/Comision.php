@@ -33,7 +33,7 @@ class Comision extends Model
 
     protected $guarded = ['idGrupoProducto','idRango'];
     
-    protected $fillable = ['comision',
+    protected $fillable = ['idGrupoProducto','idRango','comision',
                             ];
 
     

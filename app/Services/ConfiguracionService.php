@@ -285,6 +285,7 @@ class ConfiguracionService implements ConfiguracionServiceInterface
 
     public function createGrupoProducto($categoria,$grupo,$tipo,$img){
         $imgService = new ImageService();
+        $rangos = $this->rangoRepository->all();
         $data = ['idGrupoProducto' => $this->getNewIdGrupo(),
                 'nombreGrupo' => $grupo,
                 'idCategoria' => $categoria,
@@ -292,6 +293,12 @@ class ConfiguracionService implements ConfiguracionServiceInterface
                 'imagenGrupo' => ''
                 ];
         $this->grupoRepository->create($data);
+        foreach($rangos as $rango){
+            $comisionData = ['idGrupoProducto' => $data['idGrupoProducto'],
+                            'idRango' => $rango->idRango,
+                            'comision' => 0];
+            $this->comisionRepository->create($comisionData);
+        }
         $newGrupo = $this->grupoRepository->getOne('idGrupoProducto',$data['idGrupoProducto']);
         $updateData = ['imagenGrupo' => 'grupos/IMGPRO'.$newGrupo->slugGrupo.'.webp' ];
         try{

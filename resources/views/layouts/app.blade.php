@@ -14,6 +14,7 @@
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{route('js.header-scripts')}}"></script>
 </head>
@@ -178,7 +179,7 @@
                         </div>
                         <div class="col-6 col-md-9 d-flex justify-content-start align-items-center">
                             <img class="d-none d-sm-block" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
-                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.1</span></h5>
+                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.12</span></h5>
                         </div>
                         <div class="col-4 col-md-2" style="position:relative;z-index:9000">
                             <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav" style="cursor:pointer">
@@ -214,7 +215,10 @@
         <div class="offcanvas offcanvas-start bg-sistema-uno" tabindex="-1" id="offcanvasDashboard" aria-labelledby="offcanvasExampleLabel">
           <div class="offcanvas-header">
             <img class="d-sm-none" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
-            <h5 class="d-flex d-sm-none text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology<span class="text-secondary">.v1.01</span></h5>
+            <div class="row">
+                <h5 class="d-block d-sm-none text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology</h5>
+                <small class="text-secondary">v1.12</small>
+            </div>
             <h5 class="d-none d-sm-flex offcanvas-title text-light">Men&uacute;</h5>
             <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>

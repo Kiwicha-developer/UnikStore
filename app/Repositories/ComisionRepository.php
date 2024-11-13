@@ -39,8 +39,8 @@ class ComisionRepository implements ComisionRepositoryInterface
         return Comision::where($column, 'LIKE', '%' . $data . '%')->get();
     }
 
-    public function create(array $ComisionData){
-        return Comision::create($ComisionData);
+    public function create(array $comisionData){
+        return Comision::create($comisionData);
     }
 
     public function update($idRango,$idGrupo, array $comisionData){

@@ -8,7 +8,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-6 col-md-4">
             <div class="input-group mb-3" style="z-index:1000" >
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control" placeholder="SKU..." id="search">
@@ -16,16 +16,16 @@
                 </ul>
               </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5 d-none d-sm-block">
 
         </div>
         <div class="col-6 col-md-3 text-end">
             <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}" >
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-8 col-md-8">
             <h2><i class="bi bi-megaphone-fill"></i> Publicaciones</h2>
         </div>
-        <div class="col-6 col-md-4 text-end">
+        <div class="col-4 col-md-4 text-end">
             <div class="btn-group dropstart">
               <button type="button" class="btn btn-success" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-plus-lg"></i> Nueva
@@ -46,7 +46,7 @@
             <ul class="list-group">
               <li class="list-group-item bg-sistema-uno text-light pb-0" style="position:sticky; top: 0;z-index:800">
                   <div class="row text-center ">
-                      <div class="col-4 col-md-1">
+                      <div class="col-3 col-md-1">
                           <h6>Seller</h6>
                       </div>
                       <div class="col-md-1 d-none d-sm-block">
@@ -55,7 +55,7 @@
                       <div class="col-md-2 d-none d-sm-block">
                           <h6>Cuenta</h6>
                       </div>
-                      <div class="col-4 col-md-2">
+                      <div class="col-5 col-md-2">
                           <h6>SKU</h6>
                       </div>
                       <div class="col-4 col-md-2">
@@ -75,7 +75,7 @@
               @foreach($publicaciones as $public)
               <li class="list-group-item">
                   <div class="row text-center">
-                      <div class="col-4 col-md-1">
+                      <div class="col-3 col-md-1">
                           <img src="{{ asset('storage/'.$public->CuentasPlataforma->Plataforma->imagenPlataforma) }}" alt="Tooltip Imagen" style="width:100%" class="rounded-3">
                       </div>
                       <div class="col-md-1 d-none d-sm-block">
@@ -84,7 +84,7 @@
                       <div class="col-md-2 d-none d-sm-block">
                           <small>{{$public->CuentasPlataforma->nombreCuenta}}</small>
                       </div>
-                      <div class="col-4 col-md-2">
+                      <div class="col-5 col-md-2">
                         <a href="javascript:void(0)" class="decoration-link" onclick="ShareId({{$public->idPublicacion}},'{{$public->titulo}}',{{$public->precioPublicacion}},{{$public->estado}})" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{$public->titulo}}">{{$public->sku}}</small>
                         </a>
@@ -97,14 +97,15 @@
                       <div class="col-md-1 d-none d-sm-block">
                           <small>{{number_format($public->precioPublicacion,2)}}</small>
                       </div>
-                      <div class="col-6 col-md-1">
+                      <div class="col-3 d-block d-sm-none"></div>
+                      <div class="col-5 col-md-1">
                           <small >
                               <a href="javascript:void(0)"  class="{{$public->estado == 1 ? 'text-success' : ($public->estado == 0 ? 'text-danger ' : 'text-danger text-decoration-line-through')}}" >
                                     {{$public->estado == 1 ? 'Activo' : ($public->estado == 0 ? 'Inactivo' : 'Borrado')}}
                                 </a>
                           </small>
                       </div>
-                      <div class="col-6 col-md-1">
+                      <div class="col-4 col-md-1">
                           <small>{{$public->fechaPublicacion->format('d/m/Y')}}</small>
                       </div>
                   </div>

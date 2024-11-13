@@ -21,7 +21,8 @@ class Comprobante extends Model
                             'moneda',
                             'adquisicion',
                             'totalCompra',
-                            'fechaRegistro'
+                            'fechaRegistro',
+                            'estado'
                             ];
 
     

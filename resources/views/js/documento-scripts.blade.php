@@ -133,7 +133,7 @@
         divColCantidad.appendChild(h5Cantidad);
         
         let divColProduct = document.createElement('div');
-        divColProduct.classList.add('col-4','col-md-4','d-flex','truncate');
+        divColProduct.classList.add('col-4','col-md-3','d-flex','truncate');
         let h5Product = document.createElement('h5');
         h5Product.classList.add('h-100','text-uppercase');
         h5Product.innerHTML  = productInput.value + "&nbsp;";
@@ -166,18 +166,28 @@
         divColPrecioTotal.appendChild(h5TotalPrice);
         
         let divColButtons = document.createElement('div');
-        divColButtons.classList.add('col-3','col-md-1','pe-0','ps-0','text-end');
+        divColButtons.classList.add('col-3','col-md-2','pe-0','ps-0','text-end');
         let buttonAdd = document.createElement('button');
         buttonAdd.classList.add('btn','btn-success','btn-sm');
         buttonAdd.type = 'button';
         buttonAdd.innerHTML = '<i class="bi bi-plus-lg"></i>';
-        buttonAdd.addEventListener('click', function() {createItemList(inputHiddenProduct.value);countProducts(inputHiddenProduct.value);});
+        buttonAdd.addEventListener('click', function() {createItemList(inputHiddenProduct.value,'');countProducts(inputHiddenProduct.value);});
         let buttonDelete = document.createElement('button');
         buttonDelete.classList.add('btn','btn-danger','me-2','btn-sm');
         buttonDelete.type = 'button';
         buttonDelete.innerHTML = '<i class="bi bi-trash"></i>';
         buttonDelete.addEventListener('click', function() {deleteItem(liProduct);deleteList(inputHiddenProduct.value);countProducts(inputHiddenProduct.value);});
+        let buttonExcel = document.createElement('div');
+        buttonExcel.classList.add('btn','bg-success','me-2','btn-sm','text-light');
+        buttonExcel.type = 'button';
+        buttonExcel.innerHTML = '<i class="bi bi-filetype-xlsx"></i>';
+        buttonExcel.addEventListener('click',function(){
+            let inputFile = document.getElementById('excel-file');
+            inputFile.click();
+            setIdList(inputHiddenProduct.value);
+        });
         divColButtons.appendChild(buttonDelete);
+        divColButtons.appendChild(buttonExcel);
         divColButtons.appendChild(buttonAdd);
         
         divRow.appendChild(divColCantidad);
@@ -201,7 +211,7 @@
         });
     }
     
-    function createItemList(id){
+    function createItemList(id,serial){
         let headerLi = document.getElementById('header-list-product-' + id);
         let headerHidden = document.getElementById('header-hidden-product-' + id);
         
@@ -220,6 +230,9 @@
         let inputSerialNumber = document.createElement('input');
         inputSerialNumber.classList.add('form-control','form-control-sm','input-serial');
         inputSerialNumber.type="text";
+        if(serial != ''){
+            inputSerialNumber.value = serial;
+        }
         inputSerialNumber.placeholder="Serial number..";
         inputSerialNumber.name = 'detalle['+id+'][ingreso]['+cont+'][serialnumber]';
         let divInputGroupText = document.createElement('div');

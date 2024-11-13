@@ -84,6 +84,7 @@ class ComprobanteService implements ComprobanteServiceInterface
                     'moneda' => $inputs['moneda'],
                     'adquisicion' => $inputs['adquisicion'],
                     'totalCompra' => $inputs['total'],
+                    'estado' => 'REGISTRADO',
                 ];
                 
                 $comprobante = $this->comprobanteRepository->update($id, $arrayComprobante);
@@ -115,6 +116,19 @@ class ComprobanteService implements ComprobanteServiceInterface
                             return $comprobante;
                         });
         return $comprobantes;
+    }
+
+    public function validateSeriesAjax($idProveedor,array $data){
+        $series = array();
+        foreach($data as $serie){
+            if($serie != 0){
+                $find = $this->registroProductoRepository->validateSerie($idProveedor,$serie);
+                if($find){
+                    $series[] = $serie;
+                }
+            }
+        }
+        return $series;
     }
 
     private function insertDetalleComprobante(array $data, array $registros,$idAlmacen){

@@ -62,7 +62,7 @@
             @else
                 @if(count($pdf) > 0)
                     <div class="col-md-12 mb-4">
-                        <a class="btn btn-danger" href="{{route('generarSeriesPdf',[$documento->idComprobante])}}"><i class="bi bi-file-earmark-pdf"></i> Series</a>
+                        <button class="btn btn-danger" onclick="openPdfInNewWindow()"><i class="bi bi-file-earmark-pdf"></i> Series</button>
                     </div>
                 @endif
             @endif
@@ -74,7 +74,7 @@
                         <small class="d-none d-md-inline">Cant.</small>
                         <small class="d-md-none">#</small>
                     </div>
-                    <div class="col-4 col-md-4 text-start">
+                    <div class="col-4 col-md-3 text-start">
                         <small>Producto</small>
                     </div>
                     <div class="col-2 d-none d-md-block">
@@ -88,7 +88,7 @@
                         <small class="d-none d-md-inline">Precio Total</small>
                         <small class="d-md-none">P.T</small>
                     </div>
-                    <div class="col-3 col-md-1 text-end">
+                    <div class="col-3 col-md-2 text-end">
                         <button type="button" class="btn h-100 pt-0 pb-0 hidden-button text-light border hover-sistema-uno" data-bs-toggle="modal" data-bs-target="#registerModal"><i class="bi bi-cart-plus-fill fs-4"></i></button>
                     </div>
                 </div>
@@ -180,8 +180,12 @@
             </ul>
         </div>
         @if($validate)
-        <div class="col-md-12 text-center">
-            <button type="button" onclick="confirmForm()" class="btn btn-success" id="btnSubmit"  disabled><i class="bi bi-floppy-fill"></i> Registrar</button>
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center">
+            <button type="button" onclick="validateSeries({{$documento->idProveedor}})" class="btn btn-success" id="btnSubmit"  disabled><i class="bi bi-floppy-fill"></i> Registrar</button>
+        </div>
+        <div class="col-md-3 text-end">
+            <button type="button" onclick="generatePlantilla()" class="btn bg-success text-light">Plantilla <i class="bi bi-file-earmark-excel-fill"></i></button>
         </div>
         @endif
     </div>
@@ -256,9 +260,106 @@
       </div>
     </div>
     <br>
+    <input type="file" onchange="readExcel(this)" id="excel-file" class="d-none" /> <!--Input reusable -->
 </div>
 <script src="{{ route('js.documento-scripts') }}"></script>
 <script>
+    function openPdfInNewWindow() {
+        var url = "{{route('generarSeriesPdf',[$documento->idComprobante])}}";
+        window.open(url, '', 'width=800,height=600,scrollbars=yes,location=no,toolbar=no,status=no');
+    }
+</script>
+<script>
+    var listData = '';
+    function readExcel(input) { 
+        const file = input.files[0]; 
+        if (file) { 
+            const reader = new FileReader(); 
+            reader.onload = function(event) { 
+                const data = event.target.result; 
+                const workbook = XLSX.read(data, { type: "binary" }); 
+                const sheetName = workbook.SheetNames[0]; 
+                const worksheet = workbook.Sheets[sheetName]; 
+                const jsonData = XLSX.utils.sheet_to_json(worksheet); 
+                const key = jsonData[0] ? Object.keys(jsonData[0])[0] : null;
+                const values = Object.values(jsonData);
+                if(key === 'SERIES'){
+                    values.forEach(function(x){
+                        console.log(x.SERIES); 
+                        createItemList(listData,x.SERIES);
+                        countProducts(listData);
+                        updateBtnAdd();
+                    });
+                    listData = '';
+                }else{
+                    alert('Plantilla incorrecta, porfavor usa la plantilla ubicada en la parte inferior.');
+                    listData = '';
+                }
+                input.value = '';
+                console.log(jsonData); 
+            }; 
+        reader.readAsBinaryString(file); 
+        } 
+        input.value = '';
+    }
+
+    function setIdList (id){
+        listData = id;
+    }
+
+    function generatePlantilla(){
+        const headers = ["SERIES","!!Solo coloca valores en la columna de series!!"];
+
+        // Crear una fila de datos vacíos para las cabeceras
+        const data = [headers]; // Solo cabeceras, sin datos
+
+        // Crear la hoja de trabajo a partir de las cabeceras
+        const ws = XLSX.utils.aoa_to_sheet(data);
+
+        // Crear un libro de trabajo y agregar la hoja
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Plantilla");
+
+        // Escribir el archivo Excel y permitir su descarga
+        XLSX.writeFile(wb, "plantilla_series.xlsx");
+    }
+    
+    function validateSeries(idProveedor){
+        let inputSeries = document.querySelectorAll('.input-serial');
+        let series = [];
+
+        inputSeries.forEach(function(x){
+            series.push(x.value);
+        });
+
+        let seriesParams = series.map(s => `serial[]=${encodeURIComponent(s)}`).join('&');
+
+        let xhr = new XMLHttpRequest();
+            xhr.open('GET', `/documento/validateseries?${seriesParams}&proveedor=${idProveedor}`, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    let data = JSON.parse(xhr.responseText);
+                    if(data.valid){
+                        Swal.fire({
+                            title: 'Numeros de serie ya registrados!!',
+                            text: data.series,
+                            icon: 'warning',
+                            iconColor: '#00b1b9',
+                            confirmButtonText: 'Aceptar', 
+                            customClass: {
+                                confirmButton: 'btn-primary',  
+                            },
+                            reverseButtons: true
+                            });
+                    }else{
+                        confirmForm();
+                    }
+                    console.log(typeof data.series);
+                }
+            };
+            xhr.send();
+    }
+
     function confirmForm(){
         let formDocumento = document.getElementById('form-create-doc');
         Swal.fire({

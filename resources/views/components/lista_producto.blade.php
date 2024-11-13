@@ -22,16 +22,16 @@
                 <ul class="list-group ">
                         <li class="list-group-item d-flex bg-sistema-uno text-light" style="position:sticky; top: 0;z-index:800">
                             <div class="row w-100 h-100 align-items-center" >
-                                <div class="col-6 col-md-6 text-center">
+                                <div class="col-6 col-md-6 d-none d-md-block text-center">
                                     <h6>Producto</h6>
                                 </div>
-                                <div class="col-4 col-md-1 text-center">
-                                    <h6><a style="cursor:pointer" onclick="changePriceList()">Precio <i class="bi bi-caret-down-fill"></i></a></h6>
+                                <div class="col-3 col-md-1 text-center">
+                                    <h6><a style="cursor:pointer" onclick="changePriceList()">Precio <i class="bi bi-caret-down-fill d-none d-md-block"></i></a></h6>
                                 </div>
-                                <div class="col-2 col-md-4 text-center">
+                                <div class="col-6 col-md-4 text-center">
                                     <h6>Stock</h6>
                                 </div>
-                                <div class="col-2 col-md-1 text-center">
+                                <div class="col-3 col-md-1 text-center">
                                     <h6>Proveedor</h6>
                                 </div>
                             </div>
@@ -52,18 +52,18 @@
                                                 <small>{{$pro->nombreProducto}}</small>
                                             </a>
                                         </div>
-                                        <div class="col-6 d-flex flex-column justify-content-end text-start pb-2">
+                                        <div class="col-9 d-flex flex-column justify-content-end text-start pb-2">
                                             <small class="text-secondary">{{$pro->modelo}}</small>
                                         </div>
-                                        <div class="col-6 d-flex flex-column justify-content-end text-end pb-2">
+                                        <div class="col-3 d-flex flex-column justify-content-end text-end pb-2">
                                             <small class="text-secondary">{{$pro->MarcaProducto->nombreMarca}}</small>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-1 text-center">
+                                <div class="col-3 col-md-1 text-center">
                                     <small data-value="{{$pro->precioDolar}}" class="price-list-product">${{$pro->precioDolar}}</small>
                                 </div>
-                                <div class="col-6 d-none d-sm-block col-md-4">
+                                <div class="col-6 col-md-4">
                                     <div class="row text-center">
                                             @foreach($pro->Inventario as $inventario)
                                                 <div class="col-6 {{$inventario->stock < $pro->stockMin ? 'text-danger' : ''}}">
@@ -75,7 +75,7 @@
                                         
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-1 text-center">
+                                <div class="col-3 col-md-1 text-center">
                                     <small>{{$pro->Inventario_Proveedor->Preveedor->nombreProveedor}}</small>
                                     <br>
                                     <small>{{$pro->Inventario_Proveedor->stock}}</small>

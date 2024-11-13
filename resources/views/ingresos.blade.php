@@ -41,7 +41,7 @@
     <div class="row">
         <div class="col-md-12">
             <ul class="list-group">
-              <li class="list-group-item bg-sistema-uno text-light">
+              <li class="list-group-item bg-sistema-uno text-light" style="position: sticky;top:0;z-index:800">
                   <div class="row text-center">
                     <div class="col-4 col-md-2 text-start">
                         <small>Producto</small>

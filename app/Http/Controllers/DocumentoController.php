@@ -43,6 +43,10 @@ class DocumentoController extends Controller
                     
         $adquisiciones = [['value' => 'NORMAL', 'name' => 'Normal'],
                         ['value' => 'OFERTA', 'name' => 'Oferta']];
+        
+        if($documento->estado == "PENDIENTE"){
+            $bool = true;
+        }
 
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 8 && $bool){
@@ -101,4 +105,20 @@ class DocumentoController extends Controller
         return response()->json($results);
     }
     
+    public function validateSeries(Request $request){
+    $series = $request->query('serial', []);
+    $proveedor = $request->query('proveedor');
+
+    if (empty($series) || empty($proveedor)) {
+        return response()->json(['error' => 'Faltan parámetros'], 400); 
+    }
+
+    $validSeries = $this->comprobanteService->validateSeriesAjax($proveedor, $series);
+
+    if (count($validSeries) > 0) {
+        return response()->json(['valid' => true, 'series' => $validSeries]);
+    } else {
+        return response()->json(['valid' => false]);
+    }
+    }
 }

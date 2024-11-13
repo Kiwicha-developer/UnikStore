@@ -13,4 +13,5 @@ interface RegistroProductoRepositoryInterface
     public function getLast();
     public function searchByEgreso($serial);
     public function getByEgreso($serial);
+    public function validateSerie($idProveedor,$serie);
 }

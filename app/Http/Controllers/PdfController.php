@@ -17,10 +17,10 @@ class PdfController extends Controller
     public function generateSerialPdf($idDocumento)
     {
         $series = $this->pdfService->getSerialsPrint($idDocumento);
-        $data = ['title' => 'Numeros de series',
+        $data = ['title' => 'Números de series',
                 'series' => $series];
         $pdf = Pdf::loadView('pdf.series_pdf', $data);
         
-        return $pdf->download('series.pdf');
+        return $pdf->stream('series.pdf');
     }
 }
