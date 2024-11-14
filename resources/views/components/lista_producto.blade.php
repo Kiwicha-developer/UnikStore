@@ -26,7 +26,7 @@
                                     <h6>Producto</h6>
                                 </div>
                                 <div class="col-3 col-md-1 text-center">
-                                    <h6><a style="cursor:pointer" onclick="changePriceList()">Precio <i class="bi bi-caret-down-fill d-none d-md-block"></i></a></h6>
+                                    <h6><a style="cursor:pointer" onclick="changePriceList()">Precio <i class="bi bi-caret-down-fill d-none d-md-inline"></i></a></h6>
                                 </div>
                                 <div class="col-6 col-md-4 text-center">
                                     <h6>Stock</h6>

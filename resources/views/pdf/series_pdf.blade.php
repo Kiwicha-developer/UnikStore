@@ -12,13 +12,12 @@
             border-collapse: collapse;
         }
         th, td {
-            border: 1px solid #000;
-            font-size: 12px;
+            border: 0.5px solid #000;
+            font-size: 10px;
             text-align: center;
             padding: 5px;
-            text-align: left;
             width: 100px; /* Ancho fijo para todas las celdas */
-            height: 50px; /* Alto fijo para todas las celdas */
+            height: 20px; /* Alto fijo para todas las celdas */
         }
         th {
             background-color: #f2f2f2;
@@ -26,7 +25,7 @@
     </style>
 </head>
 <body>
-    <h1>{{ $title }}</h1>
+    <h3>{{ $title }}</h3>
     <table>
         <tbody>
             @foreach ($series as $index => $serie)

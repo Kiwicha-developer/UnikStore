@@ -63,7 +63,7 @@
                                     </button>
                                 </div>
                             </div>
-                        </li>
+                        </li> 
                     @endforeach
                 </ul>
             </div>

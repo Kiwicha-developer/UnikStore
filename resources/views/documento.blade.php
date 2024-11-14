@@ -62,7 +62,7 @@
             @else
                 @if(count($pdf) > 0)
                     <div class="col-md-12 mb-4">
-                        <button class="btn btn-danger" onclick="openPdfInNewWindow()"><i class="bi bi-file-earmark-pdf"></i> Series</button>
+                        <button type="button" class="btn btn-danger" onclick="openPdfInNewWindow()"><i class="bi bi-file-earmark-pdf"></i> Series</button>
                     </div>
                 @endif
             @endif
