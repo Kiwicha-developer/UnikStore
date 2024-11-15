@@ -42,13 +42,24 @@ class IngresoController extends Controller
                 $proveedores = $this->ingresoService->getAllLabelProveedor();
                 
                 $documentos = $this->ingresoService->getAllTipoComprobante();
+
+                $almacenes = $this->ingresoService->getAllAlmacen();
+
+                $estados = [['value' => 'NUEVO', 'name' => 'Nuevo'],
+                    ['value' => 'ABIERTO', 'name' => 'Abierto'],
+                    ['value' => 'ROTO', 'name' => 'Roto'],
+                    ['value' => 'DEFECTUOSO', 'name' => 'Defectuoso'],
+                    ['value' => 'DEVOLUCION', 'name' => 'Devolucion']
+                    ];
                 
                 return view('ingresos',['user' => $userModel,
                                         'registros' => $registros,
                                         'documentos' => $documentos,
                                         'proveedores' => $proveedores,
                                         'usuarios' => $usuarios,
-                                        'fecha' => $carbonMonth
+                                        'fecha' => $carbonMonth,
+                                        'almacenes' => $almacenes,
+                                        'estados' => $estados
                                         ]);
             }
         }
@@ -136,4 +147,21 @@ class IngresoController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
     
+    public function updateRegistro(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $idRegistro =  $request->input('idregistro');
+        $estado =  $request->input('estado');
+        $observacion =  $request->input('observacion');
+
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 8){
+                if(isset($idRegistro) && isset($estado)){
+                    $this->ingresoService->updateRegistro($idRegistro,$estado,$observacion);
+                }
+                return back();
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para realizar esta accion','warning','btn-danger');
+        return back();
+    }
 }

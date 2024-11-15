@@ -177,12 +177,13 @@
         buttonDelete.type = 'button';
         buttonDelete.innerHTML = '<i class="bi bi-trash"></i>';
         buttonDelete.addEventListener('click', function() {deleteItem(liProduct);deleteList(inputHiddenProduct.value);countProducts(inputHiddenProduct.value);});
-        let buttonExcel = document.createElement('div');
+        let buttonExcel = document.createElement('button');
         buttonExcel.classList.add('btn','bg-success','me-2','btn-sm','text-light');
         buttonExcel.type = 'button';
         buttonExcel.innerHTML = '<i class="bi bi-filetype-xlsx"></i>';
         buttonExcel.addEventListener('click',function(){
             let inputFile = document.getElementById('excel-file');
+            inputFile.accept = '.xls,.xlsx';
             inputFile.click();
             setIdList(inputHiddenProduct.value);
         });

@@ -84,6 +84,8 @@
               </li>
               @endforeach
             </ul>
+            <br>
+            <br>
             @else
             <div class="row align-items-center" style="height:80vh">
                 <x-aviso_no_encontrado :mensaje="''"/>

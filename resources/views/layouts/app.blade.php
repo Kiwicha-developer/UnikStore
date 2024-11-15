@@ -215,8 +215,8 @@
         <div class="offcanvas offcanvas-start bg-sistema-uno" tabindex="-1" id="offcanvasDashboard" aria-labelledby="offcanvasExampleLabel">
           <div class="offcanvas-header">
             <img class="d-sm-none" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
-            <div class="row">
-                <h5 class="d-block d-sm-none text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology</h5>
+            <div class="row d-block d-sm-none">
+                <h5 class=" text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology</h5>
                 <small class="text-secondary">v1.12</small>
             </div>
             <h5 class="d-none d-sm-flex offcanvas-title text-light">Men&uacute;</h5>

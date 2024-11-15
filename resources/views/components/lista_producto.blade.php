@@ -5,7 +5,7 @@
             </div>
         </div>
     <div class="row">
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-3 pt-1">
             <select onchange="viewProductsList(this.value)" class="form-select form-select-sm" id="select-state-product">
               <option value="TODOS" selected>Todos</option>
               <option value="DISPONIBLE">DISPONIBLE(S)</option>

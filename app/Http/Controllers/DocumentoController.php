@@ -95,8 +95,6 @@ class DocumentoController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
     
-    
-    
     public function searchDocument(Request $request){
         $query = $request->input('query');
     

@@ -7,8 +7,8 @@
     <div class="bg-secondary" id="hidden-body" style="position:fixed;left:0;width:100vw;height:100vh;z-index:998;opacity:0.5;display:none">
     </div>
     <br>
-    <div class="row">
-        <div class="col-12 col-md-5 text-end" style="position:relative;z-index:999">
+    <div class="row mb-3">
+        <div class="col-6 col-md-5 text-end" style="position:relative;z-index:999">
             <div class="input-group mb-3" >
               <span class="input-group-text"><i class="bi bi-search"></i></span>
               <input type="text" class="form-control" placeholder="Serial Number..." id="search">
@@ -16,14 +16,18 @@
               </ul>
             </div>
         </div>
-        <div class="col-6 col-md-9">
-            <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-plus-fill"></i> Ingresos <span class="text-capitalize text-secondary fw-light" ><em>({{$fecha->translatedFormat('F')}})</em></span></h2>
-        </div>
+        <div class="col-md-4 d-none d-md-block"></div>
         <div class="col-6 col-md-3 text-end">
             <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}" >
         </div>
+        <div class="col-6 col-md-6">
+            <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-plus-fill"></i> Ingresos <span class="text-capitalize text-secondary fw-light" ><em>({{$fecha->translatedFormat('F')}})</em></span></h2>
+        </div>
+        <div class="col-6 col-md-6 text-end">
+            <a href="{{route('traslados')}}" class="btn btn-info"><i class="bi bi-arrow-left-right"></i> Traslado</a>
+            <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ingresoModal"><i class="bi bi-file-earmark-plus"></i> Nuevo Registro</a>
+        </div>
     </div>
-    <br>
     <div class="row mb-2">
         <div class="col-4 col-md-2">
             <select class="form-select form-select-sm" id="select-user">
@@ -32,9 +36,6 @@
                 <option value="{{$usuario->idUser}}">{{$usuario->user}}</option>
               @endforeach
             </select>
-        </div>
-        <div class="col-8 col-md-10 text-end">
-            <a class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#ingresoModal"><i class="bi bi-file-earmark-plus"></i> Nuevo Registro</a>
         </div>
     </div>
     @if(!$registros->isEmpty())
@@ -95,7 +96,12 @@
                         <small>{{$registro->RegistroProducto->DetalleComprobante->Comprobante->adquisicion}}</small>
                     </div>
                     <div class="col-4 col-md-1 d-none d-sm-none d-md-block">
-                        <small>{{$registro->RegistroProducto->estado}}</small>
+                        <small>
+                            <a class="decoration-link" href="javascript:void(0)" 
+                                onclick='dataModalDetalle("{{$registro->RegistroProducto->DetalleComprobante->Producto->nombreProducto}}","{{$registro->RegistroProducto->DetalleComprobante->Comprobante->Preveedor->nombreProveedor}}","{{$registro->RegistroProducto->numeroSerie}}","{{$registro->RegistroProducto->estado}}","{{$registro->Usuario->user}}","{{$registro->RegistroProducto->fechaMovimiento->format("d/m/Y")}}","{{$registro->RegistroProducto->observacion}}",{{$registro->RegistroProducto->idRegistro}})'>
+                                {{$registro->RegistroProducto->estado}}
+                            </a>
+                        </small>
                     </div>
                     <div class="col-4 col-md-1">
                         <small>{{$registro->fechaIngreso->format('d/m/Y')}}</small>
@@ -106,6 +112,8 @@
             </ul>
         </div>
     </div>
+    <br>
+    <br>
     @else
     <div class="row align-items-center" style="height:80vh">
         <x-aviso_no_encontrado :mensaje="''"/>
@@ -155,38 +163,59 @@
   </div>
 </div>
 </form>
+<form action="{{route('updateregistro')}}" method="POST">
+    @csrf
 <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
         <div class="row">
+            <input type="hidden" name="idregistro" id="idregistro-modal-detail" value="">
             <div class="col-12">
                 <h5 id="titleproduct-modal-detail">[titulo del producto]</h5>
             </div>
             <div class="col-6 text-secondary">
+                <h6 id="proveedor-modal-detail">[proveedor]</h6>
+            </div>
+            <div class="col-6 text-end text-secondary">
                 <h6 id="serialnumber-modal-detail">[numero de serie]</h6>
             </div>
-            <div class="col-6 text-end">
+            <div class="col-6">
                 <span id="user-modal-detail">[usuario]</span>
             </div>
-            <div class="col-6">
-                <span id="state-modal-detail">[Estado]</span>
-            </div>
             <div class="col-6 text-end">
-                <span id="date-modal-detail">[fechadeingreso]</span>
+                <span id="date-modal-detail">[fechademovimiento]</span>
             </div>
-            <div class="col-6">
+            <div class="col-6 pt-2">
+                <label class="form-label fw-bold">Ubicacion:</label>
+                <select id="" class="form-select" disabled>
+                    @foreach ($almacenes as $almacen)
+                        <option value="{{$almacen->idAlmacen}}">{{$almacen->descripcion}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-6 pt-2">
+                <label class="form-label fw-bold">Estado:</label>
+                <select id="state-modal-detail" name="estado" class="form-select">
+                    @foreach ($estados as $estado)
+                        <option value="{{$estado['value']}}">{{$estado['name']}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-12">
                 <strong>Observaciones</strong>
-                <p id="obs-modal-detail">[observaciones]</p>
+                <textarea name="observacion" maxlength="500" placeholder="Sin observaciones" id="obs-modal-detail" class="form-control"></textarea>
             </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
       </div>
     </div>
   </div>
 </div>
+</form>
 </div>
 <script>
 document.getElementById('search').addEventListener('input', function() {
@@ -213,7 +242,7 @@ document.getElementById('search').addEventListener('input', function() {
                         let divColProduct = document.createElement('div');
                         divColProduct.classList.add('col-4','col-md-4', 'text-start');
                         let smallProduct = document.createElement('small');
-                        smallProduct.textContent = item.Registro.detalle_comprobante.producto.codigoProducto;
+                        smallProduct.textContent = item.Proveedor.nombreProveedor;
                         divColProduct.appendChild(smallProduct);
                         
                         let divColSerial = document.createElement('div');
@@ -231,12 +260,15 @@ document.getElementById('search').addEventListener('input', function() {
                         li.addEventListener('click', function() {
                             document.getElementById('search').value = item.numeroSerie; 
                             suggestions.innerHTML = ''; 
+                            let fechaMovimiento = new Date(item.Registro.fechaMovimiento);
                             dataModalDetalle(item.Registro.detalle_comprobante.producto.nombreProducto,
+                                            item.Proveedor.nombreProveedor,
                                             item.numeroSerie,
                                             item.Registro.estado,
                                             item.Usuario.user,
-                                            item.fechaIngresoPerso,
-                                            item.Registro.observacion);
+                                            fechaMovimiento.getDate() + '/' + fechaMovimiento.getMonth() + '/' + fechaMovimiento.getFullYear(),
+                                            item.Registro.observacion,
+                                            item.Registro.idRegistro);
                         });
                         
                         divRow.appendChild(divColProduct);
@@ -254,7 +286,7 @@ document.getElementById('search').addEventListener('input', function() {
     }
 });
 
-function dataModalDetalle(producto,serie,estado,usuario,fecha,obser){
+function dataModalDetalle(producto,comprobante,serie,estado,usuario,fecha,obser,idregistro){
     let myModal = new bootstrap.Modal(document.getElementById('detalleModal'));
     let titleProduct = document.getElementById('titleproduct-modal-detail');
     let serialNumber = document.getElementById('serialnumber-modal-detail');
@@ -262,14 +294,41 @@ function dataModalDetalle(producto,serie,estado,usuario,fecha,obser){
     let user = document.getElementById('user-modal-detail');
     let date = document.getElementById('date-modal-detail');
     let observacion = document.getElementById('obs-modal-detail');
-    
+    let proveedor = document.getElementById('proveedor-modal-detail');
+    let hidden = document.getElementById('idregistro-modal-detail');
+
+    let optionInvalid = document.createElement('option');
+
     titleProduct.textContent = producto;
     serialNumber.textContent = serie;
-    state.textContent = estado;
+
+    if (estado === 'INVALIDO') {
+        optionInvalid.value = 'INVALIDO';
+        optionInvalid.textContent = 'Invalido';
+        optionInvalid.selected = true;
+
+        // Verificar si el option ya existe antes de agregarlo
+        if (!state.querySelector('option[value="INVALIDO"]')) {
+            state.appendChild(optionInvalid);
+        }
+
+        state.disabled = true;
+    } else {
+        // Verificar si el option existe antes de intentar eliminarlo
+        let existingOption = state.querySelector('option[value="INVALIDO"]');
+        if (existingOption) {
+            existingOption.remove();
+        }
+
+        state.disabled = false;
+        state.value = estado;
+    }
+
+    proveedor.textContent = comprobante;
     user.textContent = usuario;
     date.textContent = fecha;
-    observacion.textContent = obser ? obser: 'Sin observaciones';
-    
+    observacion.value = obser;
+    hidden.value = idregistro;
     myModal.show();
 }
 

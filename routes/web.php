@@ -18,7 +18,7 @@ use App\Http\Controllers\PdfController;
 
 //scripts
 use App\Http\Controllers\ScriptController;
-
+use App\Http\Controllers\TrasladoController;
 
 Route::withoutMiddleware(['validate.session'])->group(function () {
     Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -63,7 +63,10 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/ingresos/{month}', [IngresoController::class, 'index'])->name('ingresos');
     Route::post('/ingreso/insertingreso/{comprobante}', [IngresoController::class, 'insertIngreso'])->name('insertingreso');
     Route::post('/ingreso/deleteingreso', [IngresoController::class, 'deleteIngreso'])->name('deleteingreso');
+    Route::post('/ingreso/updateregistro', [IngresoController::class, 'updateRegistro'])->name('updateregistro');
     Route::post('/ingreso/insertcomprobante', [IngresoController::class, 'insertComprobante'])->name('insertcomprobante');
+
+    Route::get('/traslado', [TrasladoController::class, 'index'])->name('traslados');
     
     Route::get('/documento/searchdocument', [DocumentoController::class, 'searchDocument'])->name('searchdocument');
     Route::get('/documento/validateseries', [DocumentoController::class, 'validateSeries'])->name('validateseries');

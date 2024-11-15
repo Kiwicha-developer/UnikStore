@@ -54,6 +54,8 @@ class IngresoProductoRepository implements IngresoProductoRepositoryInterface
     public function searchBySerialNumber($data)
     {
         return IngresoProducto::join('RegistroProducto','RegistroProducto.idRegistro','=','IngresoProducto.idRegistro')
+                                ->where('RegistroProducto.estado', '<>', 'ENTREGADO')
+                                ->where('RegistroProducto.estado', '<>', 'INVALIDO')
                                 ->where('RegistroProducto.numeroSerie', 'LIKE', '%' . $data . '%')
                                 ->get();
     }

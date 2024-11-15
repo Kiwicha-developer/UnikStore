@@ -54,7 +54,7 @@
                         <small>{{$egreso->Usuario->user}}</small>
                     </div>
                     <div class="col-md-3">
-                        <small>{{is_null($egreso->numeroPedido) ? 'No aplica' : $egreso->numeroPedido}}</small>
+                        <small>{{is_null($egreso->numeroOrden) ? 'No aplica' : $egreso->numeroOrden}}</small>
                     </div>
                     <div class="col-md-2">
                         <small>{{is_null($egreso->Publicacion) || is_null($egreso->Publicacion->sku) ? 'No aplica' : $egreso->Publicacion->sku}}</small>

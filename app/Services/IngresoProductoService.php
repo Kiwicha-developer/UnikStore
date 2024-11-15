@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Repositories\AlmacenRepositoryInterface;
 use Carbon\Carbon;
 use App\Repositories\IngresoProductoRepositoryInterface;
 use App\Repositories\InventarioRepositoryInterface;
@@ -16,13 +17,15 @@ class IngresoProductoService implements IngresoProductoServiceInterface
     protected $registroProductoRepository;
     protected $headerService;
     protected $inventarioRepository;
+    protected $almacenRepository;
 
     public function __construct(IngresoProductoRepositoryInterface $ingresoRepository,
                                 ProveedorRepositoryInterface $proveedorRepository,
                                 TipoComprobanteRepositoryInterface $tipoComprobanteRepository,
                                 RegistroProductoRepositoryInterface $registroProductoRepository,
                                 HeaderServiceInterface $headerService,
-                                InventarioRepositoryInterface $inventarioRepository
+                                InventarioRepositoryInterface $inventarioRepository,
+                                AlmacenRepositoryInterface $almacenRepository
                                 )
     {
         $this->ingresoRepository = $ingresoRepository;
@@ -31,6 +34,7 @@ class IngresoProductoService implements IngresoProductoServiceInterface
         $this->registroProductoRepository = $registroProductoRepository;
         $this->headerService = $headerService;
         $this->inventarioRepository = $inventarioRepository;
+        $this->almacenRepository = $almacenRepository;
     }
     
     public function getByComprobante($idComprobante){
@@ -53,24 +57,32 @@ class IngresoProductoService implements IngresoProductoServiceInterface
                         $x->Usuario = $x->Usuario;
                         $x->Registro = $x->RegistroProducto;
                         $x->Producto = $x->RegistroProducto ? $x->RegistroProducto->DetalleComprobante->Producto : null;
+                        $x->Proveedor = $x->RegistroProducto ? $x->RegistroProducto->DetalleComprobante->Comprobante->Preveedor : null;
                         return $x;
-                    });;
+                    });
         return $ingreso;
     }
     
     public function deleteIngreso($id){
         if($id){
             $ingreso = $this->ingresoRepository->getOne('idIngreso',$id);
-            $dataRegistro = ['estado' => 'INVALIDO'];
-            $dataIngreso = ['idUser' => $this->headerService->getModelUser()->idUser,
-                            'fechaIngreso' => now()];
+            $dataRegistro = ['estado' => 'INVALIDO',
+                            'fechaMovimiento' => now()];
+            $dataIngreso = ['idUser' => $this->headerService->getModelUser()->idUser];
 
             $registro = $ingreso->RegistroProducto;
             $this->registroProductoRepository->update($ingreso->idRegistro,$dataRegistro);
             $this->ingresoRepository->update($ingreso->idIngreso,$dataIngreso);
             $this->inventarioRepository->removeStock($registro->DetalleComprobante->idProducto,$registro->idAlmacen);
-            // $this->registroService->updateRegistro($ingreso->idRegistro,$data);
         }
+    }
+
+    public function updateRegistro($idRegistro,$estado,$observacion){
+        $data = ['estado' => $estado,
+                'fechaMovimiento' => now(),
+                'observacion' => $observacion];
+
+        $this->registroProductoRepository->update($idRegistro,$data);
     }
     
     public function getAllLabelProveedor(){
@@ -80,5 +92,9 @@ class IngresoProductoService implements IngresoProductoServiceInterface
     public function getAllTipoComprobante(){
         $tipoComprobante = $this->tipoComprobanteRepository->all();
         return $tipoComprobante;
+    }
+
+    public function getAllAlmacen(){
+        return $this->almacenRepository->all();
     }
 }

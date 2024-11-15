@@ -9,4 +9,6 @@ interface IngresoProductoServiceInterface
     public function deleteIngreso($id);
     public function getAllLabelProveedor();
     public function getAllTipoComprobante();
+    public function getAllAlmacen();
+    public function updateRegistro($idRegistro,$estado,$observacion);
 }
