@@ -54,10 +54,11 @@ class IngresoProductoService implements IngresoProductoServiceInterface
                     ->map(function($x){
                         $x->fechaIngresoPerso = Carbon::parse($x->fechaIngreso)->format('d-m-Y');
                         $x->fechaMovimiento = Carbon::parse($x->fechaMovimiento)->format('d-m-Y');
-                        $x->Usuario = $x->Usuario;
+                        $x->Usuario = $x->Usuario->makeHidden(['pass','tokenSesion','registroSesion','estadoUsuario','horaSesion','bandeja']);
                         $x->Registro = $x->RegistroProducto;
-                        $x->Producto = $x->RegistroProducto ? $x->RegistroProducto->DetalleComprobante->Producto : null;
+                        $x->Producto = $x->RegistroProducto ? $x->RegistroProducto->DetalleComprobante->Producto->makeHidden(['descripcionProducto','imagenProducto1','imagenProducto2','imagenProducto3','imagenProducto4']) : null;
                         $x->Proveedor = $x->RegistroProducto ? $x->RegistroProducto->DetalleComprobante->Comprobante->Preveedor : null;
+                        $x->Almacen = $x->RegistroProducto ? $x->RegistroProducto->Almacen : null;
                         return $x;
                     });
         return $ingreso;

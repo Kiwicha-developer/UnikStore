@@ -89,6 +89,8 @@ use App\Services\PdfService;
 use App\Services\PdfServiceInterface;
 use App\Services\PlataformaService;
 use App\Services\PlataformaServiceInterface;
+use App\Services\TrasladoService;
+use App\Services\TrasladoServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -140,6 +142,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ComisionPlataformaRepositoryInterface::class,ComisionPlataformaRepository::class);
         $this->app->bind(TipoProductoRepositoryInterface::class,TipoProductoRepository::class);
         $this->app->bind(CaracteristicasSugerenciasRepositoryInterface::class,CaracteristicasSugerenciasRepository::class);
+        $this->app->bind(TrasladoServiceInterface::class,TrasladoService::class);
     }
 
     /**

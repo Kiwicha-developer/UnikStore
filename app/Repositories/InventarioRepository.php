@@ -72,7 +72,6 @@ class InventarioRepository implements InventarioRepositoryInterface
             $inventario = Inventario::where('idProducto', '=', $idProducto)
             ->where('idAlmacen', '=', $idAlmacen)
             ->first();
-
             if ($inventario) {
                 $inventario->stock++;
                 $inventario->save();
