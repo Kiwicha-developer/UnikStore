@@ -83,6 +83,8 @@ use App\Repositories\VistaRepository;
 use App\Repositories\VistaRepositoryInterface;
 use App\Services\ConfiguracionService;
 use App\Services\ConfiguracionServiceInterface;
+use App\Services\DashboardService;
+use App\Services\DashboardServiceInterface;
 use App\Services\EgresoProductoService;
 use App\Services\EgresoProductoServiceInterface;
 use App\Services\PdfService;
@@ -143,6 +145,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TipoProductoRepositoryInterface::class,TipoProductoRepository::class);
         $this->app->bind(CaracteristicasSugerenciasRepositoryInterface::class,CaracteristicasSugerenciasRepository::class);
         $this->app->bind(TrasladoServiceInterface::class,TrasladoService::class);
+        $this->app->bind(DashboardServiceInterface::class,DashboardService::class);
     }
 
     /**

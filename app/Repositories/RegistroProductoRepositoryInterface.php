@@ -5,6 +5,8 @@ interface RegistroProductoRepositoryInterface
 {
     public function getOne($column,$data);
     public function getAllByColumn($column,$data);
+    public function getAllByColumnByThisMonth($column,$data);
+    public function getAllByColumnByToday($column,$data);
     public function searchOne($column,$data);
     public function searchList($column,$data);
     public function getByIngreso($month);

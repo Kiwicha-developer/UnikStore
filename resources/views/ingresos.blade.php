@@ -98,9 +98,10 @@
                     <div class="col-4 col-md-1 d-none d-sm-none d-md-block">
                         <small>
                             <a class="decoration-link" href="javascript:void(0)" 
-                                onclick='dataModalDetalle("{{$registro->RegistroProducto->DetalleComprobante->Producto->nombreProducto}}","{{$registro->RegistroProducto->DetalleComprobante->Comprobante->Preveedor->nombreProveedor}}","{{$registro->RegistroProducto->numeroSerie}}","{{$registro->RegistroProducto->estado}}","{{$registro->Usuario->user}}","{{$registro->RegistroProducto->fechaMovimiento->format("d/m/Y")}}","{{$registro->RegistroProducto->observacion}}",{{$registro->RegistroProducto->idRegistro}})'>
-                                {{$registro->RegistroProducto->estado}}
+                            onclick="dataModalDetalle({{ json_encode($registro) }})">
+                            {{ $registro->RegistroProducto->estado }}
                             </a>
+
                         </small>
                     </div>
                     <div class="col-4 col-md-1">
@@ -188,7 +189,7 @@
             </div>
             <div class="col-6 pt-2">
                 <label class="form-label fw-bold">Ubicacion:</label>
-                <select id="" class="form-select" disabled>
+                <select id="almacen-modal-detail" class="form-select" disabled>
                     @foreach ($almacenes as $almacen)
                         <option value="{{$almacen->idAlmacen}}">{{$almacen->descripcion}}</option>
                     @endforeach
@@ -261,14 +262,7 @@ document.getElementById('search').addEventListener('input', function() {
                             document.getElementById('search').value = item.numeroSerie; 
                             suggestions.innerHTML = ''; 
                             let fechaMovimiento = new Date(item.Registro.fechaMovimiento);
-                            dataModalDetalle(item.Registro.detalle_comprobante.producto.nombreProducto,
-                                            item.Proveedor.nombreProveedor,
-                                            item.numeroSerie,
-                                            item.Registro.estado,
-                                            item.Usuario.user,
-                                            fechaMovimiento.getDate() + '/' + fechaMovimiento.getMonth() + '/' + fechaMovimiento.getFullYear(),
-                                            item.Registro.observacion,
-                                            item.Registro.idRegistro);
+                            dataModalDetalle(item);
                         });
                         
                         divRow.appendChild(divColProduct);
@@ -286,7 +280,7 @@ document.getElementById('search').addEventListener('input', function() {
     }
 });
 
-function dataModalDetalle(producto,comprobante,serie,estado,usuario,fecha,obser,idregistro){
+function dataModalDetalle(json){
     let myModal = new bootstrap.Modal(document.getElementById('detalleModal'));
     let titleProduct = document.getElementById('titleproduct-modal-detail');
     let serialNumber = document.getElementById('serialnumber-modal-detail');
@@ -296,13 +290,13 @@ function dataModalDetalle(producto,comprobante,serie,estado,usuario,fecha,obser,
     let observacion = document.getElementById('obs-modal-detail');
     let proveedor = document.getElementById('proveedor-modal-detail');
     let hidden = document.getElementById('idregistro-modal-detail');
+    let ubicacion = document.getElementById('almacen-modal-detail');
 
     let optionInvalid = document.createElement('option');
+    titleProduct.textContent = json.registro_producto.detalle_comprobante.producto.nombreProducto;
+    serialNumber.textContent = json.registro_producto.numeroSerie;
 
-    titleProduct.textContent = producto;
-    serialNumber.textContent = serie;
-
-    if (estado === 'INVALIDO') {
+    if (json.registro_producto.estado === 'INVALIDO') {
         optionInvalid.value = 'INVALIDO';
         optionInvalid.textContent = 'Invalido';
         optionInvalid.selected = true;
@@ -313,7 +307,7 @@ function dataModalDetalle(producto,comprobante,serie,estado,usuario,fecha,obser,
         }
 
         state.disabled = true;
-    }else if (estado === 'ENTREGADO') {
+    } else if (json.registro_producto.estado === 'ENTREGADO') {
         optionInvalid.value = 'ENTREGADO';
         optionInvalid.textContent = 'Entregado';
         optionInvalid.selected = true;
@@ -325,26 +319,33 @@ function dataModalDetalle(producto,comprobante,serie,estado,usuario,fecha,obser,
 
         state.disabled = true;
     } else {
-        // Verificar si el option existe antes de intentar eliminarlo
-        let existingOption = state.querySelector('option[value="INVALIDO"]');
-        if (existingOption) {
-            existingOption.remove();
+        // Verificar si las opciones existen antes de intentar eliminarlas
+        let existingInvalidOption = state.querySelector('option[value="INVALIDO"]');
+        if (existingInvalidOption) {
+            existingInvalidOption.remove();
         }
 
-        if (!state.querySelector('option[value="ENTREGADO"]')) {
-            state.appendChild(optionInvalid);
+        let existingEntregadoOption = state.querySelector('option[value="ENTREGADO"]');
+        if (existingEntregadoOption) {
+            existingEntregadoOption.remove();
         }
-
 
         state.disabled = false;
-        state.value = estado;
+        state.value = json.registro_producto.estado;
     }
 
-    proveedor.textContent = comprobante;
-    user.textContent = usuario;
-    date.textContent = fecha;
-    observacion.value = obser;
-    hidden.value = idregistro;
+
+    let fecha = new Date(json.registro_producto.fechaMovimiento);
+    let day = fecha.getDate().toString().padStart(2, '0');
+    let month = (fecha.getMonth() + 1).toString().padStart(2, '0');
+    let year = fecha.getFullYear();
+    console.log(typeof fecha.getDate());
+    proveedor.textContent = json.registro_producto.detalle_comprobante.comprobante.preveedor.nombreProveedor;
+    user.textContent = json.usuario.user;
+    date.textContent = `${day}/${month}/${year}`;
+    observacion.value = json.registro_producto.observacion;
+    hidden.value = json.registro_producto.idRegistro;
+    ubicacion.value = json.registro_producto.idAlmacen;
     myModal.show();
 }
 

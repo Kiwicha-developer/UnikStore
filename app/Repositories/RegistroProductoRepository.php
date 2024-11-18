@@ -26,6 +26,16 @@ class RegistroProductoRepository implements RegistroProductoRepositoryInterface
         return RegistroProducto::where($column,'=', $data)->get();
     }
 
+    public function getAllByColumnByThisMonth($column,$data){
+        $this->validateColumns($column);
+        return RegistroProducto::where($column,'=',$data)->whereMonth('fechaMovimiento','=',now()->month)->get();
+    }
+
+    public function getAllByColumnByToday($column,$data){
+        $this->validateColumns($column);
+        return RegistroProducto::where($column,'=',$data)->whereDate('fechaMovimiento','=',now()->toDateString())->get();
+    }
+
     public function searchOne($column, $data)
     {
         $this->validateColumns($column);

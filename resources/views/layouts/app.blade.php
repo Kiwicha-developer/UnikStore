@@ -23,14 +23,35 @@
     .text-danger{
         color: #f34646 !important;
     }
+
+    .text-transparent{
+        color: #0000002a;
+    }
+
     .truncate{
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .bg-info{
+        background-color:#34b277 !important;
+    }
     
     .bg-sistema-uno{
         background-color:#043e69;
+    }
+
+    .bg-danger{
+        background-color:#f34646 !important;
+    }
+
+    .bg-warning{
+        background-color:#f1b100 !important;
+    }
+
+    .bg-marron{
+        background-color: #805300;
     }
     
     .bg-sistema-dos{
@@ -143,14 +164,35 @@
     }
     
     @media (max-width: 576px) { /* Para dispositivos con un ancho m��ximo de 576px */
-    .offcanvas {
-        width:75%;
+        .offcanvas {
+            width:75%;
+        }
+        
+        .modal {
+            z-index: 9990 !important; /* Establece el z-index para todos los modales */
+        }
     }
-    
-    .modal {
-        z-index: 9990 !important; /* Establece el z-index para todos los modales */
+
+    .grafico-pastel {
+        width: 100%;
+        aspect-ratio: 1 / 1; 
+        border-radius: 50%;
+        position: relative; 
     }
-}
+
+    .total-items{
+        width: 75%;
+        height: 75%;
+        background-color: white; 
+        border-radius: 50%; 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%); 
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+    }
     
 </style>
 <body>
@@ -179,7 +221,7 @@
                         </div>
                         <div class="col-6 col-md-9 d-flex justify-content-start align-items-center">
                             <img class="d-none d-sm-block" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
-                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.13</span></h5>
+                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.14</span></h5>
                         </div>
                         <div class="col-4 col-md-2" style="position:relative;z-index:9000">
                             <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav" style="cursor:pointer">
@@ -217,7 +259,7 @@
             <img class="d-sm-none" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
             <div class="row d-block d-sm-none">
                 <h5 class=" text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology</h5>
-                <small class="text-secondary">v1.13</small>
+                <small class="text-secondary">v1.14</small>
             </div>
             <h5 class="d-none d-sm-flex offcanvas-title text-light">Men&uacute;</h5>
             <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>

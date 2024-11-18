@@ -32,6 +32,15 @@ class InventarioRepository implements InventarioRepositoryInterface
         return Inventario::where($column,'=', $data)->get();
     }
 
+    public function getAllWhereFindStock(){
+        return Inventario::where('stock','>',0)->get();
+    }
+
+    public function getAllByColumnWhereFindStock($column,$data){
+        $this->validateColumns($column);
+        return Inventario::where($column,'=',$data)->where('stock','>',0)->get();
+    }
+
     public function searchOne($column, $data)
     {
         $this->validateColumns($column);
