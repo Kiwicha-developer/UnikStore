@@ -11,10 +11,7 @@ interface ProductoRepositoryInterface
     public function searchList($column,$data);
     public function searchIntensiveProducts($data);
     public function create(array $productoData);
-    public function createSpecs($idCaracteristica,$id,$description);
     public function update($idProducto, array $data);
-    public function updateSpecs($idCaracteristica,$id,$description);
-    public function deleteSpect($idProducto,$idCaracteristica);
     public function getCodes();
     public function validateSerial($id,$serial);
 }

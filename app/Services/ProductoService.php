@@ -7,6 +7,7 @@ use App\Repositories\GrupoProductoRepositoryInterface;
 use App\Repositories\CategoriaProductoRepositoryInterface;
 use App\Repositories\ProveedorRepositoryInterface;
 use App\Repositories\AlmacenRepositoryInterface;
+use App\Repositories\CaracteristicasProductoRepositoryInterface;
 use App\Repositories\InventarioRepositoryInterface;
 use App\Repositories\ProveedorInventarioRepositoryInterface;
 use Exception;
@@ -21,6 +22,7 @@ class ProductoService implements ProductoServiceInterface
     protected $almacenRepository;
     protected $inventarioRepository;
     protected $proveedorInventarioRepository;
+    protected $caracteristicasProductoRepository;
     
     private $path = '/home3/unikstor/public_html/images/productos';
 
@@ -31,7 +33,8 @@ class ProductoService implements ProductoServiceInterface
                                 ProveedorRepositoryInterface $proveedorRepository,
                                 AlmacenRepositoryInterface $almacenRepository,
                                 InventarioRepositoryInterface $inventarioRepository,
-                                ProveedorInventarioRepositoryInterface $proveedorInventarioRepository)
+                                ProveedorInventarioRepositoryInterface $proveedorInventarioRepository,
+                                CaracteristicasProductoRepositoryInterface $caracteristicasProductoRepository)
     {
         $this->productoRepository = $productoRepository;
         $this->marcaRepository = $marcaRepository;
@@ -41,6 +44,7 @@ class ProductoService implements ProductoServiceInterface
         $this->almacenRepository = $almacenRepository;
         $this->inventarioRepository = $inventarioRepository;
         $this->proveedorInventarioRepository = $proveedorInventarioRepository;
+        $this->caracteristicasProductoRepository = $caracteristicasProductoRepository;
     }
     
     public function getAllAlmacen(){
@@ -226,21 +230,21 @@ class ProductoService implements ProductoServiceInterface
         if(!empty($arrayCreate)){
             foreach($arrayCreate as $spec =>  $desc){
                 if(!empty($spec) && !empty($desc)){
-                    $this->productoRepository->createSpecs($spec,$id,$desc);
+                    $this->caracteristicasProductoRepository->insertCaracteristica($spec,$id,$desc);
                 }
             }
         }
         if(!empty($arrayUpdate)){
             foreach($arrayUpdate as $spec =>  $desc){
                 if(!empty($spec) && !empty($desc)){
-                    $this->productoRepository->updateSpecs($spec,$id,$desc);
+                    $this->caracteristicasProductoRepository->updateCaracteristica($spec,$id,$desc);
                 }
             }
         }
     }
 
     public function deleteCaracteristicaXProduct($idProducto,$idCaracteristica){
-        $this->productoRepository->deleteSpect($idProducto,$idCaracteristica);
+        $this->caracteristicasProductoRepository->deleteSpect($idProducto,$idCaracteristica);
     }
     
     public function validateState($id){

@@ -174,7 +174,7 @@
                     $ingresoEdit = "";
                 @endphp
                 @foreach ($user->Accesos as $access)
-                    @if($access->idVista  == 8)
+                    @if($access->idVista  == 10)
                     @php
                         $ingresoEdit = "input-edit";
                     @endphp

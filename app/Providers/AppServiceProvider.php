@@ -41,6 +41,8 @@ use App\Repositories\AlmacenRepositoryInterface;
 use App\Repositories\AlmacenRepository;
 use App\Repositories\CaracteristicasGrupoRepository;
 use App\Repositories\CaracteristicasGrupoRepositoryInterface;
+use App\Repositories\CaracteristicasProductoRepository;
+use App\Repositories\CaracteristicasProductoRepositoryInterface;
 use App\Repositories\CaracteristicasRepository;
 use App\Repositories\CaracteristicasRepositoryInterface;
 use App\Repositories\CaracteristicasSugerenciasRepository;
@@ -146,6 +148,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CaracteristicasSugerenciasRepositoryInterface::class,CaracteristicasSugerenciasRepository::class);
         $this->app->bind(TrasladoServiceInterface::class,TrasladoService::class);
         $this->app->bind(DashboardServiceInterface::class,DashboardService::class);
+        $this->app->bind(CaracteristicasProductoRepositoryInterface::class,CaracteristicasProductoRepository::class);
     }
 
     /**

@@ -68,26 +68,15 @@ class ProductoRepository implements ProductoRepositoryInterface
     
     public function searchIntensiveProducts($query){
         $productos = Producto::where('codigoProducto', 'LIKE', '%'.$query.'%')
-                     ->orWhere('partNumber', 'LIKE', '%'.$query.'%')
-                     ->orWhere('modelo', 'LIKE', '%'.$query.'%')
-                     ->get();
+                            ->orWhere('partNumber', 'LIKE', '%'.$query.'%')
+                            ->orWhere('modelo', 'LIKE', '%'.$query.'%')
+                            ->get();
         return $productos;
     }
 
     public function create(array $productoData)
     {
         return Producto::create($productoData);
-    }
-    
-    public function createSpecs($idSpec,$idProduct,$desc){
-        try{
-            DB::beginTransaction();
-            DB::statement('CALL sp_insert_caracteristicasxproducto(?,?,?)',[$idSpec,$idProduct,$desc]);
-            DB::commit();
-        }catch(Exception $e){
-            DB::rollBack();
-        }
-         
     }
     
     public function update($idProducto, array $productoData)
@@ -97,22 +86,6 @@ class ProductoRepository implements ProductoRepositoryInterface
         return $producto;
     }
     
-    public function updateSpecs($idSpec,$idProduct,$desc){
-        try{
-            DB::beginTransaction();
-            DB::statement('CALL sp_update_caracteristicaxproducto(?,?,?)',[$idSpec,$idProduct,$desc]);
-            DB::commit();
-        }catch(Exception $e){
-            DB::rollBack();
-        }
-         
-    }
-
-    public function deleteSpect($idProducto,$idCaracteristica){
-        $caracteristica = Caracteristicas_Producto::where('idProducto','=',$idProducto)->where('idCaracteristica','=',$idCaracteristica)->first();
-        $caracteristica->delete();
-    }
-
     private function validateColumns($column){
         if (!in_array($column, $this->modelColumns)) {
             throw new \InvalidArgumentException("La columna '$column' no es válida.");

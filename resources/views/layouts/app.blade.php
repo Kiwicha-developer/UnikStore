@@ -53,9 +53,17 @@
     .bg-marron{
         background-color: #805300;
     }
+
+    .bg-purple{
+        background-color: #7b4dc0;
+    }
     
     .bg-sistema-dos{
         background-color:#00b1b9 !important;
+    }
+
+    .bg-green{
+        background-color: #007e43;
     }
     
     .btn-success{
