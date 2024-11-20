@@ -36,7 +36,7 @@ class Comprobante extends Model
         'idProveedor' => 'int',
         'idTipoComprobante' => 'int',
         'idUser' => 'int',
-        'totalCompra' => 'decimal:2',
+        'totalCompra' => 'float',
         'fechaRegistro' => 'date'
     ];
     

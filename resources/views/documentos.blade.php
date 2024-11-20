@@ -27,7 +27,12 @@
             <h2><i class="bi bi-folder-fill"></i> Documentos <span class="text-capitalize text-secondary fw-light" ><em>({{$fecha->translatedFormat('F')}})</em></span></h2>
         </div>
         <div class="col-6 col-md-6 text-end">
-            <a href="{{route('ingresos', [now()->format('Y-m')])}}" class="btn btn-info mb-2"><i class="bi bi-file-earmark-plus-fill"></i> Ingresos</a>
+            @foreach ($user->Accesos as $vista)
+                @if($vista->idVista == 11) 
+                    <a href="{{route('traslados')}}" class="btn btn-info mb-2"><i class="bi bi-arrow-left-right"></i> Traslado</a>
+                @endif
+            @endforeach
+            <a href="{{route('ingresos', [now()->format('Y-m')])}}" class="btn btn-success mb-2"><i class="bi bi-file-earmark-plus-fill"></i> Ingresos</a>
             <a href="{{route('egresos', [now()->format('Y-m')])}}" class="btn btn-warning mb-2"><i class="bi bi-file-earmark-minus-fill"></i> Egresos</a>
         </div>
     </div>
@@ -42,9 +47,6 @@
                         <small>Proveedor</small>
                     </div>
                     <div class="col-md-2 d-none d-sm-none d-md-block">
-                        <small>RUC</small>
-                    </div>
-                    <div class="col-md-2 d-none d-sm-none d-md-block">
                         <small>Documento</small>
                     </div>
                     <div class="col-md-2 text-start d-none d-sm-none d-md-block">
@@ -52,6 +54,12 @@
                     </div>
                     <div class="col-3 col-md-1">
                         <small>Registros</small>
+                    </div>
+                    <div class="col-md-1 d-none d-sm-none d-md-block">
+                        <small>Usuario</small>
+                    </div>
+                    <div class="col-md-1 d-none d-sm-none d-md-block">
+                        <small>Estado</small>
                     </div>
                     <div class="col-3 col-md-2">
                         <small class=" d-none d-sm-none d-md-inline">Fecha de creaci&oacuten</small>
@@ -65,9 +73,6 @@
                     <div class="col-8 col-md-3 text-start">
                         <small class="fw-bold">{{$documento->Preveedor->razSocialProveedor}}</small>
                     </div>
-                    <div class="col-md-2 d-none d-sm-none d-md-block">
-                        <small>{{$documento->Preveedor->rucProveedor}}</small>
-                    </div>
                     <div class="col-4 col-md-2">
                         <small>{{$documento->TipoComprobante->descripcion}}</small>
                     </div>
@@ -76,6 +81,12 @@
                     </div>
                     <div class="col-3 col-md-1">
                         <small>{{$documento->DetalleComprobante->count()}}</small>
+                    </div>
+                    <div class="col-md-1 d-none d-sm-none d-md-block">
+                        <small>{{$documento->Usuario->user}}</small>
+                    </div>
+                    <div class="col-md-1 d-none d-sm-none d-md-block {{$documento->estado == "REGISTRADO" ? 'text-success' : ($documento->estado == "INVALIDO" ? 'text-danger' : 'text-warning')}}">
+                        <small>{{$documento->estado}}</small>
                     </div>
                     <div class="col-3 col-md-2">
                         <small>{{$documento->fechaRegistro->format('Y-m-d')}}</small>

@@ -28,8 +28,9 @@
             @if($validate)
             <div class="row mb-2">
                 <div class="col-6 col-md-2">
-                    <label class="form-label">Moneda:</label>
-                    <select class="form-select" name="comprobante[moneda]">
+                    <label class="form-label" style="color:red" id="select-label-moneda">Moneda:</label>
+                    <select class="form-select" onchange="changeLabel(this,'select-label-moneda')" id="select-moneda"  name="comprobante[moneda]">
+                        <option class="text-danger" value="" selected>-Elige una moneda-</option>
                         <option value="SOL">Soles</option>
                         <option value="DOLAR">Dolares</option>
                     </select>
@@ -52,19 +53,37 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4 d-none d-md-block">
+                <div class="col-md-2 d-none d-md-block">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Descuento:</label>
+                    <input type="number" id="importe-descuento-comprobante" class="form-control" name="" step="0.01" id="" value="0.00">
                 </div>
                 <div class="col-6 col-md-2 text-end">
                     <label class="form-label">Importe Total:</label>
                     <input type="number" id="importe-total-comprobante" name="comprobante[total]" step="0.01" class="form-control" value="0.00" readonly>
                 </div>
+                <div class="col-md-6 mt-2">
+                    
+                </div>
+                <div class="col-3 col-md-6 mt-2 text-end">
+                    <button type="button" onclick="generatePlantilla()" class="btn bg-success text-light">Plantilla <i class="bi bi-file-earmark-excel-fill"></i></button>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#registerModal">Producto <i class="bi bi-cart-plus-fill"></i></button>
+                </div>
             </div>
             @else
+            <div class="row">
+                <div class="col-md-6 mb-4 ">
+                    <button type="button" onclick="deleteForm({{$documento->idComprobante}})" class="btn btn-danger {{$documento->estado == 'INVALIDO' ? 'd-none' : ''}}">
+                        <i class="bi bi-trash3"></i> Eliminar {{$documento->TipoComprobante->descripcion}}
+                    </button>
+                </div>
                 @if(count($pdf) > 0)
-                    <div class="col-md-12 mb-4">
+                    <div class="col-md-6 text-end mb-4">
                         <button type="button" class="btn btn-danger" onclick="openPdfInNewWindow()"><i class="bi bi-file-earmark-pdf"></i> Series</button>
                     </div>
                 @endif
+            </div>
             @endif
             <ul class="list-group" id="ul-ingreso" style="max-height: 60vh;overflow-x: hidden; overflow-y: auto;">
               @if($validate)
@@ -87,9 +106,6 @@
                     <div class="col-2 col-md-2">
                         <small class="d-none d-md-inline">Precio Total</small>
                         <small class="d-md-none">P.T</small>
-                    </div>
-                    <div class="col-3 col-md-2 text-end">
-                        <button type="button" class="btn h-100 pt-0 pb-0 hidden-button text-light border hover-sistema-uno" data-bs-toggle="modal" data-bs-target="#registerModal"><i class="bi bi-cart-plus-fill fs-4"></i></button>
                     </div>
                 </div>
               </li>
@@ -180,12 +196,13 @@
             </ul>
         </div>
         @if($validate)
-        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <button type="button" onclick="deleteForm({{$documento->idComprobante}})" class="btn btn-danger"><i class="bi bi-trash3"></i> Eliminar {{$documento->TipoComprobante->descripcion}}</button>
+        </div>
         <div class="col-md-6 text-center">
             <button type="button" onclick="validateSeries({{$documento->idProveedor}})" class="btn btn-success" id="btnSubmit"  disabled><i class="bi bi-floppy-fill"></i> Registrar</button>
         </div>
         <div class="col-md-3 text-end">
-            <button type="button" onclick="generatePlantilla()" class="btn bg-success text-light">Plantilla <i class="bi bi-file-earmark-excel-fill"></i></button>
         </div>
         @endif
     </div>
@@ -261,6 +278,10 @@
     </div>
     <br>
     <input type="file" onchange="readExcel(this)" id="excel-file" class="d-none" /> <!--Input reusable -->
+    <form action="{{route('deletecomprobante')}}" method="post" id="form-deletecomprobante">
+        @csrf
+        <input type="hidden" name="id" id="hidden-form-deletecomprobante">
+    </form>
 </div>
 <script src="{{ route('js.documento-scripts') }}"></script>
 <script>
@@ -285,9 +306,15 @@
                 const values = Object.values(jsonData);
                 if(key === 'SERIES'){
                     values.forEach(function(x){
+                        if(x.SERIES == 'nulo'){
+                            createItemList(listData,'0');
+                        }else{
+                            createItemList(listData,x.SERIES);
+                        }
                         console.log(x.SERIES); 
-                        createItemList(listData,x.SERIES);
+                        
                         countProducts(listData);
+                        invalidarChecks(listData);
                         updateBtnAdd();
                     });
                     listData = '';
@@ -307,8 +334,21 @@
         listData = id;
     }
 
+    function invalidarChecks(id){
+        let inputsText = document.querySelectorAll('.input-serial-'+id);
+        let checks = document.querySelectorAll('.check-serial-'+id);
+
+        inputsText.forEach(function(x){
+            x.readOnly = true;
+        });
+
+        checks.forEach(function(x){
+            x.checked = true;
+        });
+    }
+
     function generatePlantilla(){
-        const headers = ["SERIES","!!Solo coloca valores en la columna de series!!"];
+        const headers = ["SERIES","!!Solo coloca valores en la columna de series(si no tiene serie coloca la palabra 'nulo')!!"];
 
         // Crear una fila de datos vacíos para las cabeceras
         const data = [headers]; // Solo cabeceras, sin datos
@@ -381,6 +421,32 @@
             }
         });
     }
+
+    function deleteForm(idComprobante){
+        let formDelete = document.getElementById('form-deletecomprobante');
+        let hiddenDelete = document.getElementById('hidden-form-deletecomprobante');
+        
+        Swal.fire({
+        title: '¿Seguro de eliminar este documento?',
+        text: '!Esta acción no se podra revertir !',
+        icon: 'warning',
+        iconColor: '#00b1b9',
+        showCancelButton: true, 
+        confirmButtonText: 'Aceptar',  
+        cancelButtonText: 'Cancelar', 
+        customClass: {
+            confirmButton: 'btn btn-danger',  
+            cancelButton: 'btn btn-secondary'
+        },
+        reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                hiddenDelete.value = idComprobante;
+                formDelete.submit();
+            }
+        });
+    }
+
 </script>
 
 @endsection

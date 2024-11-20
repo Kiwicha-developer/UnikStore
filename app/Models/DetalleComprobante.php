@@ -33,8 +33,8 @@ class DetalleComprobante extends Model
         'idComprobante' => 'int',
         'idProducto' => 'int',
         'cantidad' => 'int',
-        'precioUnitario' => 'decimal:9',
-        'precioCompra' => 'decimal:9'
+        'precioUnitario' => 'float',
+        'precioCompra' => 'float'
     ];
     
     public function RegistroProducto()

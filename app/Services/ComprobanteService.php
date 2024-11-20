@@ -10,6 +10,7 @@ use App\Repositories\RegistroProductoRepositoryInterface;
 use App\Repositories\IngresoProductoRepositoryInterface;
 use App\Repositories\InventarioRepositoryInterface;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class ComprobanteService implements ComprobanteServiceInterface
 {
@@ -105,7 +106,53 @@ class ComprobanteService implements ComprobanteServiceInterface
             }
         }
     }
-    
+
+    public function deleteComprobante($idComprobante)
+    {
+        DB::beginTransaction();
+
+        try {
+            $comprobante = $this->comprobanteRepository->getOne('idComprobante', $idComprobante);
+
+            if (!$comprobante) {
+                throw new Exception("Comprobante no encontrado.");
+            }
+
+            $updated = true;
+            $totalCompra = $comprobante->totalCompra;
+
+            foreach ($comprobante->DetalleComprobante as $detalle) {
+                $precioCompra = $detalle->precioCompra;
+                foreach ($detalle->RegistroProducto as $registro) {
+                    
+                    if ($registro->estado != 'ENTREGADO' && $registro->estado != 'INVALIDO') {
+                        $dataReg = ['estado' => 'INVALIDO'];
+                        $precioCompra -= $detalle->precioUnitario;
+                        $totalCompra -= $detalle->precioUnitario;
+
+                        $this->registroProductoRepository->update($registro->idRegistro, $dataReg);
+                        $this->inventarioRepository->removeStock($detalle->idProducto, $registro->idAlmacen);
+                    } else {
+                        $updated = false;
+                    }
+                }
+                $dataDetail = ['precioCompra' => $precioCompra];
+                $this->detalleComprobanteRepository->update($detalle->idDetalleComprobante, $dataDetail);
+            }
+
+            $dataComprobante = ['totalCompra' => $totalCompra];
+
+            if ($updated) {
+                $dataComprobante['estado'] = 'INVALIDO';
+            }
+            $this->comprobanteRepository->update($idComprobante, $dataComprobante);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
     public function searchAjaxComprobante($column,$data){
         $comprobantes = $this->comprobanteRepository->searchList($column,$data)
                         ->take(5)

@@ -5,6 +5,7 @@
     var arrayAdquisiciones = @json($adquisiciones);
     
     var index = 1;
+    var totalComprobante = 0;
     
     function sendIdToDelete(id){
         let inputDelete = document.getElementById('input-delete-ingreso');
@@ -229,7 +230,7 @@
         let divInputGroup = document.createElement('div');
         divInputGroup.classList.add('input-group','input-group-sm');
         let inputSerialNumber = document.createElement('input');
-        inputSerialNumber.classList.add('form-control','form-control-sm','input-serial');
+        inputSerialNumber.classList.add('form-control','form-control-sm','input-serial', 'input-serial-' + id);
         inputSerialNumber.type="text";
         if(serial != ''){
             inputSerialNumber.value = serial;
@@ -241,7 +242,7 @@
         let checkSerialNumber = document.createElement('input');
         checkSerialNumber.type = 'checkbox';
         checkSerialNumber.addEventListener('change', function() {disabledSerialNumber(this,inputSerialNumber);});
-        checkSerialNumber.classList.add('form-check-input');
+        checkSerialNumber.classList.add('form-check-input','check-serial-' + id);
         divInputGroupText.appendChild(checkSerialNumber);
         divInputGroup.appendChild(inputSerialNumber);
         divInputGroup.appendChild(divInputGroupText);
@@ -308,6 +309,7 @@
         let selectAdquisicion = document.getElementById('select-adquisicion');
         let labelAdquisicion = document.getElementById('select-label-adquisicion');
         let selectAlmacen = document.getElementById('select-almacen');
+        let selectMoneda = document.getElementById('select-moneda');
         let btnRegistro = document.getElementById('btnSubmit');
         let disabledBtn = false;
         
@@ -334,6 +336,11 @@
         if(selectAlmacen.value == ''){
             disabledBtn = true;
         }
+
+        if(selectMoneda.value == ''){
+            disabledBtn = true;
+        }
+
         btnRegistro.disabled = disabledBtn;
     }
     
@@ -352,6 +359,7 @@
         let selectsForm = divForm.querySelectorAll('select');
         let selectAdquisicion = document.getElementById('select-adquisicion');
         let selectAlmacen = document.getElementById('select-almacen');
+        let selectMoneda = document.getElementById('select-moneda');
         
         inputsForm.forEach(function(x){
             x.addEventListener('input',validateRegistro);
@@ -361,6 +369,7 @@
         });
         selectAdquisicion.addEventListener('change',validateRegistro);
         selectAlmacen.addEventListener('change',validateRegistro);
+        selectMoneda.addEventListener('change',validateRegistro);
     }
     
     function updateBtnAdd(){
@@ -374,8 +383,6 @@
     
     function countProducts(id){
         let importeTotal = 0;
-        let inputImporteTotal = document.getElementById('importe-total-comprobante');
-        inputImporteTotal.value = importeTotal.toFixed(2);
         let productos = document.querySelectorAll('[id^="header-preciototal-product-"]');
         
         let items = document.querySelectorAll('.item-list-product-' + id);
@@ -393,8 +400,14 @@
         productos.forEach(function(x){
             importeTotal += parseFloat(x.dataset.total);
         });
-        
-        inputImporteTotal.value = importeTotal.toFixed(2);
+        totalComprobante = importeTotal.toFixed(2);
+        updateTotalProductos();
+    }
+
+    function updateTotalProductos(){
+        let inputImporteTotal = document.getElementById('importe-total-comprobante');
+        let inputDescuento = document.getElementById('importe-descuento-comprobante');
+        inputImporteTotal.value = totalComprobante - inputDescuento.value;
     }
     
     function disabledSerialNumber(check,input){
@@ -413,6 +426,7 @@
     document.getElementById('modal-input-price').addEventListener('input', validateDisabledRegistro);
     document.getElementById('modal-input-product').addEventListener('input', validateDisabledRegistro);
     document.getElementById('modal-select-medida').addEventListener('change', validateDisabledRegistro);
+    document.getElementById('importe-descuento-comprobante').addEventListener('blur', updateTotalProductos);;
     
     document.addEventListener('DOMContentLoaded', function() {
         validateDisabledRegistro();

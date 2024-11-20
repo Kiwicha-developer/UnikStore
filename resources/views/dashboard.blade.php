@@ -127,4 +127,14 @@
                 );
         }
     </style>
+    <script>
+        window.onload = function() {
+            recargarPagina();  // Llama a la función cuando se carga la página
+        }
+        function recargarPagina() {
+            setTimeout(function() {
+                location.reload();  // Recarga la página después de 5 segundos
+            }, 60000);
+        }
+    </script>
 @endsection

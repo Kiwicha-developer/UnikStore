@@ -24,7 +24,6 @@
             <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-plus-fill"></i> Ingresos <span class="text-capitalize text-secondary fw-light" ><em>({{$fecha->translatedFormat('F')}})</em></span></h2>
         </div>
         <div class="col-6 col-md-6 text-end">
-            <a href="{{route('traslados')}}" class="btn btn-info"><i class="bi bi-arrow-left-right"></i> Traslado</a>
             <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ingresoModal"><i class="bi bi-file-earmark-plus"></i> Nuevo Registro</a>
         </div>
     </div>

@@ -2,6 +2,8 @@
 namespace App\Services;
 
 use App\Repositories\AlmacenRepositoryInterface;
+use App\Repositories\ComprobanteRepositoryInterface;
+use App\Repositories\DetalleComprobanteRepositoryInterface;
 use Carbon\Carbon;
 use App\Repositories\IngresoProductoRepositoryInterface;
 use App\Repositories\InventarioRepositoryInterface;
@@ -18,6 +20,8 @@ class IngresoProductoService implements IngresoProductoServiceInterface
     protected $headerService;
     protected $inventarioRepository;
     protected $almacenRepository;
+    protected $detalleComprobanteRepository;
+    protected $comprobanteRepository;
 
     public function __construct(IngresoProductoRepositoryInterface $ingresoRepository,
                                 ProveedorRepositoryInterface $proveedorRepository,
@@ -25,7 +29,9 @@ class IngresoProductoService implements IngresoProductoServiceInterface
                                 RegistroProductoRepositoryInterface $registroProductoRepository,
                                 HeaderServiceInterface $headerService,
                                 InventarioRepositoryInterface $inventarioRepository,
-                                AlmacenRepositoryInterface $almacenRepository
+                                AlmacenRepositoryInterface $almacenRepository,
+                                DetalleComprobanteRepositoryInterface $detalleComprobanteRepository,
+                                ComprobanteRepositoryInterface $comprobanteRepository
                                 )
     {
         $this->ingresoRepository = $ingresoRepository;
@@ -35,6 +41,8 @@ class IngresoProductoService implements IngresoProductoServiceInterface
         $this->headerService = $headerService;
         $this->inventarioRepository = $inventarioRepository;
         $this->almacenRepository = $almacenRepository;
+        $this->detalleComprobanteRepository = $detalleComprobanteRepository;
+        $this->comprobanteRepository = $comprobanteRepository;
     }
     
     public function getByComprobante($idComprobante){
@@ -72,9 +80,16 @@ class IngresoProductoService implements IngresoProductoServiceInterface
             $dataIngreso = ['idUser' => $this->headerService->getModelUser()->idUser];
 
             $registro = $ingreso->RegistroProducto;
+            $detalle = $registro->DetalleComprobante;
+            $comprobante = $detalle->Comprobante;
+
+            $dataDetalle = ['precioCompra' => $detalle->precioCompra - $detalle->precioUnitario];
+            $dataComprobante = ['totalCompra' => $comprobante->totalCompra - $detalle->precioUnitario];
             $this->registroProductoRepository->update($ingreso->idRegistro,$dataRegistro);
             $this->ingresoRepository->update($ingreso->idIngreso,$dataIngreso);
             $this->inventarioRepository->removeStock($registro->DetalleComprobante->idProducto,$registro->idAlmacen);
+            $this->detalleComprobanteRepository->update($detalle->idDetalleComprobante,$dataDetalle);
+            $this->comprobanteRepository->update($comprobante->idComprobante,$dataComprobante);
         }
     }
 

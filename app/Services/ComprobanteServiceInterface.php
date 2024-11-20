@@ -11,4 +11,5 @@ interface ComprobanteServiceInterface
     public function searchAjaxComprobante($column,$data);
     public function validateSeriesAjax($idProveedor,array $data);
     public function getAllAlmacen();
+    public function deleteComprobante($idComprobante);
 }

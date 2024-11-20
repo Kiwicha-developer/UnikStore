@@ -21,7 +21,7 @@ class TrasladoController extends Controller
     public function index(){
         $userModel = $this->headerService->getModelUser();
         foreach($userModel->Accesos as $acceso){
-            if($acceso->idVista == 8){
+            if($acceso->idVista == 11){
                 $almacenes = $this->trasladoService->getAllAlmacenes();
                 return view('traslado',['user' => $userModel,
                                         'almacenes' => $almacenes]);
@@ -35,7 +35,7 @@ class TrasladoController extends Controller
         $userModel = $this->headerService->getModelUser();
         $data = $request->input('traslado');
         foreach($userModel->Accesos as $acceso){
-            if($acceso->idVista == 8){
+            if($acceso->idVista == 11){
                 $this->trasladoService->updateRegistros($data);
                 $this->headerService->sendFlashAlerts('Traslado Existoso','Los registros se actualizaron correctamente','success','btn-success');
                 return back();

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/k6l792gpo9laee87mxdwb4ejosazo6qn95361l4i6xxunsdd/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{route('js.header-scripts')}}"></script>
 </head>
@@ -22,6 +23,10 @@
 
     .text-danger{
         color: #f34646 !important;
+    }
+
+    .text-warning{
+        color: #e48900 !important;
     }
 
     .text-transparent{
@@ -201,6 +206,8 @@
         justify-content: center; 
         align-items: center;
     }
+
+    
     
 </style>
 <body>
@@ -229,7 +236,7 @@
                         </div>
                         <div class="col-6 col-md-9 d-flex justify-content-start align-items-center">
                             <img class="d-none d-sm-block" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
-                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.14</span></h5>
+                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.15</span></h5>
                         </div>
                         <div class="col-4 col-md-2" style="position:relative;z-index:9000">
                             <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav" style="cursor:pointer">
@@ -267,7 +274,7 @@
             <img class="d-sm-none" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
             <div class="row d-block d-sm-none">
                 <h5 class=" text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology</h5>
-                <small class="text-secondary">v1.14</small>
+                <small class="text-secondary">v1.15</small>
             </div>
             <h5 class="d-none d-sm-flex offcanvas-title text-light">Men&uacute;</h5>
             <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -354,7 +361,7 @@
                         <div class="row" style="height: 300px">
                             <div class="col-md-12 h-100">
                                 <input type="hidden" name="id" value="" class="form-control" id="id-modal-bandeja">
-                                <textarea name="bandeja" type="text" maxlength="3000" class="form-control h-100" style="width: 100%; overflow-y: auto;">{{$user->bandeja}}</textarea>
+                                <textarea name="bandeja" id="text-bandeja" type="text" maxlength="3000" class="form-control h-100" style="width: 100%; overflow-y: auto;">{{$user->bandeja}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -392,6 +399,20 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
           return new bootstrap.Tooltip(tooltipTriggerEl)
         })
+    </script>
+    <script>
+        // Inicializa TinyMCE en el textarea
+        tinymce.init({
+            selector: '#text-bandeja', // Selector del campo de texto donde inicializamos TinyMCE
+            plugins: 'lists link image', // Plugins que quieres habilitar
+            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image | forecolor backcolor', // Barra de herramientas
+            menubar: false, // Desactiva el menú
+            height: 300, // Altura del editor
+            width: '100%',
+            content_style: "body { max-height: 100%; overflow-y: auto; }",
+            resize: false,
+            language: 'es'
+        });
     </script>
 </body>
 </html>

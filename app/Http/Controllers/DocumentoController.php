@@ -22,7 +22,6 @@ class DocumentoController extends Controller
     public function index($id,$bool){
         //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
-        
         //variables propias del controlador
         $documento = $this->comprobanteService->getOneById(decrypt($id));
         $ubicaciones = $this->comprobanteService->getAllAlmacen();
@@ -89,6 +88,21 @@ class DocumentoController extends Controller
                                             'documentos' => $documentos,
                                             'fecha' => $carbonMonth
                                         ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function deleteComprobante(Request $request){
+        $userModel = $this->headerService->getModelUser();
+        $idComprobante = $request->input('id');
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 8){
+                $documento = $this->comprobanteService->getOneById($idComprobante);
+                $this->comprobanteService->deleteComprobante($idComprobante);
+                return redirect()->route('documento', [ 'id' => encrypt($documento->idComprobante), 'bool' => 0 ]);
+
             }
         }
         $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');

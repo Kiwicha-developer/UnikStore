@@ -9,7 +9,7 @@
     <br>
     <div class="row">
         <div class="col-md-7">
-            <h2><a href="{{route('ingresos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> Traslados</h2>
+            <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> Traslados</h2>
         </div>
         <div class="col-md-5">
             <div class="input-group mb-3" style="z-index:1000">

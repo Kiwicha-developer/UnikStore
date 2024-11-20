@@ -66,7 +66,7 @@ class ComprobanteRepository implements ComprobanteRepositoryInterface
     }
     
     public function validateDuplicity($number,$type,$idProveedor){
-        $validate = Comprobante::where('numeroComprobante','=',$number)->where('idTipoComprobante','=',$type)->where('idProveedor','=',$idProveedor)->first();
+        $validate = Comprobante::where('estado','<>','INVALIDO')->where('numeroComprobante','=',$number)->where('idTipoComprobante','=',$type)->where('idProveedor','=',$idProveedor)->first();
         if($validate){
             return true;
         }else{
