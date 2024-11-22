@@ -16,6 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <script src="https://cdn.tiny.cloud/1/k6l792gpo9laee87mxdwb4ejosazo6qn95361l4i6xxunsdd/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{route('js.header-scripts')}}"></script>
 </head>
@@ -37,6 +38,10 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .bg-transparent{
+        background-color: #ffffff75 !important;
     }
 
     .bg-info{
@@ -206,8 +211,6 @@
         justify-content: center; 
         align-items: center;
     }
-
-    
     
 </style>
 <body>
@@ -236,7 +239,7 @@
                         </div>
                         <div class="col-6 col-md-9 d-flex justify-content-start align-items-center">
                             <img class="d-none d-sm-block" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
-                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.15</span></h5>
+                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.16</span></h5>
                         </div>
                         <div class="col-4 col-md-2" style="position:relative;z-index:9000">
                             <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav" style="cursor:pointer">
@@ -274,7 +277,7 @@
             <img class="d-sm-none" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
             <div class="row d-block d-sm-none">
                 <h5 class=" text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology</h5>
-                <small class="text-secondary">v1.15</small>
+                <small class="text-secondary">v1.16</small>
             </div>
             <h5 class="d-none d-sm-flex offcanvas-title text-light">Men&uacute;</h5>
             <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -348,11 +351,17 @@
      </div>
    </div>
    </form>
-   <form action="{{route('updatebandeja')}}" method="post">
+   <form action="{{route('updatebandeja')}}" method="post" id="form-update-bandeja">
     @csrf
         <div class="modal fade" id="modalBandeja" tabindex="-1" aria-labelledby="bandejaModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
+            <div class="modal-dialog" style="position: relative">
+                <div class="h-100 w-100 bg-transparent align-items-center justify-content-center" id="modalBandeja-total-body" style="position: absolute;z-index:1000;display:none">
+                    <div class="spinner-border text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                      <h5 class="text-secondary">&nbsp;Guardando...</h5>
+                </div>
+                <div class="modal-content " >
                     <div class="modal-header">
                         <h5 class="modal-title " id="bandejaModalLabel">Pendientes</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -377,23 +386,6 @@
     <footer>
     </footer>  
     @stack('scripts')
-    {{-- <script>
-        function viewUser(){
-            let options = document.getElementById('options-user');
-            options.style.display = 'block';
-        }
-        
-        function hideUser(){
-            let options = document.getElementById('options-user');
-            options.style.display = 'none';
-        }
-        
-        document.getElementById('header-user-nav').addEventListener('mouseover',viewUser);
-        document.getElementById('header-user-nav').addEventListener('mouseout',hideUser);
-        
-        document.getElementById('options-user').addEventListener('mouseover',viewUser);
-        document.getElementById('options-user').addEventListener('mouseout',hideUser);
-    </script> --}}
     <script>
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -401,17 +393,31 @@
         })
     </script>
     <script>
-        // Inicializa TinyMCE en el textarea
-        tinymce.init({
-            selector: '#text-bandeja', // Selector del campo de texto donde inicializamos TinyMCE
-            plugins: 'lists link image', // Plugins que quieres habilitar
-            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image | forecolor backcolor', // Barra de herramientas
-            menubar: false, // Desactiva el menú
-            height: 300, // Altura del editor
-            width: '100%',
-            content_style: "body { max-height: 100%; overflow-y: auto; }",
-            resize: false,
-            language: 'es'
+        document.getElementById('form-update-bandeja').addEventListener('submit',function(event){
+            event.preventDefault();
+
+            let form = document.getElementById('form-update-bandeja');
+            let formData = new FormData(form); 
+            
+
+            let loader = document.getElementById('modalBandeja-total-body');
+            loader.style.display = 'flex';
+
+            fetch(form.action, {
+                method: 'POST', 
+                body: formData, 
+                headers: {
+                    'Accept': 'application/json', 
+                },
+            })
+            .then(response => response.json())  
+            .then(data => {
+                loader.style.display = 'none';
+            })
+            .catch(error => {
+                loader.style.display = 'none';
+                console.log('Error: ' + error);
+            });
         });
     </script>
 </body>

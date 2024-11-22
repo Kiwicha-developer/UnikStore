@@ -55,10 +55,33 @@ class ProductoRepository implements ProductoRepositoryInterface
         $codes = Producto::select('idGrupo', DB::raw('MAX(codigoProducto) as codigoProducto'))->groupBy('idGrupo')->get(); 
         return $codes;
     }
+    public function total(){
+        return Producto::where('estadoProductoWeb','=','DISPONIBLE')->count();
+    }
+
+    public function getStockMinProducts() {
+        $query = "
+            SELECT p.*
+            FROM Producto p
+            JOIN Inventario i ON p.idProducto = i.idProducto
+            WHERE p.estadoProductoWeb = 'DISPONIBLE'
+            GROUP BY p.idProducto, p.stockMin
+            HAVING SUM(i.stock) < p.stockMin
+            AND SUM(i.stock) > 0
+        ";
+
+        $resultados = DB::select($query);
+
+        $productos = collect($resultados)->map(function ($item) {
+            return Producto::find($item->idProducto); 
+        });
+        return $productos;
+    }
     
     public function validateSerial($id,$serial){
         $serial = Producto::join('DetalleComprobante', 'DetalleComprobante.idProducto', '=', 'Producto.idProducto')
                     ->join('RegistroProducto', 'DetalleComprobante.idDetalleComprobante', '=', 'RegistroProducto.idDetalleComprobante')
+                    ->where('RegistroProducto.estado','<>','INVALIDO')
                     ->where('Producto.idProducto', '=', $id)
                     ->where('RegistroProducto.numeroSerie', '=', $serial)
                     ->first();

@@ -72,6 +72,7 @@ class RegistroProductoRepository implements RegistroProductoRepositoryInterface
     public function validateSerie($idProveedor,$serie){
         $response = RegistroProducto::join('DetalleComprobante','RegistroProducto.idDetalleComprobante','=','DetalleComprobante.idDetalleComprobante')
                                     ->join('Comprobante','DetalleComprobante.idComprobante','=','Comprobante.idComprobante')
+                                    ->where('RegistroProducto.estado','<>','INVALIDO')
                                     ->where('Comprobante.idProveedor','=',$idProveedor)
                                     ->where('RegistroProducto.numeroSerie','=',$serie)->first();
         return $response;

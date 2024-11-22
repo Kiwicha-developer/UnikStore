@@ -14,4 +14,5 @@ interface PublicacionRepositoryInterface
     public function update($id, array $data);
     public function getLast();
     public function searchByEgreso($serial);
+    public function getOldPublicaciones($cantidad);
 }

@@ -2,18 +2,26 @@
 namespace App\Services;
 
 use App\Repositories\InventarioRepositoryInterface;
+use App\Repositories\ProductoRepositoryInterface;
+use App\Repositories\PublicacionRepositoryInterface;
 use App\Repositories\RegistroProductoRepositoryInterface;
 
 class DashboardService implements DashboardServiceInterface
 {
     protected $registroRepository;
     protected $inventarioRepository;
+    protected $productoRepository;
+    protected $publicacionRepository;
 
     public function __construct(RegistroProductoRepositoryInterface $registroRepository,
-                                InventarioRepositoryInterface $inventarioRepository)
+                                InventarioRepositoryInterface $inventarioRepository,
+                                ProductoRepositoryInterface $productoRepository,
+                                PublicacionRepositoryInterface $publicacionRepository)
     {
         $this->registroRepository = $registroRepository;
         $this->inventarioRepository = $inventarioRepository;
+        $this->productoRepository = $productoRepository;
+        $this->publicacionRepository = $publicacionRepository;
     }
 
     public function getRegistrosXEstados(){
@@ -34,5 +42,17 @@ class DashboardService implements DashboardServiceInterface
 
     public function getInventoryByAlmacen($idAlmacen){
         return $this->inventarioRepository->getAllByColumnWhereFindStock('idAlmacen',$idAlmacen);
+    }
+
+    public function getTotalProducts(){
+        return $this->productoRepository->total();
+    }
+
+    public function getStockMinProducts(){
+        return $this->productoRepository->getStockMinProducts();
+    }
+
+    public function getOldPublicaciones(){
+        return $this->publicacionRepository->getOldPublicaciones(5);
     }
 }

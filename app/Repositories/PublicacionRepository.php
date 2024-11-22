@@ -59,6 +59,12 @@ class PublicacionRepository implements PublicacionRepositoryInterface
                                     ->where('CuentasPlataforma.idPlataforma','=',$idPlataforma)->first();
     }
 
+    public function getOldPublicaciones($cantidad){
+        return Publicacion::orderBy('fechaPublicacion', 'asc')
+                            ->take($cantidad)
+                            ->get();
+    }
+
     public function create(array $data)
     {
         return Publicacion::create($data);

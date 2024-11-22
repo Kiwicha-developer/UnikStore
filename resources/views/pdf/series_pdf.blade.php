@@ -32,7 +32,14 @@
                 @if ($index % 4 == 0)
                     <tr>
                 @endif
-                <td>{{ $serie }}</td>
+                <td>
+                    <div>
+                        <small>{{ $serie['serie'] }}</small>
+                        <br>
+                        <small><img src="data:image/jpeg;base64,{{ $serie['barcode'] }}" alt="Código de barras" width="100%"></small>
+                    </div>
+                    
+                </td>
                 @if ($index % 4 == 3 || $index == count($series) - 1)
                     @if ($index % 4 != 3)
                         @for ($i = 0; $i < 3 - ($index % 4); $i++)

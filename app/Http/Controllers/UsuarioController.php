@@ -99,10 +99,12 @@ class UsuarioController extends Controller
     public function updateBandeja(Request $request){
         $id = $request->input('id');
         $bandeja = $request->input('bandeja');
+
+        
         if(isset($id)){
             $this->usuarioService->updateBandeja($id,$bandeja);
         }
-        return redirect()->back();
+        return  response()->json(['message' => 'Datos enviados correctamente.']);
     }
     
     public function updateUser(Request $request){

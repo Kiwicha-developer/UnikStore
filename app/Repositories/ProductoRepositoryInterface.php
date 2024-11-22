@@ -14,4 +14,6 @@ interface ProductoRepositoryInterface
     public function update($idProducto, array $data);
     public function getCodes();
     public function validateSerial($id,$serial);
+    public function total();
+    public function getStockMinProducts();
 }
