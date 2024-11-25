@@ -26,8 +26,8 @@ class DashboardService implements DashboardServiceInterface
 
     public function getRegistrosXEstados(){
         $array = array();
-        $array[] = ['estado' => 'NUEVOXMES', 'titulo' => 'Nuevos' , 'cantidad' => count($this->registroRepository->getAllByColumnByThisMonth('estado','NUEVO')),'bg' => 'bg-sistema-uno','icon' => 'boxes','fecha' => 'Este mes'];
-        $array[] = ['estado' => 'ENTREGADOXMES', 'titulo' => 'Entregados' , 'cantidad' => count($this->registroRepository->getAllByColumnByThisMonth('estado','ENTREGADO')),'bg' => 'bg-green','icon' => 'cart','fecha' => 'Este mes'];
+        $array[] = ['estado' => 'NUEVO', 'titulo' => 'Nuevos' , 'cantidad' => count($this->registroRepository->getAllByColumnByThisMonth('estado','NUEVO')),'bg' => 'bg-sistema-uno','icon' => 'boxes','fecha' => 'Este mes'];
+        $array[] = ['estado' => 'ENTREGADO', 'titulo' => 'Entregados' , 'cantidad' => count($this->registroRepository->getAllByColumnByThisMonth('estado','ENTREGADO')),'bg' => 'bg-green','icon' => 'cart','fecha' => 'Este mes'];
         $array[] = ['estado' => 'DEVOLUCION', 'titulo' => 'Devoluciones' , 'cantidad' => count($this->registroRepository->getAllByColumn('estado','DEVOLUCION')),'bg' => 'bg-warning','icon' => 'truck','fecha' => 'Hasta la fecha'];
         $array[] = ['estado' => 'ABIERTO', 'titulo' => 'Abiertos' , 'cantidad' => count($this->registroRepository->getAllByColumn('estado','ABIERTO')),'bg' => 'bg-marron','icon' => 'dropbox','fecha' => 'Hasta la fecha'];
         $array[] = ['estado' => 'DEFECTUOSO', 'titulo' => 'Defectuosos' , 'cantidad' => count($this->registroRepository->getAllByColumn('estado','DEFECTUOSO')),'bg' => 'bg-purple','icon' => 'ban','fecha' => 'Hasta la fecha'];
@@ -54,5 +54,24 @@ class DashboardService implements DashboardServiceInterface
 
     public function getOldPublicaciones(){
         return $this->publicacionRepository->getOldPublicaciones(5);
+    }
+
+    public function getNuevosInventario(){
+        return $this->registroRepository->getAllByColumnByThisMonth('estado','NUEVO');
+    }
+    public function getEntregadosInventario(){
+        return $this->registroRepository->getAllByColumnByThisMonth('estado','ENTREGADO');
+    }
+    public function getDevolucionesInventario(){
+        return $this->registroRepository->getAllByColumn('estado','DEVOLUCION');
+    }
+    public function getAbiertosInventario(){
+        return $this->registroRepository->getAllByColumn('estado','ABIERTO');
+    }
+    public function getDefectuososInventario(){
+        return $this->registroRepository->getAllByColumn('estado','DEFECTUOSO');
+    }
+    public function getRotosInventario(){
+        return $this->registroRepository->getAllByColumn('estado','ROTO');
     }
 }

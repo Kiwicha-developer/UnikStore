@@ -36,6 +36,7 @@ Route::withoutMiddleware(['validate.session'])->group(function () {
 Route::middleware(['validate.session'])->group(function () {
     
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/inventario/{estado}',[HomeController::class,'dashboardInventario'])->name('dashboardinventario');
     
     Route::get('/calculadora', [CalculadoraController::class, 'index'])->name('calculadora');
     Route::get('/calculadora/calculate', [CalculadoraController::class, 'calculate'])->name('calculadora-calculate');
@@ -125,6 +126,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/configuracion/createproveedor', [ConfiguracionController::class, 'createProveedor'])->name('createproveedor');
 
     Route::get('/generateSerialPdf/{idDocumento}', [PdfController::class, 'generateSerialPdf'])->name('generarSeriesPdf');
+    Route::get('/reporteAlmacen', [PdfController::class, 'reportStockPdf'])->name('reportealmacen');
 });
 
 

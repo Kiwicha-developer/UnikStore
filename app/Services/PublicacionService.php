@@ -31,6 +31,7 @@ class PublicacionService implements PublicacionServiceInterface
                                                 'sku' => $details->sku,
                                                 'fechaPublicacion' => $details->fechaPublicacion->format('Y-m-d'),
                                                 'idPublicacion' => $details->idPublicacion,
+                                                'precio' => $details->precioPublicacion,
                                                 'titulo' => $details->titulo,
                                                 'user' => $details->Usuario->user,
                                                 'estado' => $details->estado

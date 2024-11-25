@@ -60,4 +60,42 @@ class HomeController extends Controller
                                     'publicaciones' => $publicaciones
                                 ]);
     }
+
+    public function dashboardInventario($estado){
+        //variables de la cabecera
+        $userModel = $this->headerService->getModelUser();
+        
+        switch(decrypt($estado)){
+            case 'NUEVO':
+                $registros = $this->dashboardService->getNuevosInventario();
+                $data = ['icon' => 'boxes','pestania' => 'Nuevos' , 'titulo' => 'Productos Nuevos','color' => 'bg-sistema-uno'];
+                break;
+            case 'ENTREGADO':
+                $registros = $this->dashboardService->getEntregadosInventario();
+                $data = ['icon' => 'cart','pestania' => 'Entregados' , 'titulo' => 'Productos Entregados','color' => 'bg-green'];
+                break;
+            case 'DEVOLUCION':
+                $registros = $this->dashboardService->getDevolucionesInventario();
+                $data = ['icon' => 'truck','pestania' => 'Devoluciones' , 'titulo' => 'Productos Devueltos','color' => 'bg-warning'];
+                break;
+            case 'ABIERTO':
+                $registros = $this->dashboardService->getAbiertosInventario();
+                $data = ['icon' => 'dropbox','pestania' => 'Abiertos' , 'titulo' => 'Productos Abiertos','color' => 'bg-marron'];
+                break;
+            case 'DEFECTUOSO':
+                $registros = $this->dashboardService->getDefectuososInventario();
+                $data = ['icon' => 'ban','pestania' => 'Defectuosos' , 'titulo' => 'Productos Defectuosos','color' => 'bg-purple'];
+                break;
+            case 'ROTO':
+                $registros = $this->dashboardService->getRotosInventario();
+                $data = ['icon' => 'x-lg','pestania' => 'Rotos' , 'titulo' => 'Productos Rotos','color' => 'bg-danger'];
+                break;
+            default:
+                return back();
+        }
+
+        return view('dashboard_inventario',['user' => $userModel,
+                                            'registros' => $registros,
+                                            'data' => $data]);
+    }
 }

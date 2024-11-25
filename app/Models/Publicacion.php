@@ -37,7 +37,7 @@ class Publicacion extends Model
         'idProducto' => 'int',
         'estado' => 'int',
         'fechaPublicacion' => 'date',
-        'precioPublicacion' => 'decimal:9'
+        'precioPublicacion' => 'float'
     ];
     
     public function CuentasPlataforma()

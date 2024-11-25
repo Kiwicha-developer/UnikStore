@@ -42,7 +42,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="overflow-x: hidden;overflow-y:auto;height: 65vh">
             <ul class="list-group">
               <li class="list-group-item bg-sistema-uno text-light pb-0" style="position:sticky; top: 0;z-index:800">
                   <div class="row text-center ">
@@ -85,7 +85,7 @@
                           <small>{{$public->CuentasPlataforma->nombreCuenta}}</small>
                       </div>
                       <div class="col-5 col-md-2">
-                        <a href="javascript:void(0)" class="decoration-link" onclick="ShareId({{$public->idPublicacion}},'{{$public->titulo}}',{{$public->precioPublicacion}},{{$public->estado}})" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <a href="javascript:void(0)" class="decoration-link" onclick="ShareId({{$public->idPublicacion}},'{{$public->titulo}}',{{$public->precioPublicacion}},{{$public->estado}})">
                             <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{$public->titulo}}">{{$public->sku}}</small>
                         </a>
                       </div>
@@ -117,11 +117,11 @@
     <!-- Modal -->
     <form id="estadoForm" action="{{route('update-estado-publicacion')}}" method="POST">
         @csrf
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="estadoModal" tabindex="-1" aria-labelledby="estadoModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Publicaci&oacute;n <span id="titlepubli"></span></h5>
+            <h5 class="modal-title" id="estadoModalLabel">Publicaci&oacute;n <span id="titlepubli"></span></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -192,6 +192,7 @@
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     let data = JSON.parse(xhr.responseText);
+                    console.log(JSON.stringify(data));
                     let suggestions = document.getElementById('suggestions');
                     hiddenBody.style.display = 'block';
                     suggestions.innerHTML = '';
@@ -225,7 +226,7 @@
                             li.addEventListener('click', function() {
                                 document.getElementById('search').value = item.sku; 
                                 suggestions.innerHTML = ''; 
-                                dataModalDetalle(item.titulo,item.sku,item.estado,item.user,item.fechaPublicacion)
+                                ShareId(item.idPublicacion,item.titulo,item.precio,item.estado);
                             });
                             
                             divRow.appendChild(divColProduct);
@@ -276,11 +277,16 @@ function ShareId(id,title,price,estado){
     let inputTextTitle = document.getElementById('title-text');
     let inputNumberPrice = document.getElementById('price-number');
     let selectEstado = document.getElementById('estado-select');
+
+    let modalEstado = new bootstrap.Modal(document.getElementById('estadoModal'), {
+                        keyboard: false
+                        }) ;
     
     inputId.value = id;
     inputTextTitle.value = title;
     inputNumberPrice.value = price;
     selectEstado.value = estado;
+    modalEstado.show();
 }
 </script>
 <script>

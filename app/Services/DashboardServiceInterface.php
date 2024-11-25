@@ -9,4 +9,10 @@ interface DashboardServiceInterface
     public function getTotalProducts();
     public function getStockMinProducts();
     public function getOldPublicaciones();
+    public function getNuevosInventario();
+    public function getEntregadosInventario();
+    public function getDevolucionesInventario();
+    public function getAbiertosInventario();
+    public function getDefectuososInventario();
+    public function getRotosInventario();
 }

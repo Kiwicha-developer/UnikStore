@@ -8,6 +8,9 @@
     </div>
     <br>
     <div class="row">
+        <div class="col-md-7">
+            <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> Traslados</h2>
+        </div>
         <div class="col-md-5">
             <div class="input-group mb-3" style="z-index:1000">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
@@ -16,13 +19,9 @@
                 </ul>
             </div>
         </div>
-        <div class="col-md-7"></div>
-        <div class="col-md-10">
-            <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> Traslados</h2>
-        </div>
-        <div class="col-md-2">
-            {{-- <x-scanner/> --}}
-        </div>
+        {{-- <div class="col-md-2">
+            <x-scanner/>
+        </div> --}}
     </div>
     <br>
     <div class="row">

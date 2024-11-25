@@ -40,7 +40,7 @@
     <div class="row">
         <div class="col-md-12">
             @if(!$documentos->isEmpty())
-            <ul class="list-group">
+            <ul class="list-group" style="overflow-x: hidden;overflow-y:auto;height: 65vh">
               <li class="list-group-item bg-sistema-uno text-light" style="position: sticky;top:0;z-index:800">
                 <div class="row text-center">
                     <div class="col-6 col-md-3 text-start">

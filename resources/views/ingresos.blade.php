@@ -39,7 +39,7 @@
     </div>
     @if(!$registros->isEmpty())
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="overflow-x: hidden;overflow-y:auto;height: 65vh">
             <ul class="list-group">
               <li class="list-group-item bg-sistema-uno text-light" style="position: sticky;top:0;z-index:800">
                   <div class="row text-center">
@@ -52,10 +52,10 @@
                     <div class="col-md-1 d-none d-sm-none d-md-block">
                         <small>Usuario</small>
                     </div>
-                    <div class="col-md-2 d-none d-sm-none d-md-block">
+                    <div class="col-md-3 d-none d-sm-none d-md-block">
                         <small>Nro Serie</small>
                     </div>
-                    <div class="col-md-2 d-none d-sm-none d-md-block">
+                    <div class="col-md-1 d-none d-sm-none d-md-block">
                         <small>Precio</small>
                     </div>
                     <div class="col-md-1 d-none d-sm-none d-md-block">
@@ -85,10 +85,10 @@
                     <div class="col-4 col-md-1">
                         <small>{{$registro->Usuario->user}}</small>
                     </div>
-                    <div class="col-4 col-md-2">
+                    <div class="col-4 col-md-3">
                         <small>{{$registro->RegistroProducto->numeroSerie}}</small>
                     </div>
-                    <div class="col-4 col-md-2">
+                    <div class="col-4 col-md-1">
                         <small>{{$registro->RegistroProducto->DetalleComprobante->Comprobante->moneda == 'DOLAR' ? '$ ' : 'S/. '}}{{number_format($registro->RegistroProducto->DetalleComprobante->precioUnitario, 2)}}</small>
                     </div>
                     <div class="col-md-1 d-none d-sm-none d-md-block">
@@ -198,7 +198,7 @@
                 <label class="form-label fw-bold">Estado:</label>
                 <select id="state-modal-detail" name="estado" class="form-select">
                     @foreach ($estados as $estado)
-                        <option value="{{$estado['value']}}">{{$estado['name']}}</option>
+                        <option value="{{$estado['value']}}" {{$estado['value'] == 'NUEVO' ? 'disabled':''}}>{{$estado['name']}}</option>
                     @endforeach
                 </select>
             </div>

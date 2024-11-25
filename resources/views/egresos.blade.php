@@ -8,14 +8,25 @@
 @section('content')
 <div class="container">
     <br>
+    En Mantenimiento (Evitar usar)
     <div class="row">
+        <div class="col-6 col-md-5">
+            <div class="input-group mb-3" style="z-index:1000" >
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" placeholder="Serial Number..." id="search">
+                <ul class="list-group w-100" style="position:absolute;top:100%;z-index:1000" id="suggestions">
+                </ul>
+              </div>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-6 col-md-4 text-end">
+            <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}" >
+        </div>
         <div class="col-md-8">
             <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-minus-fill"></i> Egresos<span class="text-capitalize text-secondary fw-light"><em>({{$fecha->translatedFormat('F')}})</em></span></h2>
         </div>
-        <div class="col-md-2 text-end">
-            <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}" >
-        </div>
-        <div class="col-md-2 text-end">
+        
+        <div class="col-md-4 text-end">
             <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#egresoModal"><i class="bi bi-plus-lg"></i> Nuevo Egreso</a>
         </div>
     </div>
@@ -88,20 +99,11 @@
           </div>
           <div class="modal-body">
             <div class="row">
-                <div class="col-md-8 mb-2" style="position:relative">
+                <div class="col-md-12 mb-2" style="position:relative">
                     <label>Numero de Serie</label>
                     <input type="text" oninput="searchRegistro(this)" name="serialnumber" placeholder="Serial Number" class="form-control input-egreso" id="input-serial-number">
                     <input type="hidden" value="" name="idregistro" id="hidden-product-serial-number">
                     <ul class="list-group" id="suggestions-serial-number" name="idregistro" style="position:absolute;z-index:1000;top:100%;left:0;width:100%"></ul>
-                </div>
-                <div class="col-md-4">
-                    <label>Almacén</label>
-                    <select class="form-select input-egreso" name="almacen">
-                        <option value="">-Elige un almacén-</option>
-                        @foreach ($almacenes as $almacen)
-                            <option value="{{$almacen->idAlmacen}}">{{$almacen->descripcion}}</option>
-                        @endforeach
-                    </select>
                 </div>
                 <div class="col-md-12 mb-2">
                     <div class="row">

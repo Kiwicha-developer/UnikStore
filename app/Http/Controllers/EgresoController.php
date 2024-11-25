@@ -49,7 +49,6 @@ class EgresoController extends Controller
         $numeroorden = $request->input('numeroorden');
         $fechapedido = $request->input('fechapedido');
         $fechadespacho = $request->input('fechadespacho');
-        $idAlmacen = $request->input('almacen');
         
         $validateRegistro = '';
         if(is_null($idregistro)){
@@ -75,7 +74,7 @@ class EgresoController extends Controller
                                 'fechaCompra' => $fechapedido,
                                 'fechaDespacho' => $fechadespacho];
                 
-                $producto = $this->egresoService->createEgreso($idAlmacen,$arrayEgreso);
+                $producto = $this->egresoService->createEgreso($arrayEgreso);
                 $this->productoService->validateState($producto->idProducto);
                 
                 $this->headerService->sendFlashAlerts('Egreso registrado','Operacion exitosa','success','btn-success');

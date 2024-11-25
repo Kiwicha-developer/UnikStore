@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <div id="dashboard-content">
+    <div id="dashboard-content" >
         <x-dashboard_content :registros="$registros" :inventario="$inventario" :stock="$stock" :colors="$colors" :productos="$productos" :stockMin="$stockMin" :publicaciones="$publicaciones"/>
     </div>
     <script>

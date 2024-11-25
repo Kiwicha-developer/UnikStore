@@ -10,20 +10,13 @@
             <div class="col-12 col-md-4">
                 <x-buscador_producto />
             </div>
+            <div class="col-6 col-md-8 text-end">
+                <a href="{{route('createproducto')}}" class="btn btn-success"><i class="bi bi-plus-square"></i> Nuevo Producto</a>
+            </div>
             <div class="col-12"></div>
             <div class="col-6 col-md-8 pt-2">
                 <h3><i class="bi bi-box-fill"></i> Productos</h3>
             </div>
-            <div class="col-6 col-md-4 text-end">
-                <a href="{{route('createproducto')}}" class="btn btn-success"><i class="bi bi-plus-square"></i> Nuevo Producto</a>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-7 col-md-8">
-                <h3 class="">{{$categoria['nombreCategoria']}} <em class="fw-light text-secondary">({{$grupo['nombreGrupo']}})</em></h3>
-            </div>
-            
             <div class="col-5 col-md-4 text-end">
                 <div class="btn-group">
                   <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
@@ -35,6 +28,12 @@
                       @endforeach
                   </ul>
                 </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-7 col-md-8">
+                <h3 class="">{{$categoria['nombreCategoria']}} <em class="fw-light text-secondary">({{$grupo['nombreGrupo']}})</em></h3>
             </div>
         </div>
         <br>

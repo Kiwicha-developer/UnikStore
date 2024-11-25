@@ -7,7 +7,7 @@
                 <small class="mb-2 text-secondary">Seguimiento de Productos registrados.</small>
                 @foreach ($registros as $registro)
                     <div class="col-md-2">
-                        <a href="" class="text-decoration-none">
+                        <a href="{{route('dashboardinventario',[encrypt($registro['estado'])])}}" class="text-decoration-none">
                             <div class="card {{$registro['bg']}} text-light mb-3" style="max-width: 18rem;">
                                 <div class="card-body">
                                 <div class="row text-center">
@@ -42,10 +42,26 @@
                         <div class="col-12">
                             @foreach ($publicaciones as $public)
                                 <div class="row border ms-1 me-1 rounded pt-2 pb-2 mb-2">
-                                    <div class="col-md-3 ">
-                                        <img src="{{asset('storage/'.$public->CuentasPlataforma->Plataforma->imagenPlataforma)}}" class="w-100 rounded-3" alt="">
+                                    <div class="col-md-2 pe-0 text-center">
+                                        <img 
+                                            src="{{asset('storage/'.$public->CuentasPlataforma->Plataforma->imagenPlataforma)}}" 
+                                            class="w-100 rounded-3" 
+                                            alt=""
+                                            title="{{$public->CuentasPlataforma->nombreCuenta}}"
+                                        >
                                     </div>
-                                    da
+                                    <div class="col-md-10">
+                                        <h6 class="mb-0">{{$public->titulo}}</h6>
+                                    </div>
+                                    <div class="col-md-2 pe-0 text-end">
+                                        <small class="text-secondary mt-0 pt-0 mb-0">{{$public->sku}}</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mt-0 mb-0">{{$public->Producto->modelo}} <em class="text-secondary">(S/.{{$public->precioPublicacion}})</em></p>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <p class="mt-0 mb-0" >{{$public->fechaPublicacion->format('Y-m-d')}}</p>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
@@ -71,15 +87,15 @@
                                 </div>
                         </div>
                         <div class="col-4"></div>
-                        <div class="col-12 text-center">
-                            <small class="text-secondary">{{$productos - $stockMin}} Productos con stock</small>
-                        </div>
                     </div>
                 </div>
                 <div class="col-md-12 mt-3">
                     <div class="row border shadow rounded-3 pt-2 pb-2">
-                        <h4 class="mb-0">Reclamos</h4>
-                        <small class="text-secondary">Libro de reclamaciones</small>
+                        <div class="col-md-12">
+                            <h4 class="mb-0">Reclamos</h4>
+                            <small class="text-secondary">Libro de reclamaciones</small>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -93,7 +109,7 @@
                             <small class="text-secondary">Stock de los almacenes</small>
                         </div>
                         <div class="col-3 text-end">
-                            <button class="btn btn-outline-danger btn-sm"><i class="bi bi-file-pdf"></i></button>
+                            <button onclick="reportAlmacen()" class="btn btn-outline-danger btn-sm"><i class="bi bi-file-pdf"></i></button>
                         </div>
                         <div class="col-md-12 text-center">
                             <div class="card text-bg-light mb-3 h-100" style="max-width: auto;">
@@ -157,3 +173,9 @@
             );
     }
 </style>
+<script>
+    function reportAlmacen() {
+        var url = "{{route('reportealmacen')}}";
+        window.open(url, '', 'width=800,height=600,scrollbars=yes,location=no,toolbar=no,status=no');
+    }
+</script>

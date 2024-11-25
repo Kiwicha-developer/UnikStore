@@ -1,4 +1,4 @@
-<div class="lista_producto">
+<div class="lista_producto" >
     <div class="text-end" style="position:fixed;top:0;width:200px;z-index:1000">
             <div class="alert alert-info alert-dismissible fade show" role="alert" id="myAlert" style="display: none;">
               ¡Texto copiado!
@@ -18,7 +18,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-12">
+        <div class="col-12" style="overflow-x: hidden;overflow-y:auto;height: 50vh">
                 <ul class="list-group ">
                         <li class="list-group-item d-flex bg-sistema-uno text-light" style="position:sticky; top: 0;z-index:800">
                             <div class="row w-100 h-100 align-items-center" >
@@ -26,7 +26,7 @@
                                     <h6>Producto</h6>
                                 </div>
                                 <div class="col-3 col-md-1 text-center">
-                                    <h6><a style="cursor:pointer" onclick="changePriceList()">Precio <i class="bi bi-caret-down-fill d-none d-md-inline"></i></a></h6>
+                                    <h6><a style="cursor:pointer" onclick="changePriceList()"><i class="bi bi-caret-down-fill d-none d-md-inline"></i>Precio</a></h6>
                                 </div>
                                 <div class="col-6 col-md-4 text-center">
                                     <h6>Stock</h6>

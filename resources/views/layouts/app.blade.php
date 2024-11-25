@@ -213,7 +213,7 @@
     }
     
 </style>
-<body>
+<body style="position: relative">
     @if(session('title') && session('message') && session('icon') && session('button'))
         <script>
             Swal.fire({
@@ -228,10 +228,10 @@
             });
     </script>
     @endif
-    <header>
-            <div class="text-light bg-sistema-uno">
+    <header style="position:sticky;top:0;z-index:1001">
+            <div class="text-light bg-sistema-uno" >
                 <div class="container">
-                    <div class="row" style="z-index:9000">
+                    <div class="row" style="z-index:1000">
                         <div class="col-2 col-md-1">
                             <a class="btn text-light hidden-button" data-bs-toggle="offcanvas" href="#offcanvasDashboard" role="button" aria-controls="offcanvasDashboard">
                               <i class="bi bi-list" style="font-size:2rem"></i>
@@ -239,7 +239,7 @@
                         </div>
                         <div class="col-6 col-md-9 d-flex justify-content-start align-items-center">
                             <img class="d-none d-sm-block" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
-                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.16</span></h5>
+                            <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology &nbsp;<span class="text-secondary"> v1.17</span></h5>
                         </div>
                         <div class="col-4 col-md-2" style="position:relative;z-index:9000">
                             <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav" style="cursor:pointer">
@@ -277,7 +277,7 @@
             <img class="d-sm-none" alt="logo" src="{{asset('storage/logos/logosysfondo.webp')}}" style="width:50px">
             <div class="row d-block d-sm-none">
                 <h5 class=" text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology</h5>
-                <small class="text-secondary">v1.16</small>
+                <small class="text-secondary">v1.17</small>
             </div>
             <h5 class="d-none d-sm-flex offcanvas-title text-light">Men&uacute;</h5>
             <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>

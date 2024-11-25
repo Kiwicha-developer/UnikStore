@@ -68,8 +68,10 @@ class EgresoProductoService implements EgresoProductoServiceInterface
         return $this->almacenRepository->all();
     }
 
-    public function createEgreso($idAlmacen,array $data){
+    public function createEgreso(array $data){
         if($data){
+            $registro = $this->registroRepository->getOne('idRegistro',$data['idRegistro']);
+            $idAlmacen = $registro->idAlmacen;
             $data['idEgreso'] = $this->getNewIdEgreso();
             $data['idUser'] = $this->headerService->getModelUser()->idUser;
 

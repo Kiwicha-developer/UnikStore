@@ -77,6 +77,24 @@ class ProductoRepository implements ProductoRepositoryInterface
         });
         return $productos;
     }
+
+    public function getProductsWithStock(){
+        $query = "
+            SELECT p.*
+            FROM Producto p
+            JOIN Inventario i ON p.idProducto = i.idProducto
+            WHERE p.estadoProductoWeb = 'DISPONIBLE'
+            GROUP BY p.idProducto
+            HAVING SUM(i.stock) > 0
+        ";
+
+        $resultados = DB::select($query);
+
+        $productos = collect($resultados)->map(function ($item) {
+            return Producto::find($item->idProducto); 
+        });
+        return $productos;
+    }
     
     public function validateSerial($id,$serial){
         $serial = Producto::join('DetalleComprobante', 'DetalleComprobante.idProducto', '=', 'Producto.idProducto')

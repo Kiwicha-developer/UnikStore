@@ -48,8 +48,7 @@ class IngresoController extends Controller
                 $estados = [['value' => 'NUEVO', 'name' => 'Nuevo'],
                     ['value' => 'ABIERTO', 'name' => 'Abierto'],
                     ['value' => 'ROTO', 'name' => 'Roto'],
-                    ['value' => 'DEFECTUOSO', 'name' => 'Defectuoso'],
-                    ['value' => 'DEVOLUCION', 'name' => 'Devolucion']
+                    ['value' => 'DEFECTUOSO', 'name' => 'Defectuoso']
                     ];
                 
                 return view('ingresos',['user' => $userModel,
