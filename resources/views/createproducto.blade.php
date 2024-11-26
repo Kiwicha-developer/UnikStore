@@ -12,7 +12,7 @@
         </div>
         <br>
         <form action="{{route('createdetails')}}" id="form-create"  method="POST" enctype="multipart/form-data">
-             @csrf
+            @csrf
         <div class="row border shadow rounded-3 pt-3 pb-3 mb-3">
             <div class="row">
                 <div class="col-12">

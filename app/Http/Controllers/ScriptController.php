@@ -5,10 +5,17 @@ use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\Calculadora;
 use App\Models\Almacen;
+use App\Services\ScriptServiceInterface;
 use Illuminate\Support\Facades\DB;
 
 class ScriptController extends Controller
 {
+    protected $scriptService;
+
+    public function __construct(ScriptServiceInterface $scriptService)
+    {
+        $this->scriptService = $scriptService;
+    }
     public function headerScript(){
         
         $js = view('js.header-scripts')->render();
@@ -46,8 +53,9 @@ class ScriptController extends Controller
         return response($js)->header('Content-Type', 'application/javascript');
     }
     
-    public function documentoScript(){
-        $ubicaciones = Almacen::all();
+    public function documentoScript($idDocumento){
+        $ubicaciones = $this->scriptService->getAllAlmacen();
+        $documento = $this->scriptService->getOneComprobante($idDocumento);
         
         $estados = [['value' => 'NUEVO', 'name' => 'Nuevo'],
                     ['value' => 'ABIERTO', 'name' => 'Abierto'],
@@ -65,7 +73,15 @@ class ScriptController extends Controller
         $js = view('js.documento-scripts',['ubicaciones' => $ubicaciones,
                                             'estados' => $estados,
                                             'medidas' => $medidas,
-                                            'adquisiciones' => $adquisiciones])->render();
+                                            'adquisiciones' => $adquisiciones,
+                                            'documento' => $documento])->render();
+        
+        return response($js)->header('Content-Type', 'application/javascript');
+    }
+
+    public function configCalculosScript(){
+        $categorias = $this->scriptService->getAllCategorias();
+        $js = view('js.config-calculos-scripts',['categorias' => $categorias])->render();
         
         return response($js)->header('Content-Type', 'application/javascript');
     }

@@ -1,0 +1,198 @@
+.text-danger {
+    color: #f34646 !important;
+}
+
+.text-warning {
+    color: #e48900 !important;
+}
+
+.text-transparent {
+    color: #0000002a;
+}
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bg-transparent {
+    background-color: #ffffff75 !important;
+}
+
+.bg-info {
+    background-color: #34b277 !important;
+}
+
+.bg-sistema-uno {
+    background-color: #043e69;
+}
+
+.bg-danger {
+    background-color: #f34646 !important;
+}
+
+.bg-warning {
+    background-color: #f1b100 !important;
+}
+
+.bg-marron {
+    background-color: #805300;
+}
+
+.bg-purple {
+    background-color: #7b4dc0;
+}
+
+.bg-sistema-dos {
+    background-color: #00b1b9 !important;
+}
+
+.bg-green {
+    background-color: #007e43;
+}
+
+.btn-success {
+    background-color: #00b1b9 !important;
+    border-color: #00b1b9 !important;
+}
+
+.btn-primary {
+    background-color: #043e69 !important;
+    border-color: #043e69 !important;
+}
+
+.btn-danger {
+    background-color: #f34646 !important;
+    border-color: #f34646 !important;
+}
+
+.btn-info {
+    background-color: #34b277 !important;
+    border-color: #34b277 !important;
+    color: white !important;
+}
+
+.btn-warning {
+    background-color: #6740a1 !important;
+    border-color: #6740a1 !important;
+    color: white !important;
+}
+
+.btn-warning:hover {
+    background-color: #5c3a8e !important;
+    /* Color de fondo en hover (puedes ajustarlo) */
+    border-color: #5c3a8e !important;
+    /* Color del borde en hover */
+}
+
+.btn-warning:focus,
+.btn-warning.focus {
+    box-shadow: 0 0 0 0.2rem rgba(103, 64, 161, 0.5) !important;
+    /* Sombra en foco */
+}
+
+.text-sistema-uno {
+    color: #1c328a;
+}
+
+.hover-sistema-uno:hover {
+    background-color: #00b1b9;
+    color: white;
+}
+
+.bg-sistema-light {
+    background-color: #2ca3c6;
+}
+
+.bg-list {
+    background-color: #dfdfdf;
+}
+
+.menu-border {
+    border-color: #6790b9;
+}
+
+.link-sistema {
+    color: black;
+    text-decoration: none;
+}
+
+.link-sistema:hover {
+    color: #00b1b9;
+    text-decoration: underline;
+}
+
+.link-danger:hover {
+    color: red !important;
+}
+
+.decoration-link {
+    color: #00b1b9;
+}
+
+.link-hover:hover {
+    text-decoration: underline !important;
+}
+
+.hidden-button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.hidden-button {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: transparent !important;
+    color: inherit !important;
+    box-shadow: none !important;
+}
+
+.accordion-button:focus,
+.accordion-button.active {
+    box-shadow: none;
+    background-color: transparent;
+    color: inherit;
+}
+
+.offcanvas {
+    z-index: 9999;
+    /* Cambia este valor seg��n tus necesidades */
+}
+
+@media (max-width: 576px) {
+
+    /* Para dispositivos con un ancho m��ximo de 576px */
+    .offcanvas {
+        width: 75%;
+    }
+
+    .modal {
+        z-index: 9990 !important;
+        /* Establece el z-index para todos los modales */
+    }
+}
+
+.grafico-pastel {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    position: relative;
+}
+
+.total-items {
+    width: 75%;
+    height: 75%;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

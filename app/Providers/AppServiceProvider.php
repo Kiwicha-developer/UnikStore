@@ -93,6 +93,8 @@ use App\Services\PdfService;
 use App\Services\PdfServiceInterface;
 use App\Services\PlataformaService;
 use App\Services\PlataformaServiceInterface;
+use App\Services\ScriptService;
+use App\Services\ScriptServiceInterface;
 use App\Services\TrasladoService;
 use App\Services\TrasladoServiceInterface;
 
@@ -149,6 +151,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TrasladoServiceInterface::class,TrasladoService::class);
         $this->app->bind(DashboardServiceInterface::class,DashboardService::class);
         $this->app->bind(CaracteristicasProductoRepositoryInterface::class,CaracteristicasProductoRepository::class);
+        $this->app->bind(ScriptServiceInterface::class,ScriptService::class);
     }
 
     /**
