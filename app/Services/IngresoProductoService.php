@@ -10,6 +10,7 @@ use App\Repositories\InventarioRepositoryInterface;
 use App\Repositories\ProveedorRepositoryInterface;
 use App\Repositories\RegistroProductoRepositoryInterface;
 use App\Repositories\TipoComprobanteRepositoryInterface;
+use Illuminate\Support\Arr;
 
 class IngresoProductoService implements IngresoProductoServiceInterface
 {
@@ -49,14 +50,12 @@ class IngresoProductoService implements IngresoProductoServiceInterface
         return $this->ingresoRepository->getAllByComprobante($idComprobante);
     }
     
-    public function getByMonth($date){
+    public function getByMonth($date,$cant,$querys){
         $fechacompleta = $date. '-01';
         $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
-        return $this->ingresoRepository->getAllByMonth($carbonMonth);
+        return $this->ingresoRepository->getAllByMonth($carbonMonth,$cant,$querys);
     }
-    
-    
-    
+
     public function searchAjaxIngreso($data){
         $ingreso = $this->ingresoRepository->searchBySerialNumber($data)->take(5)
                     ->map(function($x){
@@ -113,4 +112,44 @@ class IngresoProductoService implements IngresoProductoServiceInterface
     public function getAllAlmacen(){
         return $this->almacenRepository->all();
     }
+
+    public function filtroUsuario($date){
+        $fechacompleta = $date. '-01';
+        $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
+        return $this->ingresoRepository->getUsersByMonth($carbonMonth);
+    }
+
+    public function filtroAlmacen($date){
+        $almacenes = array();
+        $fechacompleta = $date. '-01';
+        $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
+        $idAlmacenes = $this->ingresoRepository->getAlmacenesByMonth($carbonMonth);
+        
+        foreach($idAlmacenes as $id){
+            $almacenes[] = $this->almacenRepository->getOne('idAlmacen',$id->idAlmacen);
+        }
+
+        return $almacenes;
+    }
+
+    public function filtroEstado($date){
+        $fechacompleta = $date. '-01';
+        $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
+        return $this->ingresoRepository->getEstadosByMonth($carbonMonth);
+    }
+
+    public function filtroProveedor($date){
+        $proveedores = array();
+        $fechacompleta = $date. '-01';
+        $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
+        $idProveedores = $this->ingresoRepository->getProveedoresByMonth($carbonMonth);
+
+        foreach($idProveedores as $id){
+            $proveedores[] = $this->proveedorRepository->getOne('idProveedor',$id->idProveedor);
+        }
+
+        return $proveedores; 
+    }
+
+    
 }

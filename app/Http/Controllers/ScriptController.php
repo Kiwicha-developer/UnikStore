@@ -2,9 +2,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Producto;
-use App\Models\Calculadora;
-use App\Models\Almacen;
 use App\Services\ScriptServiceInterface;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +21,7 @@ class ScriptController extends Controller
     
     public function createProductScript($tc)
     {
-        $latestProductCodes = Producto::select('idGrupo', DB::raw('MAX(codigoProducto) as codigoProducto'))->groupBy('idGrupo')->get();        
+        $latestProductCodes = $this->scriptService->getCodigosProductos();        
         $js = view('js.create-product-scripts',['tc' => $tc,
                                                 'codigos' => $latestProductCodes])->render();
         
@@ -46,7 +43,7 @@ class ScriptController extends Controller
     }
     
     public function calculatorScript(){
-        $valores = Calculadora::first();
+        $valores = $this->scriptService->getCalculadora();
         
         $js = view('js.calculator-scripts',['valores' => $valores])->render();
         

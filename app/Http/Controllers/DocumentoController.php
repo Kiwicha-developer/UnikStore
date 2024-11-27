@@ -75,18 +75,29 @@ class DocumentoController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
     
-    public function list($date){
+    public function list($date,Request $request){
         //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
         
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 3){
                 $carbonMonth = Carbon::createFromFormat('Y-m-d', $date . '-01');
-                $documentos = $this->comprobanteService->getByMonth($date);
+                $documentos = $this->comprobanteService->getByMonth($date,15,$request->query('filtro'))->appends($request->all());
+
+                if($request->query('page') || $request->query('filtro')){
+                    $view = view('components.lista_documentos', ['documentos' => $documentos,'container' => $request->query('container')])->render();
+                    return response()->json(['html' => $view]);
+                }
+
+                $filtros = ['users' => $this->comprobanteService->filtroUsuario($date),
+                            'proveedores' => $this->comprobanteService->filtroProveedor($date),
+                            'documentos' => $this->comprobanteService->filtroDocumento($date),
+                            'estados' => $this->comprobanteService->filtroEstado($date)];
                 
                 return view('documentos',['user' => $userModel,
                                             'documentos' => $documentos,
-                                            'fecha' => $carbonMonth
+                                            'fecha' => $carbonMonth,
+                                            'filtros' => $filtros
                                         ]);
             }
         }

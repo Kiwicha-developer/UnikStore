@@ -52,7 +52,7 @@
                         <img class="d-none d-sm-block" alt="logo"
                             src="{{ asset('storage/logos/logosysfondo.webp') }}" style="width:50px">
                         <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology
-                            &nbsp;<span class="text-secondary"> v1.17</span></h5>
+                            &nbsp;<span class="text-secondary"> v1.18</span></h5>
                     </div>
                     <div class="col-4 col-md-2" style="position:relative;z-index:9000">
                         <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav"
@@ -103,7 +103,7 @@
                 <div class="row d-block d-sm-none">
                     <h5 class=" text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology
                     </h5>
-                    <small class="text-secondary">v1.17</small>
+                    <small class="text-secondary">v1.18</small>
                 </div>
                 <h5 class="d-none d-sm-flex offcanvas-title text-light">Men&uacute;</h5>
                 <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas"

@@ -34,18 +34,28 @@ class ProductoController extends Controller
         $this->productoService = $productoService;
     }
     
-    public function index($idCategory,$idGrupo){
+    public function index($idCategory,$idGrupo,Request $request){
         //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
         
         //variables del controlador
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 2){
+                $productos = $this->productoService->getAllProductsByColumn('idGrupo',decrypt($idGrupo),15);
+
+                if($request->query('page') || $request->query('filtro')){
+                    $view = view('components.lista_producto', ['productos' => $productos,
+                                                                'container' => $request->query('container'),
+                                                                'tc' => $this->calculadoraService->getTasaCambio()])->render();
+                    return response()->json(['html' => $view]);
+                }
+
+                //aqui ira ajax
                 $grupo = $this->productoService->getOneLabelGrupo(decrypt($idGrupo));
                 $grupos = $this->productoService->getAllLabelGrupoXCategory(decrypt($idCategory));
                 $categoria = $this->productoService->getOneLabelCategory(decrypt($idCategory));
                 $categorias = $this->productoService->getAllLabelCategory();
-                $productos = $this->productoService->getAllProductsByColumn('idGrupo',decrypt($idGrupo));
+                
                 
                 return view('productos',['user' => $userModel,
                                         'grupos' => $grupos,

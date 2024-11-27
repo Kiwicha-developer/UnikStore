@@ -39,6 +39,11 @@ class ProductoRepository implements ProductoRepositoryInterface
         return Producto::where($column,'=', $data)->get();
     }
 
+    public function paginateAllByColumn($column, $data,$cant){
+        $this->validateColumns($column);
+        return Producto::where($column,'=', $data)->paginate($cant);
+    }
+
     public function searchOne($column, $data)
     {
         $this->validateColumns($column);
@@ -113,6 +118,10 @@ class ProductoRepository implements ProductoRepositoryInterface
                             ->orWhere('modelo', 'LIKE', '%'.$query.'%')
                             ->get();
         return $productos;
+    }
+
+    public function getProductsCodes(){
+        return Producto::select('idGrupo', DB::raw('MAX(codigoProducto) as codigoProducto'))->groupBy('idGrupo')->get();
     }
 
     public function create(array $productoData)

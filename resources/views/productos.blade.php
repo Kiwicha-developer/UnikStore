@@ -67,10 +67,25 @@
                 </ul>
             </div>
         </div>
-        <br>
-        <x-lista_producto :productos="$productos" :tc="$tc"/>
+        <form action="{{url()->current()}}" method="get" id="form-filtro-componente">
+            <div class="row mb-2 mt-3">
+                <div class="col-md-2">
+                    <small>Marca</small>
+                    <select class="form-select form-select-sm filtro-componente" name="filtro[usuario]" >
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <small>Estado</small>
+                    <select class="form-select form-select-sm filtro-componente"  name="filtro[proveedor]">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+        <div id="container-list-products">
+            <x-lista_producto :productos="$productos" :tc="$tc" :container="'container-list-products'" />
+        </div>
     </div>
     <br>
-    <br>
-    
 @endsection

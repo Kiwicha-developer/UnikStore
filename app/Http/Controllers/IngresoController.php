@@ -27,7 +27,7 @@ class IngresoController extends Controller
         $this->headerService = $headerService;
     }
     
-    public function index($month){
+    public function index($month,Request $request){
         $userModel = $this->headerService->getModelUser();
         
         foreach($userModel->Accesos as $acceso){
@@ -35,9 +35,13 @@ class IngresoController extends Controller
                 Carbon::setLocale('es');
                 $fechacompleta = $month. '-01';
                 $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
-                $registros = $this->ingresoService->getByMonth($month);
                 
-                $usuarios = $this->userService->allUsers();
+                $registros = $this->ingresoService->getByMonth($month,100,$request->query('filtro'))->appends($request->all());;
+
+                if($request->query('page') || $request->query('filtro')){
+                    $view = view('components.lista_ingresos', ['registros' => $registros,'container' => $request->query('container')])->render();
+                    return response()->json(['html' => $view]);
+                }
                 
                 $proveedores = $this->ingresoService->getAllLabelProveedor();
                 
@@ -51,14 +55,20 @@ class IngresoController extends Controller
                     ['value' => 'DEFECTUOSO', 'name' => 'Defectuoso']
                     ];
                 
+                $filtros = ['users' => $this->ingresoService->filtroUsuario($month),
+                            'proveedores' => $this->ingresoService->filtroProveedor($month),
+                            'almacenes' => $this->ingresoService->filtroAlmacen($month),
+                            'estados' => $this->ingresoService->filtroEstado($month)];
+
+                
                 return view('ingresos',['user' => $userModel,
                                         'registros' => $registros,
                                         'documentos' => $documentos,
                                         'proveedores' => $proveedores,
-                                        'usuarios' => $usuarios,
                                         'fecha' => $carbonMonth,
                                         'almacenes' => $almacenes,
-                                        'estados' => $estados
+                                        'estados' => $estados,
+                                        'filtros' => $filtros
                                         ]);
             }
         }

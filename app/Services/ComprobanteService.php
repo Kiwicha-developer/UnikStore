@@ -55,11 +55,11 @@ class ComprobanteService implements ComprobanteServiceInterface
         return $this->comprobanteRepository->getOne('idComprobante',$id);
     }
     
-    public function getByMonth($date){
+    public function getByMonth($date,$cant,$querys){
         Carbon::setLocale('es');
         $fechacompleta = $date. '-01';
         $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
-        return $this->comprobanteRepository->getAllByMonth($carbonMonth);
+        return $this->comprobanteRepository->getAllByMonth($carbonMonth,$cant,$querys);
     }
     
     public function insertComprobante(array $inputs){
@@ -176,6 +176,31 @@ class ComprobanteService implements ComprobanteServiceInterface
             }
         }
         return $series;
+    }
+
+    public function filtroUsuario($month){
+        Carbon::setLocale('es');
+        $fechacompleta = $month. '-01';
+        $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
+        return $this->comprobanteRepository->getUsuariosByMonth($carbonMonth);
+    }
+    public function filtroProveedor($month){
+        Carbon::setLocale('es');
+        $fechacompleta = $month. '-01';
+        $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
+        return $this->comprobanteRepository->getProveedoresByMonth($carbonMonth);
+    }
+    public function filtroDocumento($month){
+        Carbon::setLocale('es');
+        $fechacompleta = $month. '-01';
+        $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
+        return $this->comprobanteRepository->getDocumentosByMonth($carbonMonth);
+    }
+    public function filtroEstado($month){
+        Carbon::setLocale('es');
+        $fechacompleta = $month. '-01';
+        $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
+        return $this->comprobanteRepository->getEstadosByMonth($carbonMonth);
     }
 
     private function insertDetalleComprobante(array $data, array $registros,$idAlmacen){

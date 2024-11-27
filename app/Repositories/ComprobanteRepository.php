@@ -26,12 +26,27 @@ class ComprobanteRepository implements ComprobanteRepositoryInterface
         return Comprobante::where($column,'=', $data)->get();
     }
     
-    public function getAllByMonth($month)
+    public function getAllByMonth($month,$cant,$querys)
     {
-        return Comprobante::whereMonth('fechaRegistro', $month)
-                            ->whereYear('fechaRegistro', $month)
-                            ->orderBy('fechaRegistro','desc')
-                            ->get();
+        $query = Comprobante::query();
+        $query->whereMonth('fechaRegistro', $month)
+                ->whereYear('fechaRegistro', $month);
+        
+        if(isset($querys)){
+            if(isset($querys['usuario'])){
+                $query->where('idUser','=',$querys['usuario']);
+            }
+            if(isset($querys['proveedor'])){
+                $query->where('idProveedor','=',$querys['proveedor']);
+            }
+            if(isset($querys['documento'])){
+                $query->where('idTipoComprobante','=',$querys['documento']);
+            }
+            if(isset($querys['estado'])){
+                $query->where('estado','=',$querys['estado']);
+            }
+        }
+        return $query->orderBy('fechaRegistro','desc')->paginate($cant);
     }
     
     public function searchOne($column, $data)
@@ -45,7 +60,34 @@ class ComprobanteRepository implements ComprobanteRepositoryInterface
         $this->validateColumns($column);
         return Comprobante::where($column, 'LIKE', '%' . $data . '%')->get();
     }
-    
+
+    public function getUsuariosByMonth($month){
+        return Comprobante::select('idUser')->distinct()
+                            ->whereMonth('fechaRegistro', $month)
+                            ->whereYear('fechaRegistro', $month)
+                            ->get();
+    }
+
+    public function getProveedoresByMonth($month){
+        return Comprobante::select('idProveedor')->distinct()
+                        ->whereMonth('fechaRegistro', $month)
+                        ->whereYear('fechaRegistro', $month)
+                        ->get();
+    }
+
+    public function getDocumentosByMonth($month){
+        return Comprobante::select('idTipoComprobante')->distinct()
+                            ->whereMonth('fechaRegistro', $month)
+                            ->whereYear('fechaRegistro', $month)
+                            ->get();
+    }
+
+    public function getEstadosByMonth($month){
+        return Comprobante::select('estado')->distinct()
+                            ->whereMonth('fechaRegistro', $month)
+                            ->whereYear('fechaRegistro', $month)
+                            ->get();
+    }
     
     public function create(array $data)
     {
@@ -66,7 +108,10 @@ class ComprobanteRepository implements ComprobanteRepositoryInterface
     }
     
     public function validateDuplicity($number,$type,$idProveedor){
-        $validate = Comprobante::where('estado','<>','INVALIDO')->where('numeroComprobante','=',$number)->where('idTipoComprobante','=',$type)->where('idProveedor','=',$idProveedor)->first();
+        $validate = Comprobante::where('estado','<>','INVALIDO')
+                                ->where('numeroComprobante','=',$number)
+                                ->where('idTipoComprobante','=',$type)
+                                ->where('idProveedor','=',$idProveedor)->first();
         if($validate){
             return true;
         }else{

@@ -33,10 +33,35 @@ class IngresoProductoRepository implements IngresoProductoRepositoryInterface
                     ->where('Comprobante.idComprobante','=',$idComprobante)->select('IngresoProducto.*')->get();
     }
     
-    public function getAllByMonth($month){
-        return IngresoProducto::whereMonth('fechaIngreso', $month)
-                                    ->orderBy('fechaIngreso','desc')
-                                    ->get();
+    public function getAllByMonth($month,$cant,$querys){
+        $query = IngresoProducto::query();
+        $query->select('IngresoProducto.*');
+
+        $query->join('RegistroProducto','RegistroProducto.idRegistro','=','IngresoProducto.idRegistro')
+                ->join('DetalleComprobante','DetalleComprobante.idDetalleComprobante','=','RegistroProducto.idDetalleComprobante')
+                ->join('Comprobante','Comprobante.idComprobante','=','DetalleComprobante.idComprobante');
+
+        $query->whereYear('IngresoProducto.fechaIngreso', $month)->whereMonth('IngresoProducto.fechaIngreso', $month);
+
+        if(isset($querys)){
+            if(isset($querys['usuario'])){
+                $query->where('IngresoProducto.idUser','=',$querys['usuario']);
+            }
+
+            if(isset($querys['proveedor'])){
+                $query->where('Comprobante.idProveedor','=',$querys['proveedor']);
+            }
+
+            if(isset($querys['almacen'])){
+                $query->where('RegistroProducto.idAlmacen','=',$querys['almacen']);
+            }
+
+            if(isset($querys['estado'])){
+                $query->where('RegistroProducto.estado','=',$querys['estado']);
+            }
+        }
+
+        return $query->orderBy('IngresoProducto.fechaIngreso','desc')->paginate($cant);
     }
 
     public function searchOne($column, $data)
@@ -57,6 +82,42 @@ class IngresoProductoRepository implements IngresoProductoRepositoryInterface
                                 ->where('RegistroProducto.estado', '<>', 'ENTREGADO')
                                 ->where('RegistroProducto.estado', '<>', 'INVALIDO')
                                 ->where('RegistroProducto.numeroSerie', 'LIKE', '%' . $data . '%')
+                                ->get();
+    }
+
+    public function getUsersByMonth($month){
+        return IngresoProducto::select('IngresoProducto.idUser')->distinct()
+                                ->join('RegistroProducto','RegistroProducto.idRegistro','=','IngresoProducto.idRegistro')
+                                ->whereYear('IngresoProducto.fechaIngreso', $month)
+                                ->whereMonth('IngresoProducto.fechaIngreso',$month)
+                                ->get();
+    }
+
+    public function getProveedoresByMonth($month){
+        return IngresoProducto::select('Comprobante.idProveedor')->distinct()
+                                ->join('RegistroProducto','RegistroProducto.idRegistro','=','IngresoProducto.idRegistro')
+                                ->join('DetalleComprobante','DetalleComprobante.idDetalleComprobante','=','RegistroProducto.idDetalleComprobante')
+                                ->join('Comprobante','Comprobante.idComprobante','=','DetalleComprobante.idComprobante')
+                                ->whereYear('IngresoProducto.fechaIngreso', $month)
+                                ->whereMonth('IngresoProducto.fechaIngreso',$month)
+                                ->get();
+    }
+
+    public function getAlmacenesByMonth($month){
+        return IngresoProducto::select('RegistroProducto.idAlmacen')->distinct()
+                                ->join('RegistroProducto','RegistroProducto.idRegistro','=','IngresoProducto.idRegistro')
+                                ->whereMonth('IngresoProducto.fechaIngreso',$month)
+                                ->get();
+    }
+
+    public function getEstadosByMonth($month){
+        return IngresoProducto::select('RegistroProducto.estado')->distinct()
+                                ->join('RegistroProducto','RegistroProducto.idRegistro','=','IngresoProducto.idRegistro')
+                                ->where('RegistroProducto.estado', '<>', 'ENTREGADO')
+                                ->where('RegistroProducto.estado', '<>', 'INVALIDO')
+                                ->where('RegistroProducto.estado', '<>', 'DEVOLUCION')
+                                ->whereYear('IngresoProducto.fechaIngreso', $month)
+                                ->whereMonth('IngresoProducto.fechaIngreso',$month)
                                 ->get();
     }
     

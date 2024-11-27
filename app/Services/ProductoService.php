@@ -120,9 +120,8 @@ class ProductoService implements ProductoServiceInterface
         return $grupo;
     }
     
-    public function getAllProductsByColumn($column,$data){
-        $modelProductos = $this->productoRepository->getAllByColumn($column,$data);
-        $productos = $modelProductos->load('MarcaProducto')->sortBy('MarcaProducto.nombreMarca');
+    public function getAllProductsByColumn($column,$data,$cant){
+        $productos = $this->productoRepository->paginateAllByColumn($column,$data,$cant);
         return $productos;
     }
     
@@ -184,8 +183,8 @@ class ProductoService implements ProductoServiceInterface
             $newProducto = $this->productoRepository->create($array);
             
             if($newProducto){
-                $this->insertInventory($array['idProducto']);
                 $this->createSeguimiento($array['idProducto'],$proveedor);
+                $this->insertInventory($array['idProducto']);
                 $imgService->createImage($img1,$array['idProducto'].'_1',$this->path);
                 $imgService->createImage($img2,$array['idProducto'].'_2',$this->path);
                 $imgService->createImage($img3,$array['idProducto'].'_3',$this->path);
