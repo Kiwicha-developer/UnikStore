@@ -1,7 +1,6 @@
 <?php
 namespace App\Repositories;
 
-use App\Models\Caracteristicas_Producto;
 use Illuminate\Support\Facades\DB;
 use App\Models\Producto;
 use Exception;
@@ -39,9 +38,23 @@ class ProductoRepository implements ProductoRepositoryInterface
         return Producto::where($column,'=', $data)->get();
     }
 
-    public function paginateAllByColumn($column, $data,$cant){
+    public function paginateAllByColumn($column, $data,$cant,$querys){
         $this->validateColumns($column);
-        return Producto::where($column,'=', $data)->paginate($cant);
+
+        $query = Producto::query();
+        $query->where($column,'=', $data);
+
+        if(isset($querys)){
+            if(isset($querys['marca'])){
+                $query->where('idMarca','=', $querys['marca']);
+            }
+
+            if(isset($querys['estado'])){
+                $query->where('estadoProductoWeb','=', $querys['estado']);
+            }
+        }
+
+        return $query->paginate($cant);
     }
 
     public function searchOne($column, $data)
@@ -54,6 +67,18 @@ class ProductoRepository implements ProductoRepositoryInterface
     {
         $this->validateColumns($column);
         return Producto::where($column, 'LIKE', '%' . $data . '%')->get();
+    }
+
+    public function getMarcasByColumn($column,$data){
+        $this->validateColumns($column);
+        return Producto::select('idMarca')->distinct()
+                        ->where($column,'=',$data)->get();
+    }
+
+    public function getEstadosByColumn($column,$data){
+        $this->validateColumns($column);
+        return Producto::select('estadoProductoWeb')->distinct()
+                        ->where($column,'=',$data)->get();
     }
     
     public function getCodes(){

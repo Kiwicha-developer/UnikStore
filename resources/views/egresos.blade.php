@@ -91,7 +91,7 @@
                                 <small>{{ $egreso->RegistroProducto->numeroSerie }}</small>
                             </div>
                             <div class="col-md-1">
-                                <a href="" class="decoration-link"><small>{{ $egreso->RegistroProducto->estado }}</small></a>
+                                <a href="javascript:void(0)" onclick='viewModalEgreso("{{$egreso->RegistroProducto->DetalleComprobante->Producto->nombreProducto}}",@json($egreso->RegistroProducto),@json($egreso),@json($egreso->Publicacion))' class="decoration-link"><small>{{ $egreso->RegistroProducto->estado }}</small></a>
                             </div>
                             <div class="col-md-1">
                                 <small>{{ $egreso->fechaCompra->format('d/m/y') }}</small>
@@ -178,237 +178,46 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 id="modal-egreso-titulo">Titulo del producto</h5>
+                            </div>
+                            <div class="col-md-6 text-secondary">
+                                <h6 id="modal-egreso-serialnumber">serial number</h6>
+                            </div>
+                            <div class="col-md-6 text-secondary text-end">
+                                <h6 id="modal-egreso-estado">estado</h6>
+                            </div>
+                            <div class="col-md-6" id="modal-egreso-fecha">
+                                <p class="mb-0"><strong>Fecha Despacho:</strong></p>
+                                <p class="mt-0"><strong>Fecha Entrega:</strong></p>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <small><strong>Usuario:</strong></small>
+                                <p class="mb-0"><small id="modal-egreso-usuario">Luiyi</small></p>
+                            </div>
+                            <div class="col-md-12" id="modal-egreso-observacion">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Observaci&oacute;n:</label>
+                                <textarea class="form-control" maxlength="500" id="modal-egreso-observacion"></textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <div class="row w-100 pe-0 ps-0">
+                            <div class="col-md-6 ps-0">
+                                <button type="button" class="btn btn-warning"><i class="bi bi-arrow-clockwise"></i> Devoluci&oacute;n</button>
+                            </div>
+                            <div class="col-md-6 pe-0 text-end">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
+                                <button type="button" class="btn btn-primary"><i class="bi bi-floppy"></i> Actualizar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailEgresoModal">
-        Launch demo modal
-    </button>
-    <script>
-        function sendDetailModal() {
-
-        }
-
-        function checkSku() {
-            let checkSku = document.getElementById('check-sku-egreso');
-            let inputEgreso = document.getElementById('input-sku-egreso');
-            let hiddenEgreso = document.getElementById('hidden-publicacion-sku');
-            let inputNumberOrder = document.getElementById('input-numero-orden');
-
-            if (checkSku.checked) {
-                inputEgreso.disabled = true;
-                inputEgreso.value = checkSku.value;
-                inputNumberOrder.disabled = true;
-                inputNumberOrder.value = checkSku.value;
-                hiddenEgreso.value = 'NULO';
-            } else {
-                inputEgreso.disabled = false;
-                inputEgreso.value = '';
-                inputNumberOrder.disabled = false;
-                inputNumberOrder.value = '';
-                hiddenEgreso.value = '';
-            }
-        }
-
-        function validateEgreso() {
-            let inputsEgreso = document.querySelectorAll('.input-egreso');
-            let disabledInput = false;
-
-            inputsEgreso.forEach(function(x) {
-                if (x.value == '') {
-                    disabledInput = true;
-                }
-            });
-
-            return disabledInput;
-        }
-
-        function handleBtnRegistrar() {
-            let btnRegEgreso = document.getElementById('btnRegistrarEgreso');
-
-            btnRegEgreso.disabled = validateEgreso();
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            handleBtnRegistrar();
-        });
-
-        document.getElementById('check-sku-egreso').addEventListener('change', checkSku);
-        document.getElementById('check-sku-egreso').addEventListener('change', handleBtnRegistrar);
-
-        let allInputsEgreso = document.querySelectorAll('.input-egreso');
-        allInputsEgreso.forEach(function(x) {
-            x.addEventListener('input', handleBtnRegistrar);
-        });
-    </script>
-    <script>
-        function searchRegistro(inputElement) {
-            let query = inputElement.value;
-
-            function handleClickOutside(event) {
-                let suggestions = document.getElementById('suggestions-serial-number');
-                if (!suggestions.contains(event.target) && event.target !== inputElement) {
-                    suggestions.innerHTML = ''; // Limpiar sugerencias si se hace clic fuera del input
-                }
-            }
-
-            // Agregar el manejador de clics al documento
-            document.addEventListener('click', handleClickOutside);
-
-            if (query.length > 2) { // Comenzar la búsqueda después de 3 caracteres
-                document.getElementById('hidden-product-serial-number').value = "";
-                let xhr = new XMLHttpRequest();
-                xhr.open('GET', `/egresos/searchregistro?query=${query}`, true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let data = JSON.parse(xhr.responseText);
-                        let suggestions = document.getElementById('suggestions-serial-number');
-                        suggestions.innerHTML = '';
-
-                        data.forEach(item => {
-                            let li = document.createElement('li');
-                            li.classList.add('list-group-item', 'pe-0');
-                            li.classList.add('hover-sistema-uno', 'text-truncate');
-                            li.style.cursor = "pointer";
-
-                            let divRow = document.createElement('div');
-                            divRow.classList.add('row', 'w-100');
-
-                            let colSerie = document.createElement('div');
-                            colSerie.classList.add('col-md-8');
-                            colSerie.textContent = item.numeroSerie;
-
-                            let colAlmacen = document.createElement('div');
-                            colAlmacen.classList.add('col-md-4', 'text-end');
-                            colAlmacen.textContent = item.almacen;
-
-                            let colProducto = document.createElement('div');
-                            colProducto.classList.add('col-md-12');
-                            let smallProducto = document.createElement('em');
-                            smallProducto.textContent = item.nombreProducto;
-                            smallProducto.style.fontSize = '12px';
-                            colProducto.appendChild(smallProducto);
-
-                            divRow.appendChild(colSerie);
-                            divRow.appendChild(colAlmacen);
-                            divRow.appendChild(colProducto);
-                            li.appendChild(divRow);
-
-                            li.addEventListener('click', function() {
-                                inputElement.value = item.numeroSerie;
-                                document.getElementById('hidden-product-serial-number').value = item
-                                    .idRegistroProducto;
-                                suggestions.innerHTML =
-                                ''; // Limpiar sugerencias después de seleccionar una
-                            });
-
-                            suggestions.appendChild(li);
-                        });
-                    }
-                };
-                xhr.send();
-            } else {
-                document.getElementById('suggestions-serial-number').innerHTML = ''; // Limpiar si hay menos de 3 caracteres
-                document.getElementById('hidden-product-serial-number').value = "";
-            }
-        }
-
-        function searchPublicacion(inputElement) {
-            let query = inputElement.value;
-
-            function handleClickOutside(event) {
-                let suggestions = document.getElementById('suggestions-sku');
-                if (!suggestions.contains(event.target) && event.target !== inputElement) {
-                    suggestions.innerHTML = ''; // Limpiar sugerencias si se hace clic fuera del input
-                }
-            }
-
-            // Agregar el manejador de clics al documento
-            document.addEventListener('click', handleClickOutside);
-
-            if (query.length > 2) { // Comenzar la búsqueda después de 3 caracteres
-                document.getElementById('hidden-publicacion-sku').value = "";
-                let xhr = new XMLHttpRequest();
-                xhr.open('GET', `/searchpublicacion?query=${query}`, true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        let data = JSON.parse(xhr.responseText);
-                        let suggestions = document.getElementById('suggestions-sku');
-                        suggestions.innerHTML = '';
-
-                        data.forEach(item => {
-                            let li = document.createElement('li');
-                            li.classList.add('list-group-item', 'pe-0');
-                            li.classList.add('hover-sistema-uno', 'text-truncate');
-                            li.style.cursor = "pointer";
-
-                            let divRow = document.createElement('div');
-                            divRow.classList.add('row', 'w-100');
-
-                            let colSerie = document.createElement('div');
-                            colSerie.classList.add('col-md-8');
-                            colSerie.textContent = item.sku;
-
-                            let colAlmacen = document.createElement('div');
-                            colAlmacen.classList.add('col-md-4', 'text-end');
-                            colAlmacen.textContent = item.fechaPublicacion;
-
-                            let colProducto = document.createElement('div');
-                            colProducto.classList.add('col-md-12');
-                            let smallProducto = document.createElement('em');
-                            smallProducto.textContent = item.titulo;
-                            smallProducto.style.fontSize = '12px';
-                            colProducto.appendChild(smallProducto);
-
-                            divRow.appendChild(colSerie);
-                            divRow.appendChild(colAlmacen);
-                            divRow.appendChild(colProducto);
-                            li.appendChild(divRow);
-
-                            li.addEventListener('click', function() {
-                                inputElement.value = item.sku;
-                                document.getElementById('hidden-publicacion-sku').value = item
-                                    .idPublicacion;
-                                suggestions.innerHTML =
-                                ''; // Limpiar sugerencias después de seleccionar una
-                            });
-
-                            suggestions.appendChild(li);
-                        });
-                    }
-                };
-                xhr.send();
-            } else {
-                document.getElementById('suggestions-sku').innerHTML = ''; // Limpiar si hay menos de 3 caracteres
-                document.getElementById('hidden-publicacion-sku').value = "";
-            }
-        }
-    </script>
-    <script>
-        document.getElementById('month').addEventListener('change', function() {
-            let selectedMonth = this.value;
-
-            if (selectedMonth == "") {
-                alert('Fecha no valida.');
-            } else {
-                let url = "/egresos/" + selectedMonth;
-
-                window.location.href = url;
-            }
-        });
-
-        document.getElementById('month').addEventListener('keydown', function(event) {
-            // Evita que la acci贸n de borrado ocurra si se presiona Backspace o Delete
-            if (event.key === 'Backspace' || event.key === 'Delete') {
-                event.preventDefault();
-            }
-        });
-    </script>
+    <script src="{{asset('js/egresos.js')}}"></script>
 @endsection

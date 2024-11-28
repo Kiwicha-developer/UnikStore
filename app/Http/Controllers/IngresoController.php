@@ -36,7 +36,7 @@ class IngresoController extends Controller
                 $fechacompleta = $month. '-01';
                 $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
                 
-                $registros = $this->ingresoService->getByMonth($month,100,$request->query('filtro'))->appends($request->all());;
+                $registros = $this->ingresoService->getByMonth($month,150,$request->query('filtro'))->appends($request->all());
 
                 if($request->query('page') || $request->query('filtro')){
                     $view = view('components.lista_ingresos', ['registros' => $registros,'container' => $request->query('container')])->render();
@@ -164,7 +164,7 @@ class IngresoController extends Controller
 
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 8){
-                if(isset($idRegistro) && isset($estado)){
+                if(isset($idRegistro)){
                     $this->ingresoService->updateRegistro($idRegistro,$estado,$observacion);
                 }
                 return back();

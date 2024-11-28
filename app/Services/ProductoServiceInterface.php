@@ -3,7 +3,7 @@ namespace App\Services;
 
 interface ProductoServiceInterface
 {
-    public function getAllProductsByColumn($column,$data,$cant);
+    public function getAllProductsByColumn($column,$data,$cant,$querys);
     public function getOneProductByColumn($column,$data);
     public function searchProducts($input);
     public function insertProduct($array,$proveedor,$img1,$img2,$img3,$img4);
@@ -24,4 +24,6 @@ interface ProductoServiceInterface
     public function getLastCodesProducts();
     public function searchAjaxProducts($column,$query);
     public function deleteCaracteristicaXProduct($idProducto,$idCaracteristica);
+    public function filtroMarcas($column,$data);
+    public function filtroEstados($column,$data);
 }

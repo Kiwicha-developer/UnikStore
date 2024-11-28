@@ -9,7 +9,7 @@ interface ProductoRepositoryInterface
     public function getAllByColumn($column,$data);
     public function searchOne($column,$data);
     public function searchList($column,$data);
-    public function paginateAllByColumn($column, $data,$cant);
+    public function paginateAllByColumn($column, $data,$cant,$querys);
     public function searchIntensiveProducts($data);
     public function create(array $productoData);
     public function update($idProducto, array $data);
@@ -19,4 +19,6 @@ interface ProductoRepositoryInterface
     public function getStockMinProducts();
     public function getProductsWithStock();
     public function getProductsCodes();
+    public function getMarcasByColumn($column,$data);
+    public function getEstadosByColumn($column,$data);
 }

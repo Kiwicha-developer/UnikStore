@@ -120,8 +120,8 @@ class ProductoService implements ProductoServiceInterface
         return $grupo;
     }
     
-    public function getAllProductsByColumn($column,$data,$cant){
-        $productos = $this->productoRepository->paginateAllByColumn($column,$data,$cant);
+    public function getAllProductsByColumn($column,$data,$cant,$querys){
+        $productos = $this->productoRepository->paginateAllByColumn($column,$data,$cant,$querys);
         return $productos;
     }
     
@@ -293,6 +293,14 @@ class ProductoService implements ProductoServiceInterface
         }
     }
     
+    public function filtroMarcas($column,$data){
+        return $this->productoRepository->getMarcasByColumn($column,$data);
+    }
+
+    public function filtroEstados($column,$data){
+        return $this->productoRepository->getEstadosByColumn($column,$data);
+    }
+
     private function insertInventory($idProducto){
         if (!$idProducto) {
             return null;

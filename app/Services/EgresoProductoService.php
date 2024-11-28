@@ -45,7 +45,7 @@ class EgresoProductoService implements EgresoProductoServiceInterface
     public function searchAjaxRegistro($serial){
         $egresos = $this->registroRepository->searchByEgreso($serial);
         $result = $egresos->take(5)->map(function($details) {
-                         return [
+                        return [
                             'nombreProducto' => $details->DetalleComprobante->Producto->nombreProducto,
                             'idRegistroProducto' => $details->idRegistro,
                             'numeroSerie' => $details->numeroSerie
@@ -75,7 +75,8 @@ class EgresoProductoService implements EgresoProductoServiceInterface
             $data['idEgreso'] = $this->getNewIdEgreso();
             $data['idUser'] = $this->headerService->getModelUser()->idUser;
 
-            $arrayRegistro =['estado' => 'ENTREGADO'];
+            $arrayRegistro =['estado' => 'ENTREGADO',
+                            'fechaMovimiento' => now()];
             
             $this->egresoRepository->create($data);
             $this->registroRepository->update($data['idRegistro'],$arrayRegistro);

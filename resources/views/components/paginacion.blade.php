@@ -4,7 +4,7 @@
         <ul class="pagination justify-content-{{$justify}}" style="position: relative">
             <div class="w-100 h-100 bg-transparent rounded-3" style="position: absolute;z-index:800;display:none" id="hidden-loader-paginate">
                 <div class="text-start ps-4 text-sistema-uno pt-1">
-                    <div class="spinner-border" role="status">
+                    <div class="spinner-grow" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>

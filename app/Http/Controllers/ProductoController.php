@@ -41,7 +41,7 @@ class ProductoController extends Controller
         //variables del controlador
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 2){
-                $productos = $this->productoService->getAllProductsByColumn('idGrupo',decrypt($idGrupo),15);
+                $productos = $this->productoService->getAllProductsByColumn('idGrupo',decrypt($idGrupo),15,$request->query('filtro'))->appends($request->all());;
 
                 if($request->query('page') || $request->query('filtro')){
                     $view = view('components.lista_producto', ['productos' => $productos,
@@ -56,6 +56,8 @@ class ProductoController extends Controller
                 $categoria = $this->productoService->getOneLabelCategory(decrypt($idCategory));
                 $categorias = $this->productoService->getAllLabelCategory();
                 
+                $filtros = ['marcas' => $this->productoService->filtroMarcas('idGrupo',decrypt($idGrupo)),
+                            'estados' => $this->productoService->filtroEstados('idGrupo',decrypt($idGrupo))];
                 
                 return view('productos',['user' => $userModel,
                                         'grupos' => $grupos,
@@ -63,7 +65,8 @@ class ProductoController extends Controller
                                         'grupo' => $grupo,
                                         'productos' => $productos,
                                         'categoria' => $categoria,
-                                        'tc' => $this->calculadoraService->getTasaCambio()
+                                        'tc' => $this->calculadoraService->getTasaCambio(),
+                                        'filtros' => $filtros
                                         ]);
             }
         }
