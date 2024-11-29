@@ -69,6 +69,18 @@ class ProductoRepository implements ProductoRepositoryInterface
         return Producto::where($column, 'LIKE', '%' . $data . '%')->get();
     }
 
+    public function searchTakeList($column, $data,$cont)
+    {
+        $this->validateColumns($column);
+        return Producto::where($column, 'LIKE', '%' . $data . '%')->take($cont)->get();
+    }
+
+    public function searchPaginateList($column,$cont,$data)
+    {
+        $this->validateColumns($column);
+        return Producto::where($column, 'LIKE', '%' . $data . '%')->paginate($cont);
+    }
+
     public function getMarcasByColumn($column,$data){
         $this->validateColumns($column);
         return Producto::select('idMarca')->distinct()
@@ -137,16 +149,20 @@ class ProductoRepository implements ProductoRepositoryInterface
         return $serial;
     }
     
-    public function searchIntensiveProducts($query){
-        $productos = Producto::where('codigoProducto', 'LIKE', '%'.$query.'%')
-                            ->orWhere('partNumber', 'LIKE', '%'.$query.'%')
-                            ->orWhere('modelo', 'LIKE', '%'.$query.'%')
-                            ->get();
-        return $productos;
+    public function searchIntensiveProducts($query,$cant,$filtros){
+        $consulta = Producto::query();
+        $consulta->where('codigoProducto', 'LIKE', '%'.$query.'%')
+        ->orWhere('partNumber', 'LIKE', '%'.$query.'%')
+        ->orWhere('modelo', 'LIKE', '%'.$query.'%');
+        return $consulta->paginate($cant);
     }
 
     public function getProductsCodes(){
         return Producto::select('idGrupo', DB::raw('MAX(codigoProducto) as codigoProducto'))->groupBy('idGrupo')->get();
+    }
+
+    public function getPaginationNull(){
+        return Producto::whereRaw('1=0')->paginate(10);
     }
 
     public function create(array $productoData)

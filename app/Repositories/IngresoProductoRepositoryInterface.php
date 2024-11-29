@@ -12,7 +12,7 @@ interface IngresoProductoRepositoryInterface
     public function create(array $data);
     public function update($id, array $data);
     public function getLast();
-    public function searchBySerialNumber($data);
+    public function searchBySerialNumber($data,$cant);
     public function getUsersByMonth($month);
     public function getProveedoresByMonth($month);
     public function getAlmacenesByMonth($month);

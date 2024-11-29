@@ -25,8 +25,8 @@ class PublicacionService implements PublicacionServiceInterface
     }
 
     public function searchAjaxPubli($data){
-        $publicaciones = $this->publicacionRepository->searchByEgreso($data)
-                        ->take(5)->map(function($details) {
+        $publicaciones = $this->publicacionRepository->searchByEgreso($data,5)
+                            ->map(function($details) {
                                              return [
                                                 'sku' => $details->sku,
                                                 'fechaPublicacion' => $details->fechaPublicacion->format('Y-m-d'),

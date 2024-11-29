@@ -43,6 +43,18 @@ class EgresoProductoRepository implements EgresoProductoRepositoryInterface
         $this->validateColumns($column);
         return EgresoProducto::where($column, 'LIKE', '%' . $data . '%')->get();
     }
+
+    public function getEgresoBySerial($serial,$cant)
+    {
+        return EgresoProducto::join('RegistroProducto','RegistroProducto.idRegistro','=','EgresoProducto.idRegistro')
+                            ->where(function($query){
+                                $query->where('RegistroProducto.estado','=','ENTREGADO')
+                                        ->orWhere('RegistroProducto.estado','=','DEVOLUCION');
+                            })
+                            ->where('RegistroProducto.numeroSerie','LIKE', '%' . $serial . '%')
+                            ->take($cant)
+                            ->get();
+    }
     
     public function create(array $data)
     {

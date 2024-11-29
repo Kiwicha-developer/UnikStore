@@ -8,13 +8,12 @@
 @section('content')
     <div class="container">
         <br>
-        En Mantenimiento (Evitar usar)
         <div class="row">
             <div class="col-6 col-md-5">
                 <div class="input-group mb-3" style="z-index:1000">
                     <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <input type="text" class="form-control" placeholder="Serial Number..." id="search">
-                    <ul class="list-group w-100" style="position:absolute;top:100%;z-index:1000" id="suggestions">
+                    <input type="text" class="form-control" oninput="searchEgreso(this)" placeholder="Serial Number..." id="search">
+                    <ul class="list-group w-100" style="position:absolute;top:100%;z-index:1000" id="suggestions-egresos">
                     </ul>
                 </div>
             </div>
@@ -88,10 +87,33 @@
                                 <small>{{ is_null($egreso->Publicacion) || is_null($egreso->Publicacion->sku) ? 'No aplica' : $egreso->Publicacion->sku }}</small>
                             </div>
                             <div class="col-md-2">
-                                <small>{{ $egreso->RegistroProducto->numeroSerie }}</small>
+                                @php
+                                    $egresoJson = [
+                                        'idEgreso' => $egreso->idEgreso,
+                                        'nombreProducto' => $egreso->RegistroProducto->DetalleComprobante->Producto->nombreProducto,
+                                        'numeroSerie' => $egreso->RegistroProducto->numeroSerie,
+                                        'estado' => $egreso->RegistroProducto->estado,
+                                        'fechaCompra' => $egreso->fechaCompra,
+                                        'fechaDespacho' => $egreso->fechaDespacho,
+                                        'fechaMovimiento' => $egreso->RegistroProducto->fechaMovimiento,
+                                        'usuario' => $egreso->Usuario->user,
+                                        'observacion' => $egreso->RegistroProducto->observacion,
+                                        'cuenta' => $egreso->Publicacion ? $egreso->Publicacion->CuentasPlataforma->nombreCuenta : null,
+                                        'sku' => $egreso->Publicacion ? $egreso->Publicacion->sku : null,
+                                        'numeroOrden' => $egreso->numeroOrden,
+                                        'imagenPublicacion' => $egreso->Publicacion ? asset('storage/'.$egreso->Publicacion->CuentasPlataforma->Plataforma->imagenPlataforma) : null
+                                    ];
+                                @endphp
+                                <a href="javascript:void(0)" 
+                                   onclick='viewModalEgreso(@json($egresoJson))' 
+                                   class="decoration-link">
+                                    <small>{{ $egreso->RegistroProducto->numeroSerie }}</small>
+                                </a>
                             </div>
                             <div class="col-md-1">
-                                <a href="javascript:void(0)" onclick='viewModalEgreso("{{$egreso->RegistroProducto->DetalleComprobante->Producto->nombreProducto}}",@json($egreso->RegistroProducto),@json($egreso),@json($egreso->Publicacion))' class="decoration-link"><small>{{ $egreso->RegistroProducto->estado }}</small></a>
+                            <small>
+                                {{ $egreso->RegistroProducto->estado }}
+                            </small>
                             </div>
                             <div class="col-md-1">
                                 <small>{{ $egreso->fechaCompra->format('d/m/y') }}</small>
@@ -173,51 +195,57 @@
                 </div>
             </div>
         </form>
-        <div class="modal fade" id="detailEgresoModal" tabindex="-1" aria-labelledby="detailEgresoModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h5 id="modal-egreso-titulo">Titulo del producto</h5>
-                            </div>
-                            <div class="col-md-6 text-secondary">
-                                <h6 id="modal-egreso-serialnumber">serial number</h6>
-                            </div>
-                            <div class="col-md-6 text-secondary text-end">
-                                <h6 id="modal-egreso-estado">estado</h6>
-                            </div>
-                            <div class="col-md-6" id="modal-egreso-fecha">
-                                <p class="mb-0"><strong>Fecha Despacho:</strong></p>
-                                <p class="mt-0"><strong>Fecha Entrega:</strong></p>
-                            </div>
-                            <div class="col-md-6 text-end">
-                                <small><strong>Usuario:</strong></small>
-                                <p class="mb-0"><small id="modal-egreso-usuario">Luiyi</small></p>
-                            </div>
-                            <div class="col-md-12" id="modal-egreso-observacion">
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label fw-bold">Observaci&oacute;n:</label>
-                                <textarea class="form-control" maxlength="500" id="modal-egreso-observacion"></textarea>
+        <form action="{{route('devolucionegreso')}}" method="post" id="form-detail-egreso">
+            @csrf
+            <div class="modal fade" id="detailEgresoModal" tabindex="-1" aria-labelledby="detailEgresoModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="hidden" id="modal-egreso-transaccion" name="transaccion">
+                                    <input type="hidden" id="modal-egreso-id" name="idegreso">
+                                    <h5 id="modal-egreso-titulo"></h5>
+                                </div>
+                                <div class="col-md-6 text-secondary">
+                                    <h6 id="modal-egreso-serialnumber"></h6>
+                                </div>
+                                <div class="col-md-6 text-secondary text-end">
+                                    <h6 id="modal-egreso-estado"></h6>
+                                </div>
+                                <div class="col-md-6" id="modal-egreso-fecha">
+                                    <p class="mb-0"><strong></strong></p>
+                                    <p class="mt-0"><strong></strong></p>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <small><strong></strong></small>
+                                    <p class="mb-0"><small id="modal-egreso-usuario"></small></p>
+                                </div>
+                                <div class="col-md-12 mt-1" id="modal-egreso-publicidad">
+                                    
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold">Observacion:</label>
+                                    <textarea class="form-control" maxlength="500" id="modal-egreso-observacion" name="observacion"></textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="row w-100 pe-0 ps-0">
-                            <div class="col-md-6 ps-0">
-                                <button type="button" class="btn btn-warning"><i class="bi bi-arrow-clockwise"></i> Devoluci&oacute;n</button>
-                            </div>
-                            <div class="col-md-6 pe-0 text-end">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
-                                <button type="button" class="btn btn-primary"><i class="bi bi-floppy"></i> Actualizar</button>
+                        <div class="modal-footer">
+                            <div class="row w-100 pe-0 ps-0">
+                                <div class="col-md-6 ps-0">
+                                    <button type="button" onclick="formDetailEgreso('devolucion')" class="btn btn-warning"><i class="bi bi-arrow-clockwise"></i> Devoluci&oacute;n</button>
+                                </div>
+                                <div class="col-md-6 pe-0 text-end">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
+                                    <button type="button" onclick="formDetailEgreso('update')" class="btn btn-primary"><i class="bi bi-floppy"></i> Actualizar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
     <script src="{{asset('js/egresos.js')}}"></script>
 @endsection

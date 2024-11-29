@@ -82,11 +82,12 @@
         </div>
     </div>
     <br>
-    <x-paginacion :justify="'end'" :coleccion="$productos" :container="$container"/>
+    
     @else
     <div class="row align-items-center" style="height:50vh">
         <x-aviso_no_encontrado :mensaje="''" />
     </div>
     @endif
+    <x-paginacion :justify="'end'" :coleccion="$productos" :container="$container"/>
     <script src="{{ route('js.list-product-scripts',[$tc]) }}"></script>
 </div>

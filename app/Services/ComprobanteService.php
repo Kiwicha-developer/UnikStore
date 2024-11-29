@@ -154,8 +154,7 @@ class ComprobanteService implements ComprobanteServiceInterface
         }
     }
     public function searchAjaxComprobante($column,$data){
-        $comprobantes = $this->comprobanteRepository->searchList($column,$data)
-                        ->take(5)
+        $comprobantes = $this->comprobanteRepository->searchTakeList($column,$data,5)
                         ->map(function($comprobante) {
                             $comprobante->fechaPersonalizada = Carbon::parse($comprobante->fechaRegistro)->format('d-m-Y');
                             $comprobante->encryptId = encrypt($comprobante->idComprobante );

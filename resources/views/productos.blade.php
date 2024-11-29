@@ -102,6 +102,5 @@
             <x-lista_producto :productos="$productos" :tc="$tc" :container="'container-list-products'" />
         </div>
     </div>
-    <br>
     <script src="{{asset('js/filtro_componente.js')}}"></script>
 @endsection

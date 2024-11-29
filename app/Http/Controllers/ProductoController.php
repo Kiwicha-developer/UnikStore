@@ -3,20 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Services\HeaderServiceInterface;
 use App\Services\CalculadoraServiceInterface;
-use App\Services\ImageService;
 use App\Services\PreciosService;
 
 use App\Services\ProductoServiceInterface;
-use App\Services\GrupoProductoServiceInterface;
-use App\Services\CategoriaProductoServiceInterface;
-use App\Services\MarcaProductoServiceInterface;
-use App\Services\ProveedorServiceInterface;
-use App\Services\AlmacenServiceInterface;
-use App\Services\InventarioServiceInterface;
-use App\Services\ProveedorInventarioServiceInterface;
 use Exception;
 
 class ProductoController extends Controller
@@ -172,7 +163,14 @@ class ProductoController extends Controller
             if($acceso->idVista == 2){
                 //variables del controlador
                 $input = $request->input('search');
-                $productos = $this->productoService->searchProducts($input);
+                $productos = $this->productoService->searchProducts($input,25,$request->query('filtros'));
+
+                if($request->query('page') || $request->query('filtro')){
+                    $view = view('components.lista_producto', ['productos' => $productos,
+                                                                'container' => $request->query('container'),
+                                                                'tc' => $this->calculadoraService->getTasaCambio()])->render();
+                    return response()->json(['html' => $view]);
+                }
                 
                 return view('buscarproducto',['user' => $userModel,
                                                 'productos' => $productos,

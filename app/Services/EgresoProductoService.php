@@ -43,12 +43,35 @@ class EgresoProductoService implements EgresoProductoServiceInterface
     }
 
     public function searchAjaxRegistro($serial){
-        $egresos = $this->registroRepository->searchByEgreso($serial);
-        $result = $egresos->take(5)->map(function($details) {
+        $egresos = $this->registroRepository->searchByEgreso($serial,5);
+        $result = $egresos->map(function($details) {
                         return [
                             'nombreProducto' => $details->DetalleComprobante->Producto->nombreProducto,
                             'idRegistroProducto' => $details->idRegistro,
                             'numeroSerie' => $details->numeroSerie
+                        ];
+                    });
+        return $result;
+    }
+    
+    public function searchAjaxEgreso($serie,$cant){
+        $egresos = $this->egresoRepository->getEgresoBySerial($serie,$cant);
+        $result = $egresos->map(function($details) {
+                        return [
+                                'idEgreso' => $details->idEgreso,
+                                'nombreProducto' => $details->RegistroProducto->DetalleComprobante->Producto->nombreProducto,
+                                'codigoProducto' => $details->RegistroProducto->DetalleComprobante->Producto->codigoProducto,
+                                'numeroSerie' => $details->RegistroProducto->numeroSerie,
+                                'estado' => $details->RegistroProducto->estado,
+                                'fechaCompra' => $details->fechaCompra,
+                                'fechaDespacho' => $details->fechaDespacho,
+                                'fechaMovimiento' => $details->RegistroProducto->fechaMovimiento,
+                                'usuario' => $details->Usuario->user,
+                                'observacion' => $details->RegistroProducto->observacion,
+                                'cuenta' => $details->Publicacion ? $details->Publicacion->CuentasPlataforma->nombreCuenta : null,
+                                'sku' => $details->Publicacion ? $details->Publicacion->sku : null,
+                                'numeroOrden' => $details->numeroOrden,
+                                'imagenPublicacion' => $details->Publicacion ? asset('storage/'.$details->Publicacion->CuentasPlataforma->Plataforma->imagenPlataforma) : null
                         ];
                     });
         return $result;

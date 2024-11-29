@@ -17,7 +17,9 @@ function loadProducts(url) {
         })
         .then(data => {
             document.getElementById(containerValue).innerHTML = data.html;
-            loader.style.display = 'none';
+            if(loader){
+                loader.style.display = 'none';
+            }
         })
         .catch(error => console.error('Error al cargar los productos:', error));
 }

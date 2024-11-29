@@ -136,25 +136,23 @@ class ProductoService implements ProductoServiceInterface
     }
     
     public function searchAjaxProducts($column,$query){
-        $productos = $this->productoRepository->searchList($column,$query)
-                    ->take(5);
+        $productos = $this->productoRepository->searchTakeList($column,$query,5);
         return $productos;
     }
     
-    public function searchProducts($input){
-        $productos = collect(); 
-        
+    public function searchProducts($input,$cont,$filtros){
+        $productos = $this->productoRepository->getPaginationNull();    
         $marca = $this->marcaRepository->searchOne('nombreMarca',$input);
         
         if ($marca) {
-            $productos = $this->productoRepository->getAllByColumn('idMarca',$marca->idMarca);
+            $productos = $this->productoRepository->paginateAllByColumn('idMarca',$marca->idMarca,$cont,$filtros);
         }
         
         if($productos->isEmpty()){
-            $productos = $this->productoRepository->searchIntensiveProducts($input);
+            $productos = $this->productoRepository->searchIntensiveProducts($input,$cont,$filtros);
         }
         if($productos->isEmpty()){
-            $productos = $this->productoRepository->searchList('nombreProducto',$input);
+            $productos = $this->productoRepository->searchPaginateList('nombreProducto',$cont,$input);
         }
         
         return $productos;

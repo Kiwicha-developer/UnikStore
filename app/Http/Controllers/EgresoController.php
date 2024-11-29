@@ -87,10 +87,21 @@ class EgresoController extends Controller
             
         
     }
+
+    public function devolucionEgreso(Request $request){
+        dd($request);
+    }
     
     public function searchRegistro(Request $request){
         $query = $request->input('query');
         $results = $this->egresoService->searchAjaxRegistro($query);
+    
+        return response()->json($results);
+    }
+
+    public function searchEgreso(Request $request){
+        $query = $request->input('query');
+        $results = $this->egresoService->searchAjaxEgreso($query,5);
     
         return response()->json($results);
     }

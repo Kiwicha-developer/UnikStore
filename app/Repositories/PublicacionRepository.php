@@ -49,8 +49,8 @@ class PublicacionRepository implements PublicacionRepositoryInterface
                       ->get();
     }
 
-    public function searchByEgreso($data){
-        return Publicacion::where('estado','<>',-1)->where('sku', 'LIKE', "%{$data}%")->get();
+    public function searchByEgreso($data,$cant){
+        return Publicacion::where('estado','<>',-1)->where('sku', 'LIKE', "%{$data}%")->take($cant)->get();
     }
 
     public function validateSkuDuplicity($sku,$idPlataforma){

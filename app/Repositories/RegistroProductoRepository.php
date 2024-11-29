@@ -55,10 +55,11 @@ class RegistroProductoRepository implements RegistroProductoRepositoryInterface
                                     ->get();
     }
 
-    public function searchByEgreso($serial){
+    public function searchByEgreso($serial,$cant){
         return RegistroProducto::where('estado','!=','ENTREGADO')
                                 ->where('estado','!=','INVALIDO')
                                 ->where('numeroSerie', 'LIKE', "%{$serial}%")
+                                ->take($cant)
                                 ->get();
     }
 

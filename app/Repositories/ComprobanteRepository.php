@@ -61,6 +61,12 @@ class ComprobanteRepository implements ComprobanteRepositoryInterface
         return Comprobante::where($column, 'LIKE', '%' . $data . '%')->get();
     }
 
+    public function searchTakeList($column, $data,$cant)
+    {
+        $this->validateColumns($column);
+        return Comprobante::where($column, 'LIKE', '%' . $data . '%')->take($cant)->get();
+    }
+
     public function getUsuariosByMonth($month){
         return Comprobante::select('idUser')->distinct()
                             ->whereMonth('fechaRegistro', $month)

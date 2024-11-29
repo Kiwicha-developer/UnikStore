@@ -59,11 +59,11 @@
             @endforeach
         </ul>
         <br>
-        <x-paginacion :justify="'end'" :coleccion="$documentos" :container="$container"/>
         @else
         <div class="row align-items-center" style="height:80vh">
             <x-aviso_no_encontrado :mensaje="''" />
         </div>
         @endif
+        <x-paginacion :justify="'end'" :coleccion="$documentos" :container="$container"/>
     </div>
 </div>

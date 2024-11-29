@@ -76,12 +76,13 @@ class IngresoProductoRepository implements IngresoProductoRepositoryInterface
         return IngresoProducto::where($column, 'LIKE', '%' . $data . '%')->get();
     }
     
-    public function searchBySerialNumber($data)
+    public function searchBySerialNumber($data,$cant)
     {
         return IngresoProducto::join('RegistroProducto','RegistroProducto.idRegistro','=','IngresoProducto.idRegistro')
                                 ->where('RegistroProducto.estado', '<>', 'ENTREGADO')
                                 ->where('RegistroProducto.estado', '<>', 'INVALIDO')
                                 ->where('RegistroProducto.numeroSerie', 'LIKE', '%' . $data . '%')
+                                ->take($cant)
                                 ->get();
     }
 

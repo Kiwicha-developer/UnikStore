@@ -57,7 +57,7 @@ class IngresoProductoService implements IngresoProductoServiceInterface
     }
 
     public function searchAjaxIngreso($data){
-        $ingreso = $this->ingresoRepository->searchBySerialNumber($data)->take(5)
+        $ingreso = $this->ingresoRepository->searchBySerialNumber($data,5)
                     ->map(function($x){
                         $x->fechaIngresoPerso = Carbon::parse($x->fechaIngreso)->format('d-m-Y');
                         $x->fechaMovimiento = Carbon::parse($x->fechaMovimiento)->format('d-m-Y');
