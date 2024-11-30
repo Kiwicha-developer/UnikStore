@@ -182,5 +182,5 @@
         </div>
       </div>
 </div>
-<script src="{{asset('js/publicaciones.js')}}"></script>
+<script src="{{asset('js/publish.js')}}"></script>
 @endsection

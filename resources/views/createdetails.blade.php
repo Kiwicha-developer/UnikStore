@@ -7,10 +7,10 @@
     <br>
     <br>
     <div class="row ">
-        <div class="col-6">
+        <div class="col-8">
             <h2><a href="{{route('producto',[encrypt($producto->idProducto)])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> ESPECIFICACIONES <em class="text-secondary fw-normal">({{$producto->codigoProducto}})</em></h2>
         </div>
-         <div class="col-6 text-end">
+         <div class="col-4 text-end">
             <a class="btn bg-sistema-uno text-light" href="{{route('productos',[encrypt($producto->GrupoProducto->idCategoria),encrypt($producto->idGrupo)])}}">Productos <i class="bi bi-box-fill"></i></a>
         </div>
     </div>
@@ -22,13 +22,10 @@
         <div class="col-3 col-md-2">
             <img src="{{ asset('storage/'.$producto->MarcaProducto->imagenMarca) }}" alt="imagen marca" style="width:100%" class="rounded-3">
         </div>
-        <div class="col-9">
-            
-        </div>
-        <div class="col-4 col-md-8">
+        <div class="col-9 text-md-start text-end col-md-8">
             <h5>{{$producto->estadoProductoWeb}}</h5>
         </div>
-        <div class="col-8 col-md-4 text-end">
+        <div class="col-12 col-md-4 text-md-end">
                 <h5 data-bs-toggle="tooltip" data-bs-placement="bottom" title="Modelo">{{$grupo['nombreGrupo']}}: {{$producto->modelo}}</h4>
         </div>
         

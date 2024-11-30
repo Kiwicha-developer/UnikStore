@@ -9,14 +9,14 @@
         <div class="col-md-6">
             <h2><a href="{{route('documentos',[now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-filter-circle"></i></a> {{$documento->Preveedor->razSocialProveedor}}</h2>
         </div>
-        <div class="col-6 col-md-6 ">
+        <div class="col-8 col-md-6 ">
             <h2 class="text-end d-none d-sm-none d-md-block">{{$documento->numeroComprobante}}</h2>
-            <h2 class="d-block d-sm-none">{{$documento->numeroComprobante}}</h2>
+            <h4 class="d-block d-sm-none">{{$documento->numeroComprobante}}</h4>
         </div>
         <div class="col-md-6 d-none d-md-block">
             <h4 class="text-secondary">RUC: {{$documento->Preveedor->rucProveedor}}</h4>
         </div>
-        <div class="col-6 col-md-6 text-end">
+        <div class="col-4 col-md-6 text-end">
             <h4 class="text-secondary">{{$documento->TipoComprobante->descripcion}}</h4>
         </div>
     </div>
@@ -73,13 +73,13 @@
             </div>
             @else
             <div class="row">
-                <div class="col-md-6 mb-4 ">
+                <div class="col-6 col-md-6 mb-4 ">
                     <button type="button" onclick="deleteForm({{$documento->idComprobante}})" class="btn btn-danger {{$documento->estado == 'INVALIDO' ? 'd-none' : ''}}">
                         <i class="bi bi-trash3"></i> Eliminar {{$documento->TipoComprobante->descripcion}}
                     </button>
                 </div>
                 @if(count($pdf) > 0)
-                    <div class="col-md-6 text-end mb-4">
+                    <div class="col-6 col-md-6 text-end mb-4">
                         <button type="button" class="btn btn-danger" onclick="openPdfInNewWindow()"><i class="bi bi-file-earmark-pdf"></i> Series</button>
                     </div>
                 @endif
@@ -142,19 +142,22 @@
                     <h2 class="accordion-header" id="flush-heading-{{$cont}}">
                       <button class="accordion-button collapsed border-bottom list-group-item-secondary ps-3 pe-3" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-{{$cont}}" aria-expanded="false" aria-controls="flush-collapse-{{$cont}}">
                         <div class="row text-center w-100">
-                            <div class="col-12 col-md-6 text-start fw-bold mb-2">
-                                {{$detalle->Producto->nombreProducto}}
-                            </div>
-                            <div class="col-2 col-md-1">
+                            <div class="col-1 d-block d-md-none pt-1">
                                 {{count($detalle->RegistroProducto)}}
                             </div>
-                            <div class="col-3 col-md-2">
+                            <div class="col-11 col-md-6 text-start fw-bold mb-2">
+                                {{$detalle->Producto->nombreProducto}}
+                            </div>
+                            <div class="col-md-1 d-none d-md-block">
+                                {{count($detalle->RegistroProducto)}}
+                            </div>
+                            <div class="col-3 col-md-2 d-none d-md-block">
                                 {{$detalle->medida}}
                             </div>
-                            <div class="col-3 col-md-1">
+                            <div class="col-3 col-md-1 d-none d-md-block">
                                 {{number_format($detalle->precioUnitario, 2)}}
                             </div>
-                            <div class="col-4 col-md-2">
+                            <div class="col-4 col-md-2 d-none d-md-block">
                                 {{number_format($detalle->precioCompra, 2)}}
                             </div>
                         </div>
@@ -163,6 +166,22 @@
                     <div id="flush-collapse-{{$cont}}" class="accordion-collapse collapse" aria-labelledby="flush-heading-{{$cont}}" data-bs-parent="#accordionFlushExample">
                       <div class="accordion-body ps-0 pe-0 pt-0 pb-0">
                         <ul class="list-group" style="position: relative;">
+                            <li class="list-group-item list-group-item-secondary d-block d-md-none">
+                                <div class="row">
+                                    <div class="col-4 col-md-2">
+                                        <small>Unidad de medida:</small>
+                                        <p class="mb-0">{{$detalle->medida}}</p>
+                                    </div>
+                                    <div class="col-4 col-md-1">
+                                        <small>Precio Unitario:</small>
+                                        <p class="mb-0">{{number_format($detalle->precioUnitario, 2)}}</p>
+                                    </div>
+                                    <div class="col-4 col-md-2">
+                                        <small>Precio Total:</small>
+                                        <p class="mb-0">{{number_format($detalle->precioCompra, 2)}}</p>
+                                    </div>
+                                </div>
+                            </li>
                             @foreach($detalle->RegistroProducto as $registro)
                             <li class="list-group-item">
                                 <div class="row text-center {{$registro->estado == 'INVALIDO' ? 'text-danger text-decoration-line-through' : ''}}">

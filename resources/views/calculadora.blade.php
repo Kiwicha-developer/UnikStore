@@ -16,31 +16,31 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-lg-8">
                 <div class="row border shadow rounded-3 me-1 ms-1 pt-2 pb-2">
                     <div class="col-12 col-md-12">
                         <h4>Precio:</h4>
                     </div>
-                    <div class="col-4 col-md-4">
+                    <div class="col-4 col-lg-4">
                         <label>Moneda:</label>
                         <select class="form-select" onchange="calculateTc(this)" id="select-type">
                           <option value="DOLAR">Dolar</option>
                           <option value="SOL">Sol</option>
                         </select>
                     </div>
-                    <div class="col-4 col-md-2">
+                    <div class="col-4 col-lg-2">
                         <label>Sin IGV:</label>
                         <input type="number" value="0.00" class="form-control" step="0.01" id="precio-entrada">
                     </div>
-                    <div class="col-4 col-md-2">
+                    <div class="col-4 col-lg-2">
                         <label>Con IGV:</label>
                         <input type="number" id="costo-igv" value="0.00" class="form-control" step="0.01">
                     </div>
                 </div>
             </div>
-            <div class="col-md-1 mb-4"></div>
-            <div class="col-6 d-block d-sm-none"></div>
-            <div class="col-6 col-md-3">
+            <div class="col-lg-1 mb-4"></div>
+            <div class="col-6 d-block d-lg-none"></div>
+            <div class="col-6 col-lg-3">
                 <div class="row border shadow rounded-3 me-1 ms-1 pt-2 pb-2">
                     <div class="col-md-12">
                         <h4 >Categorias:</h4>
@@ -109,10 +109,10 @@
                     </div>
                     <div class="col-md-12">
                         <div class="row mb-2">
-                            <div class="col-7 col-md-10">
+                            <div class="col-7 col-md-8 col-lg-10">
                                 <h4>{{$plata->nombrePlataforma}}:</h4>
                             </div>
-                            <div class="col-5 col-md-2 text-end">
+                            <div class="col-5 col-md-4 col-lg-2 text-end">
                                 <img src="{{asset('storage/'.$plata->imagenPlataforma)}}" class="w-50">
                             </div>
                         </div>
@@ -121,25 +121,25 @@
                         <ul class="list-group list-group-flush rounded-3 border">
                             <li class="list-group-item">
                                 <div class="row text-secondary">
-                                    <div class="col-3 col-md-2 text-truncate">
+                                    <div class="col-3 col-lg-2 text-truncate">
                                         <em><strong>Porcentaje:</strong></em>
                                     </div>
-                                    <div class="col-2 col-md-1">
+                                    <div class="col-2 col-lg-1">
                                         <em><strong>Monto:</strong></em>
                                     </div>
-                                    <div class="col-2 col-md-2">
+                                    <div class="col-2 col-lg-2">
                                         <em><strong>Costo:</strong></em>
                                     </div>
-                                    <div class="col-md-1 d-none d-sm-none d-md-block">
+                                    <div class="col-lg-1 d-none d-sm-none d-lg-block">
                                         <em><strong>T.S.Fact:</strong></em>
                                     </div>
-                                    <div class="col-md-2 d-none d-sm-none d-md-block">
+                                    <div class="col-lg-2 d-none d-sm-none d-lg-block">
                                         <em><strong>T.Fact:</strong></em>
                                     </div>
-                                    <div class="col-2 col-md-2">
+                                    <div class="col-2 col-lg-2">
                                         <em><strong>Flete:</strong></em>
                                     </div>
-                                    <div class="col-2 col-md-2 text-end">
+                                    <div class="col-2 col-lg-2 text-end">
                                         <em><strong>Promedio:</strong></em>
                                     </div>
                                 </div>
@@ -147,25 +147,25 @@
                             @foreach($plata->ComisionPlataforma as $comi)
                                 <li class="list-group-item li-comision-plataforma hover-sistema-uno">
                                     <div class="row">
-                                        <div data-porcent="{{number_format($comi->comision,2,'.')}}" class="col-3 col-md-2 porcentaje-plataforma">
+                                        <div data-porcent="{{number_format($comi->comision,2,'.')}}" class="col-3 col-lg-2 porcentaje-plataforma">
                                             <small>%{{number_format($comi->comision,2,'.')}}</small>
                                         </div>
-                                        <div class="col-2 col-md-1">
+                                        <div class="col-2 col-lg-1">
                                             <small class="monto-plataforma">0.00</small>
                                         </div>
-                                        <div class="col-2 col-md-2">
+                                        <div class="col-2 col-lg-2">
                                             <small class="costo-plataforma">0.00</small>
                                         </div>
-                                        <div class="col-md-1 d-none d-sm-none d-md-block">
+                                        <div class="col-lg-1 d-none d-lg-block">
                                             <small class="tsfact-plataforma">0.00</small>
                                         </div>
-                                        <div class="col-md-2 d-none d-sm-none d-md-block">
+                                        <div class="col-lg-2 d-none d-lg-block">
                                             <small class="tfact-plataforma">0.00</small>
                                         </div>
-                                        <div class="col-2 col-md-2">
+                                        <div class="col-2 col-lg-2">
                                             <small class="flete-plataforma" data-flete="{{number_format($comi->flete,2,'.')}}" >{{number_format($comi->flete,2,'.')}}</small>
                                         </div>
-                                        <div class="col-2 col-md-2 text-end">
+                                        <div class="col-2 col-lg-2 text-end">
                                             <small class="promedio-plataforma fw-bold">0.00</small>
                                         </div>
                                     </div>

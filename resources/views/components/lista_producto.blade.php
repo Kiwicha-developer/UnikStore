@@ -6,17 +6,17 @@
                 <li class="list-group-item d-flex bg-sistema-uno text-light"
                     style="position:sticky; top: 0;z-index:800">
                     <div class="row w-100 h-100 align-items-center">
-                        <div class="col-6 col-md-6 d-none d-md-block text-center">
+                        <div class="col-12 col-md-8 col-lg-6 text-center">
                             <h6>Producto</h6>
                         </div>
-                        <div class="col-3 col-md-1 text-center">
+                        <div class="d-none d-lg-block col-lg-1 text-center">
                             <h6><a style="cursor:pointer" onclick="changePriceList()"><i
                                         class="bi bi-caret-down-fill d-none d-md-inline"></i>Precio</a></h6>
                         </div>
-                        <div class="col-6 col-md-4 text-center">
+                        <div class="d-none d-md-block col-md-4 col-lg-4 text-center">
                             <h6>Stock</h6>
                         </div>
-                        <div class="col-3 col-md-1 text-center">
+                        <div class="d-none d-lg-block col-lg-1 text-center">
                             <h6>Proveedor</h6>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                 <li
                     class="list-group-item justify-content-between align-items-center li-item-product-{{$pro->estadoProductoWeb}} li-item-product-all">
                     <div class="row w-100 ">
-                        <div class="col-2 col-md-1 text-center" style="position:relative;cursor:pointer">
+                        <div class="col-2 col-lg-1 text-center" style="position:relative;cursor:pointer">
                             <img onmouseover="mostrarImg({{ $pro->idProducto }})"
                                 onmouseout="ocultarImg({{ $pro->idProducto }})"
                                 src="{{ asset('storage/'.$pro->imagenProducto1) }}" alt="Tooltip Imagen"
@@ -37,7 +37,7 @@
                                     style="width:100%" class="rounded-3">
                             </div>
                         </div>
-                        <div class="col-10 col-md-5">
+                        <div class="col-10 col-md-6 col-lg-5">
                             <div class="row h-100">
                                 <div class="col-12" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="Cod: {{$pro->codigoProducto}}">
@@ -54,11 +54,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3 col-md-1 text-center">
+                        <div class="col-md-1 d-none d-lg-block text-center">
                             <small data-value="{{$pro->precioDolar}}"
                                 class="price-list-product">${{$pro->precioDolar}}</small>
                         </div>
-                        <div class="col-6 col-md-4">
+                        <div class="d-none d-md-block col-md-4">
                             <div class="row text-center">
                                 @foreach($pro->Inventario as $inventario)
                                 <div class="col-6 {{$inventario->stock < $pro->stockMin ? 'text-danger' : ''}}">
@@ -70,7 +70,7 @@
 
                             </div>
                         </div>
-                        <div class="col-3 col-md-1 text-center">
+                        <div class="d-none d-lg-block col-md-1 text-center">
                             <small>{{$pro->Inventario_Proveedor->Preveedor->nombreProveedor}}</small>
                             <br>
                             <small>{{$pro->Inventario_Proveedor->stock}}</small>

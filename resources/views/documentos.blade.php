@@ -9,7 +9,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-6 col-md-5 text-end" style="position:relative;z-index:999">
+        <div class="col-6 col-lg-5 text-end" style="position:relative;z-index:999">
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control" placeholder="Nro documento" id="search">
@@ -17,8 +17,8 @@
                 </ul>
             </div>
         </div>
-        <div class="col-md-4 d-none d-sm-none d-md-block"></div>
-        <div class="col-6 col-md-3 text-end">
+        <div class="col-lg-4 d-none d-lg-block"></div>
+        <div class="col-6 col-lg-3 text-end">
             <input type="month" class="form-control" id="month" name="month" placeholder="MM-YYYY"
                 value="{{$fecha->format('Y-m')}}">
         </div>
@@ -34,18 +34,18 @@
             @foreach ($user->Accesos as $vista)
             @if($vista->idVista == 11)
             <a href="{{route('traslados')}}" class="btn btn-info mb-2"><i class="bi bi-arrow-left-right"></i>
-                Traslado</a>
+                <span class="d-none d-md-inline">Traslado</span></a>
             @endif
             @endforeach
             <a href="{{route('ingresos', [now()->format('Y-m')])}}" class="btn btn-success mb-2"><i
-                    class="bi bi-file-earmark-plus-fill"></i> Ingresos</a>
+                    class="bi bi-file-earmark-plus-fill"></i> <span class="d-none d-md-inline">Ingresos</span></a>
             <a href="{{route('egresos', [now()->format('Y-m')])}}" class="btn btn-warning mb-2"><i
-                    class="bi bi-file-earmark-minus-fill"></i> Egresos</a>
+                    class="bi bi-file-earmark-minus-fill"></i> <span class="d-none d-md-inline">Egresos</span></a>
         </div>
     </div>
     <form action="{{url()->current()}}" method="get" id="form-filtro-componente">
         <div class="row mb-2">
-            <div class="col-md-2">
+            <div class="col-6 col-md-3 col-lg-2">
                 <small>Usuario</small>
                 <select class="form-select form-select-sm filtro-componente" name="filtro[usuario]" >
                     <option value="">Todos</option>
@@ -54,7 +54,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-3 col-lg-2">
                 <small>Proveedores</small>
                 <select class="form-select form-select-sm filtro-componente"  name="filtro[proveedor]">
                     <option value="">Todos</option>
@@ -63,7 +63,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-3 col-lg-2">
                 <small>Documento</small>
                 <select class="form-select form-select-sm filtro-componente"  name="filtro[documento]">
                     <option value="">Todos</option>
@@ -72,7 +72,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-3 col-lg-2">
                 <small>Estado</small>
                 <select class="form-select form-select-sm filtro-componente"  name="filtro[estado]">
                     <option value="">Todos</option>

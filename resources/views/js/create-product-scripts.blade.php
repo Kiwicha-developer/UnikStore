@@ -34,7 +34,7 @@
                             
                             data[1].total.forEach(function(x){
                                 let divPrecio = document.createElement('div');
-                                divPrecio.classList.add('col-md-4');
+                                divPrecio.classList.add('col-lg-4','col-md-8');
                                 
                                 let labelEmpresa = document.createElement('label');
                                 labelEmpresa.classList.add('form-label');

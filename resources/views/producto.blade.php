@@ -14,11 +14,11 @@
     <form action="{{route('updateproduct',[encrypt($producto->idProducto)])}}" method="POST" enctype="multipart/form-data">
         @csrf
     <div class="row">
-        <div class="col-10 col-md-6 d-flex align-items-center">
+        <div class="col-10 col-lg-6 d-flex align-items-center">
             <h3><a href="javascript:void(0);" onclick="history.back();" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> PRODUCTO: <span class="text-secondary">{{$producto->codigoProducto}}</span></h3>
         </div>
-        <div class="col-2 col-md-6 text-end pt-2">
-            <h5><a class="btn btn-secondary" href="{{route('details',[$producto->idProducto])}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Especificaciones"><i class="bi bi-layers"></i></a></h5>
+        <div class="col-2 col-lg-6 text-end pt-2">
+            <h5><a class="btn btn-secondary" href="{{route('details',[$producto->idProducto])}}"><i class="bi bi-layers"></i> <span class="d-none d-lg-inline">Especificaciones</span></a></h5>
         </div>
     </div>
     <br>
@@ -31,11 +31,11 @@
                 <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
             </div>
         </div>
-        <div class="mb-3 col-12 col-md-6">
+        <div class="mb-3 col-12 col-lg-6">
             <label class="form-label">Titulo</label>
             <input type="text" name="titulo" class="form-control input-edit" value="{{$producto->nombreProducto}}" aria-describedby="basic-addon1" maxlength="200" disabled>
         </div>
-        <div class="mb-3 col-6 col-md-3">
+        <div class="mb-3 col-6 col-lg-3">
         <label for="marca-product" class="form-label">Marca:</label>
             <select name="marca" id="marca-product" class="form-select input-edit" disabled>
                 @foreach($marcas as $marca)
@@ -46,7 +46,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="mb-3 col-6 col-md-3">
+        <div class="mb-3 col-6 col-lg-3">
             <label for="grupo-product" class="form-label">Grupo:</label>
             <select name="grupo" id="grupo-product" class="form-select " disabled>
                 @foreach($grupos as $grupo)
@@ -57,7 +57,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="mb-3 col-6 col-md-2">
+        <div class="mb-3 col-6 col-lg-2">
             <label for="estado-product" class="form-label">Estado:</label>
             <select name="estado" id="estado-product" class="form-select input-edit" disabled>
               <option value="DISPONIBLE" {{ $producto->estadoProductoWeb == 'DISPONIBLE' ? 'selected' : '' }}>DISPONIBLE</option>
@@ -67,7 +67,7 @@
               <option value="DESCONTINUADO" {{ $producto->estadoProductoWeb == 'DESCONTINUADO' ? 'selected' : '' }}>DESCONTINUADO</option>
             </select>
         </div>
-        <div class="mb-3 col-6 col-md-2">
+        <div class="mb-3 col-6 col-lg-2">
             <label for="garantia-product" class="form-label">Garantia:</label>
             <select name="garantia" id="garantia-product" class="form-select input-edit" disabled>
               <option value="No tiene" {{$producto->garantia == 'No tiene' ? 'selected' : ''}}>No tiene</option>
@@ -81,10 +81,10 @@
     </div>
     <div class="editButton row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
         <div class="row">
-            <div class="col-6 col-md-4">
+            <div class="col-6 col-lg-4">
                 <h3>Precios:</h3>
             </div>
-            <div class="col-6 col-md-8 text-end">
+            <div class="col-6 col-lg-8 text-end">
                 <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
             </div>
         </div>
@@ -95,7 +95,7 @@
                     <h5>Precio producto</h5>
                 </div>
                 <div class="row">
-                    <div class="mb-3 col-md-4">
+                    <div class="mb-3 col-md-6 col-lg-4">
                         <label for="select-tipoprecio" class="form-label">Moneda:</label>
                         <select class="form-select" onchange="changeTC()" name="tipoprecio" id="select-tipoprecio">
                             <option value="DOLAR" selected>Dolares</option>
@@ -119,16 +119,16 @@
                     <h5>Precio venta</h5>
                 </div>
                 <div class="row">
-                    <div class="mb-3 col-md-4">
+                    <div class="mb-3 col-md-6 col-lg-4">
                         <label for="precio-producto" class="form-label">Utilidad:</label>
                          <input type="number"  value="{{number_format($producto->gananciaExtra, 2, '.', '')}}" name="ganancia" id="precio-product-ganancia"  class="form-control input-edit price-product" step="0.01" disabled>
                     </div>
-                    <div class="col-md-8"></div>
-                    <div class="mb-3 col-md-4">
+                    <div class="col-lg-8"></div>
+                    <div class="mb-3 col-md-6 col-lg-4">
                         <label for="precio-producto" class="form-label">Precio Calculado:</label>
                          <input type="number"  value="" id="precio-product-calculado" class="form-control price-product" step="0.01" disabled>
                     </div>
-                    <div class="col-md-8"></div>
+                    <div class="col-lg-8"></div>
                         <div class="row" id="div-total-price">
                         </div>
                     <div class="col-md-8"></div>
@@ -149,16 +149,16 @@
                 @endforeach
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-lg-4">
             <label class="form-label">UPC/EAN</label>
             <input type="text" name="upc" class="form-control input-edit" value="{{$producto->UPC}}" aria-describedby="basic-addon1" maxlength="13" disabled>
             <small id="upcError" class="text-danger"></small>
         </div>
-        <div class="col-md-3">
+        <div class="col-lg-3">
             <label class="form-label">Modelo</label>
             <input type="text" name="modelo" class="form-control input-edit" value="{{$producto->modelo}}" aria-describedby="basic-addon1" maxlength="70" disabled>
         </div>
-        <div class="col-md-2">
+        <div class="col-lg-2">
             <label class="form-label">Part Number</label>
             <input type="text" name="partnumber" class="form-control input-edit" value="{{$producto->partNumber}}" aria-describedby="basic-addon1" maxlength="50" disabled>
         </div>
@@ -182,21 +182,21 @@
                 @endforeach
             </div>
         </div>
-        <div class="col-6 col-md-2">
+        <div class="col-6 col-md-3 col-lg-2">
             <label  class="form-label">Stock Minimo:</label>
             <input name="stockminimo" value="{{$producto->stockMin}}" type="number" class="form-control input-edit" disabled>
         </div>
         @foreach($producto->Inventario as $inventario)
-        <div class="col-6 col-md-2">
+        <div class="col-6 col-md-3 col-lg-2">
             <label class="form-label">Stock {{$inventario->Almacen->descripcion}}:</label>
             <input name="stock[{{$inventario->idAlmacen}}]" value="{{$inventario->stock}}" type="number" class="form-control {{$ingresoEdit}}"  disabled>
         </div>
         @endforeach
-        <div class="col-6 col-md-2">
+        <div class="col-6 col-md-4 col-lg-2">
             <label class="form-label">Stock {{$producto->Inventario_Proveedor->Preveedor->nombreProveedor}}:</label>
             <input name="stockproveedor" value="{{$producto->Inventario_Proveedor->stock}}" type="number" class="form-control input-edit" disabled>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-4 col-lg-3">
             <label for="grupo-product" id="proveedor-label" class="form-label">Proveedor:</label>
             <select name="proveedor" id="proveedor-product" class="form-select input-edit" disabled>
                 @foreach($proveedor as $pro)

@@ -6,7 +6,7 @@
                 <h4>Inventario</h4>
                 <small class="mb-2 text-secondary">Seguimiento de Productos registrados.</small>
                 @foreach ($registros as $registro)
-                    <div class="col-md-2">
+                    <div class="col-6 col-md-4 col-lg-2">
                         <a href="{{route('dashboardinventario',[encrypt($registro['estado'])])}}" class="text-decoration-none">
                             <div class="card {{$registro['bg']}} text-light mb-3" style="max-width: 18rem;">
                                 <div class="card-body">
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 mt-3">
+        <div class="col-lg-6 mt-3">
             <div class="row me-md-1">
                 <div class="col-md-12 mt-3">
                     <div class="row border shadow rounded-3 pt-2 pb-2">
@@ -42,7 +42,7 @@
                         <div class="col-12">
                             @foreach ($publicaciones as $public)
                                 <div class="row border ms-1 me-1 rounded pt-2 pb-2 mb-2">
-                                    <div class="col-md-2 pe-0 text-center">
+                                    <div class="col-3 col-md-2 pe-0 text-center">
                                         <img 
                                             src="{{asset('storage/'.$public->CuentasPlataforma->Plataforma->imagenPlataforma)}}" 
                                             class="w-100 rounded-3" 
@@ -50,16 +50,16 @@
                                             title="{{$public->CuentasPlataforma->nombreCuenta}}"
                                         >
                                     </div>
-                                    <div class="col-md-10">
+                                    <div class="col-9 col-md-10">
                                         <h6 class="mb-0">{{$public->titulo}}</h6>
                                     </div>
-                                    <div class="col-md-2 pe-0 text-end">
+                                    <div class="col-3 col-md-2 pe-0 text-end">
                                         <small class="text-secondary mt-0 pt-0 mb-0">{{$public->sku}}</small>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-6 col-md-6">
                                         <p class="mt-0 mb-0">{{$public->Producto->modelo}} <em class="text-secondary">(S/.{{$public->precioPublicacion}})</em></p>
                                     </div>
-                                    <div class="col-md-4 text-end">
+                                    <div class="col-3 col-md-4 text-end">
                                         <p class="mt-0 mb-0" >{{$public->fechaPublicacion->format('Y-m-d')}}</p>
                                     </div>
                                 </div>
@@ -69,8 +69,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 mt-3">
-            <div class="row me-md-1">
+        <div class="col-6 col-lg-3 mt-3">
+            <div class="row me-1">
                 <div class="col-md-12 mt-3">
                     <div class="row border shadow rounded-3 pt-2 pb-2">
                         <div class="col-12">
@@ -100,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 mt-3">
+        <div class="col-6 col-lg-3 mt-3">
             <div class="row">
                 <div class="col-md-12 mt-3">
                     <div class="row border shadow rounded-3 pt-2 pb-2">

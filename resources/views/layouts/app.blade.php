@@ -42,19 +42,19 @@
         <div class="text-light bg-sistema-uno">
             <div class="container">
                 <div class="row" style="z-index:1000">
-                    <div class="col-2 col-md-1">
+                    <div class="col-2 col-lg-1">
                         <a class="btn text-light hidden-button" data-bs-toggle="offcanvas" href="#offcanvasDashboard"
                             role="button" aria-controls="offcanvasDashboard">
                             <i class="bi bi-list" style="font-size:2rem"></i>
                         </a>
                     </div>
-                    <div class="col-6 col-md-9 d-flex justify-content-start align-items-center">
-                        <img class="d-none d-sm-block" alt="logo"
+                    <div class="col-6 col-lg-9 d-flex justify-content-start align-items-center">
+                        <img class="d-none d-lg-block" alt="logo"
                             src="{{ asset('storage/logos/logosysfondo.webp') }}" style="width:50px">
-                        <h5 class="d-none d-sm-flex justify-content-start align-items-center mb-0 h-100">Unik Technology
-                            &nbsp;<span class="text-secondary"> v1.18</span></h5>
+                        <h5 class="d-none d-lg-flex justify-content-start align-items-center mb-0 h-100">Unik Technology
+                            &nbsp;<span class="text-secondary"> v1.19.1</span></h5>
                     </div>
-                    <div class="col-4 col-md-2" style="position:relative;z-index:9000">
+                    <div class="col-4 col-lg-2" style="position:relative;z-index:9000">
                         <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav"
                             style="cursor:pointer">
                             <h5 class="w-100"><i class="bi bi-person-circle"></i> {{ $user->user }}</h5>
@@ -98,12 +98,14 @@
         <div class="offcanvas offcanvas-start bg-sistema-uno" tabindex="-1" id="offcanvasDashboard"
             aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
-                <img class="d-sm-none" alt="logo" src="{{ asset('storage/logos/logosysfondo.webp') }}"
+                <div class="d-flex justify-content-start d-sm-none">
+                    <img alt="logo" src="{{ asset('storage/logos/logosysfondo.webp') }}"
                     style="width:50px">
-                <div class="row d-block d-sm-none">
-                    <h5 class=" text-light justify-content-start align-items-center mb-0 h-100 w-100">Unik Technology
-                    </h5>
-                    <small class="text-secondary">v1.18</small>
+                    <div class="row d-block">
+                        <h5 class="mb-0 text-light">Unik Technology
+                        </h5>
+                        <small class="text-secondary">v1.19.1</small>
+                    </div>
                 </div>
                 <h5 class="d-none d-sm-flex offcanvas-title text-light">Men&uacute;</h5>
                 <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas"

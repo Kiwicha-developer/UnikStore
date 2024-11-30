@@ -6,7 +6,7 @@
     <div class="container">
         <br>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 <h3><a href="{{route('productos',[encrypt(1),encrypt(1)])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> NUEVO PRODUCTO:</h3>
             </div>
         </div>
@@ -19,11 +19,11 @@
                     <h3>Datos generales</h3>
                 </div>
             </div>
-            <div class="mb-3 col-12 col-md-6">
+            <div class="mb-3 col-12 col-lg-6">
                 <label class="form-label">Titulo</label>
                 <input type="text" id="name-product" name="name" class="form-control" value="{{ old('name') }}" aria-describedby="basic-addon1" maxlength="200">
             </div>
-            <div class="mb-3 col-6 col-md-3">
+            <div class="mb-3 col-6 col-lg-3">
             <label for="marca-product" id="marca-label" class="form-label">Marca:</label>
                 <select name="marca" id="marca-product" class="form-select">
                     <option value="" {{ old('marca') ? '' : 'selected' }}>-Elige una marca-</option>
@@ -35,8 +35,8 @@
                     @endforeach
                 </select>
             </div>
-            <div class="mb-3 col-6 col-md-3">
-                <label for="grupo-product" id="grupo-label" class="form-label">Grupo (No se podra modificar despues):</label>
+            <div class="mb-3 col-6 col-lg-3">
+                <label for="grupo-product" id="grupo-label" class="form-label">Grupo:</label>
                 <select name="grupo" id="grupo-product" class="form-select">
                         <option value="" {{ old('grupo') ? '' : 'selected' }}>-Elige un grupo-</option>
                     @foreach($grupos as $grupo)
@@ -47,8 +47,9 @@
                     @endforeach
                 </select>
                 <input type="hidden" name="codigo" value="ERROR" id="codigo-product">
+                <small><i class="bi bi-exclamation-circle"></i> No se podra modificar despues</small>
             </div>
-            <div class="mb-3 col-6 col-md-2">
+            <div class="mb-3 col-6 col-lg-2">
                 <label for="estado-product" id="estado-label" class="form-label">
                     <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="<small>DISPONIBLE: En stock.</small><br><small>AGOTADO: Sin stock</small><br><small>EXCLUSIVO: Precio sin calculos.</small>"></i> 
                     Estado:
@@ -62,7 +63,7 @@
                   <option value="DESCONTINUADO" {{ old('estado') == 'DESCONTINUADO' ? 'selected' : '' }}>DESCONTINUADO</option>
                 </select>
             </div>
-            <div class="mb-3 col-6 col-md-2">
+            <div class="mb-3 col-6 col-lg-2">
                 <label for="garantia-product" id="garantia-label" class="form-label">Garantia:</label>
                 <select name="garantia" id="garantia-product" class="form-select">
                   <option value="" {{ old('garantia') ? '' : 'selected' }}>-Elige la garantia-</option>
@@ -84,14 +85,14 @@
                     <h5>Precio producto</h5>
                 </div>
                 <div class="row">
-                    <div class="mb-3 col-md-4">
+                    <div class="mb-3 col-md-6 col-lg-4">
                         <label for="select-tipoprecio" class="form-label">Moneda:</label>
                         <select class="form-select" onchange="changeTC()" name="tipoprecio" id="select-tipoprecio">
                             <option value="DOLAR"{{old('tipoprecio') == '' || old('tipoprecio') == 'dolar' ? 'selected' : ''}}>Dolares</option>
                             <option value="SOL" {{old('tipoprecio') == 'sol' ? 'selected' : ''}}>Soles</option>
                           </select>
                     </div>
-                    <div class="col-md-8"></div>
+                    <div class="col-lg-8"></div>
                     <div class="mb-3 col-md-6">
                         <label for="precio-producto" class="form-label">Sin IGV:</label>
                          <input type="number" name="precio" value="{{old('precio') ? old('precio') : 0}}" id="precio-product"  aria-label="Last name" class="form-control  price-product" step="0.01">
@@ -108,16 +109,16 @@
                     <h5>Precio venta</h5>
                 </div>
                 <div class="row">
-                    <div class="mb-3 col-md-4">
+                    <div class="mb-3 col-md-6 col-lg-4">
                         <label for="precio-producto" class="form-label">Utilidad:</label>
                          <input type="number"  value="{{old('ganancia') ? old('ganancia') : 0}}" name="ganancia" id="precio-product-ganancia"  class="form-control price-product" step="0.01">
                     </div>
-                    <div class="col-md-8"></div>
-                    <div class="mb-3 col-md-4">
+                    <div class="col-lg-8"></div>
+                    <div class="mb-3 col-md-6 col-lg-4">
                         <label for="precio-producto" class="form-label">Precio Calculado:</label>
                          <input type="number"  value="" id="precio-product-calculado" class="form-control price-product" step="0.01" disabled>
                     </div>
-                    <div class="col-md-8"></div>
+                    <div class="col-lg-8"></div>
                         <div class="row" id="div-total-price">
                         </div>
                     <div class="col-md-8"></div>
@@ -130,7 +131,7 @@
                     <h3>Datos clave</h3>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 <label class="form-label d-flex w-100"><span class="w-50">UPC/EAN</span><span class="text-secondary text-end w-50">No aplica</span></label>
                 <div class="input-group mb-3">
                     <input type="text" name="upc" class="form-control" id="upc-product" placeholder="Maximo 13 caracteres" value="{{old('upc')}}" maxlength="13" aria-describedby="basic-addon1">
@@ -141,11 +142,11 @@
                 
                 <small id="upcError" class="text-danger"></small>
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3">
                 <label class="form-label">Modelo</label>
-                <input type="text" name="modelo" class="form-control" id="modelo-product" value="{{old('modelo')}}" aria-describedby="basic-addon1" maxlength="70">
+                <input type="text" name="modelo" class="form-control mb-3" id="modelo-product" value="{{old('modelo')}}" aria-describedby="basic-addon1" maxlength="70">
             </div>
-            <div class="col-md-3">
+            <div class="col-lg-3">
                 <label class="form-label d-flex w-100"><span class="w-50">Numero de Parte</span><span class="text-secondary text-end w-50">No aplica</span></label>
                 <div class="input-group mb-3">
                     <input type="text" name="partnumber" class="form-control" placeholder="Part Number" id="partnumber-product" value="{{old('partnumber')}}" aria-describedby="basic-addon1" maxlength="50">
@@ -162,15 +163,15 @@
                     <h3>Cantidad disponible</h3>
                 </div>
             </div>
-            <div class="col-6 col-md-2">
+            <div class="col-6 col-md-4 col-lg-2">
                 <label  class="form-label">Stock Minimo:</label>
                 <input name="stockminimo" value="{{old('stockminimo') ? old('stockminimo') : 0}}" type="number" class="form-control" >
             </div>
-            <div class="col-6 col-md-2">
+            <div class="col-6 col-md-4 col-lg-2">
                 <label for="precio-producto" class="form-label">Stock Proveedor:</label>
                 <input name="stockproveedor" value="{{old('stockproveedor') ? old('stockproveedor') : 0}}" type="number" id="stockproveedor-product" class="form-control">
             </div>
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4 col-lg-3">
                 <label for="grupo-product" id="proveedor-label" class="form-label">Proveedor:</label>
                 <select name="proveedor" id="proveedor-product" class="form-select">
                      <option  value=""  {{ old('proveedor') ? '' : 'selected' }}>-Elige un proveedor-</p></option>

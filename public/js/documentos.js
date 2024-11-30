@@ -17,7 +17,6 @@ document.getElementById('month').addEventListener('keydown', function(event) {
     }
 });
 
-const baseUrl = "{{ route('documento', ['id' => 'dummyId', 'bool' => 'dummyBool']) }}";
 document.getElementById('search').addEventListener('input', function() {
     let query = this.value;
     let hiddenBody = document.getElementById('hidden-body');
@@ -61,9 +60,8 @@ document.getElementById('search').addEventListener('input', function() {
                             document.getElementById('search').value = item.numeroComprobante; // Mostrar solo el n��mero de documento
                             suggestions.innerHTML = ''; // Limpiar sugerencias despu��s de seleccionar una
                             let encryptedId = item.encryptId; // Encriptar el ID del documento
-                            let boolValue = 0; // Valor del par��metro booleano (ajusta si es necesario)
-                            let url = baseUrl.replace('dummyId', encryptedId).replace('dummyBool', boolValue); // Reemplazar los marcadores de posici��n
-                        
+                            let boolValue = 0;
+                            let url =  '/documento/' + encryptedId + '/' + boolValue;
                             window.location.href = url;
                         });
                         
