@@ -20,19 +20,19 @@ document.getElementById('search').addEventListener('input', function () {
                     divRow.classList.add('row');
 
                     let divColProduct = document.createElement('div');
-                    divColProduct.classList.add('col-4', 'col-md-3', 'text-start');
+                    divColProduct.classList.add('d-none','d-md-block', 'col-md-3', 'text-start');
                     let smallProduct = document.createElement('small');
                     smallProduct.textContent = item.Proveedor.nombreProveedor;
                     divColProduct.appendChild(smallProduct);
 
                     let divColSerial = document.createElement('div');
-                    divColSerial.classList.add('col-4', 'col-md-6');
+                    divColSerial.classList.add('col-12', 'col-md-6');
                     let smallSerial = document.createElement('small');
                     smallSerial.textContent = item.numeroSerie;
                     divColSerial.appendChild(smallSerial);
 
                     let divColDate = document.createElement('div');
-                    divColDate.classList.add('col-4', 'col-md-3');
+                    divColDate.classList.add('col-12', 'col-md-3');
                     let smallDate = document.createElement('small');
                     smallDate.textContent = item.fechaIngresoPerso;
                     divColDate.appendChild(smallDate);

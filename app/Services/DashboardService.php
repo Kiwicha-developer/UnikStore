@@ -26,12 +26,13 @@ class DashboardService implements DashboardServiceInterface
 
     public function getRegistrosXEstados(){
         $array = array();
-        $array[] = ['estado' => 'NUEVO', 'titulo' => 'Nuevos' , 'cantidad' => count($this->registroRepository->getAllByColumnByThisMonth('estado','NUEVO')),'bg' => 'bg-sistema-uno','icon' => 'boxes','fecha' => 'Este mes'];
-        $array[] = ['estado' => 'ENTREGADO', 'titulo' => 'Entregados' , 'cantidad' => count($this->registroRepository->getAllByColumnByThisMonth('estado','ENTREGADO')),'bg' => 'bg-green','icon' => 'cart','fecha' => 'Este mes'];
-        $array[] = ['estado' => 'DEVOLUCION', 'titulo' => 'Devoluciones' , 'cantidad' => count($this->registroRepository->getAllByColumn('estado','DEVOLUCION')),'bg' => 'bg-warning','icon' => 'truck','fecha' => 'Hasta la fecha'];
-        $array[] = ['estado' => 'ABIERTO', 'titulo' => 'Abiertos' , 'cantidad' => count($this->registroRepository->getAllByColumn('estado','ABIERTO')),'bg' => 'bg-marron','icon' => 'dropbox','fecha' => 'Hasta la fecha'];
-        $array[] = ['estado' => 'DEFECTUOSO', 'titulo' => 'Defectuosos' , 'cantidad' => count($this->registroRepository->getAllByColumn('estado','DEFECTUOSO')),'bg' => 'bg-purple','icon' => 'ban','fecha' => 'Hasta la fecha'];
-        $array[] = ['estado' => 'ROTO','titulo' => 'Rotos' ,'cantidad' => count($this->registroRepository->getAllByColumn('estado','ROTO')),'bg' => 'bg-danger','icon' => 'x-lg','fecha' => 'Hasta la fecha'];
+        $array[] = ['estado' => 'NUEVO', 'titulo' => 'Nuevos' , 'cantidad' => $this->registroRepository->getAllByColumnByThisMonth('estado','NUEVO',100)->total(),'bg' => 'bg-sistema-uno','icon' => 'boxes','fecha' => 'Este mes'];
+        $array[] = ['estado' => 'ENTREGADO', 'titulo' => 'Entregados' , 'cantidad' => $this->registroRepository->getAllByColumnByThisMonth('estado','ENTREGADO',100)->total(),'bg' => 'bg-green','icon' => 'cart','fecha' => 'Este mes'];
+        $array[] = ['estado' => 'DEVOLUCION', 'titulo' => 'Devoluciones' , 'cantidad' => $this->registroRepository->paginateAllByColumn('estado','DEVOLUCION',50)->total(),'bg' => 'bg-warning','icon' => 'truck','fecha' => 'Hasta la fecha'];
+        $array[] = ['estado' => 'GARANTIA','titulo' => 'Garantía' ,'cantidad' => $this->registroRepository->paginateAllByColumn('estado','GARANTIA',50)->total(),'bg' => 'bg-marron','icon' => 'award','fecha' => 'Hasta la fecha'];
+        $array[] = ['estado' => 'ABIERTO', 'titulo' => 'Abiertos' , 'cantidad' => $this->registroRepository->paginateAllByColumn('estado','ABIERTO',50)->total(),'bg' => 'bg-purple','icon' => 'dropbox','fecha' => 'Hasta la fecha'];
+        $array[] = ['estado' => 'DEFECTUOSO', 'titulo' => 'Defectuosos' , 'cantidad' => $this->registroRepository->paginateAllByColumn('estado','DEFECTUOSO',50)->total(),'bg' => 'bg-danger','icon' => 'x-lg','fecha' => 'Hasta la fecha'];
+
         
         return $array;
     }
@@ -57,10 +58,10 @@ class DashboardService implements DashboardServiceInterface
     }
 
     public function getNuevosInventario(){
-        return $this->registroRepository->getAllByColumnByThisMonth('estado','NUEVO');
+        return $this->registroRepository->getAllByColumnByThisMonth('estado','NUEVO',250);
     }
     public function getEntregadosInventario(){
-        return $this->registroRepository->getAllByColumnByThisMonth('estado','ENTREGADO');
+        return $this->registroRepository->getAllByColumnByThisMonth('estado','ENTREGADO',250);
     }
     public function getDevolucionesInventario(){
         return $this->registroRepository->getAllByColumn('estado','DEVOLUCION');

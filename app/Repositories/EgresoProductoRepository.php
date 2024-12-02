@@ -49,7 +49,8 @@ class EgresoProductoRepository implements EgresoProductoRepositoryInterface
         return EgresoProducto::join('RegistroProducto','RegistroProducto.idRegistro','=','EgresoProducto.idRegistro')
                             ->where(function($query){
                                 $query->where('RegistroProducto.estado','=','ENTREGADO')
-                                        ->orWhere('RegistroProducto.estado','=','DEVOLUCION');
+                                        ->orWhere('RegistroProducto.estado','=','DEVOLUCION')
+                                        ->orWhere('RegistroProducto.estado','=','GARANTIA');
                             })
                             ->where('RegistroProducto.numeroSerie','LIKE', '%' . $serial . '%')
                             ->take($cant)

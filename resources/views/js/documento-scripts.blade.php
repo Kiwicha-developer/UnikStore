@@ -134,7 +134,7 @@
         divColCantidad.appendChild(h5Cantidad);
         
         let divColProduct = document.createElement('div');
-        divColProduct.classList.add('col-4','col-md-3','d-flex','truncate');
+        divColProduct.classList.add('col-4','col-md-5','col-lg-3','d-flex','truncate');
         let h5Product = document.createElement('h5');
         h5Product.classList.add('h-100','text-uppercase');
         h5Product.innerHTML  = productInput.value + "&nbsp;";
@@ -145,7 +145,7 @@
         divColProduct.appendChild(smallProduct);
         
         let divColMedida = document.createElement('div');
-        divColMedida.classList.add('d-none','d-md-block','col-md-2','text-center');
+        divColMedida.classList.add('d-none','d-lg-block','col-lg-2','text-center');
         let pMedida = document.createElement('p');
         pMedida.textContent = selectModalMedida.value;
         divColMedida.appendChild(pMedida);
@@ -226,7 +226,7 @@
         divRow.classList.add('row');
         
         let divColSerialNumber = document.createElement('div');
-        divColSerialNumber.classList.add('col-6','col-md-3');
+        divColSerialNumber.classList.add('col-6','col-md-4','col-lg-3');
         let divInputGroup = document.createElement('div');
         divInputGroup.classList.add('input-group','input-group-sm');
         let inputSerialNumber = document.createElement('input');
@@ -263,7 +263,7 @@
         divColEstado.appendChild(selectEstado);
         
         let divColObservacion = document.createElement('div');
-        divColObservacion.classList.add('d-none','d-md-block','col-md-6');
+        divColObservacion.classList.add('d-none','d-md-block','col-md-5','col-lg-6');
         let inputObservacion = document.createElement('input');
         inputObservacion.classList.add('form-control','form-control-sm');
         inputObservacion.type="text";

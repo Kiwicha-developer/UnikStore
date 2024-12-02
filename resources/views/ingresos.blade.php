@@ -8,8 +8,8 @@
         style="position:fixed;left:0;width:100vw;height:100vh;z-index:998;opacity:0.5;display:none">
     </div>
     <br>
-    <div class="row mb-3">
-        <div class="col-6 col-md-5 text-end" style="position:relative;z-index:999">
+    <div class="row mb-2">
+        <div class="col-6 col-md-7 col-lg-5 text-end" style="position:relative;z-index:999">
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control" placeholder="Serial Number..." id="search">
@@ -17,25 +17,25 @@
                 </ul>
             </div>
         </div>
-        <div class="col-md-4 d-none d-md-block"></div>
-        <div class="col-6 col-md-3 text-end">
+        <div class="col-lg-4 d-none d-lg-block"></div>
+        <div class="col-6 col-md-5 col-lg-3 text-end">
             <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}">
         </div>
-        <div class="col-6 col-md-6">
+        <div class="col-6 col-lg-6">
             <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i
                         class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-plus-fill"></i> Ingresos
                 <span
                     class="text-capitalize text-secondary fw-light"><em>({{$fecha->translatedFormat('F')}})</em></span>
             </h2>
         </div>
-        <div class="col-6 col-md-6 text-end">
+        <div class="col-6 col-lg-6 text-end">
             <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ingresoModal"><i
                     class="bi bi-file-earmark-plus"></i> Nuevo Registro</a>
         </div>
     </div>
     <form action="{{url()->current()}}" method="get" id="form-filtro-componente">
         <div class="row mb-2">
-            <div class="col-md-2">
+            <div class="col-6 col-md-3 col-lg-2">
                 <small>Usuario</small>
                 <select class="form-select form-select-sm filtro-componente" name="filtro[usuario]" >
                     <option value="">Todos</option>
@@ -44,7 +44,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-3 col-lg-2">
                 <small>Proveedores</small>
                 <select class="form-select form-select-sm filtro-componente"  name="filtro[proveedor]">
                     <option value="">Todos</option>
@@ -53,7 +53,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-3 col-lg-2">
                 <small>Almac&eacute;n</small>
                 <select class="form-select form-select-sm filtro-componente"  name="filtro[almacen]">
                     <option value="">Todos</option>
@@ -62,7 +62,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-3 col-lg-2">
                 <small>Estado</small>
                 <select class="form-select form-select-sm filtro-componente"  name="filtro[estado]">
                     <option value="">Todos</option>

@@ -27,46 +27,46 @@
         <div class="col-md-12 mb-3">
             @if($validate)
             <div class="row mb-2">
-                <div class="col-6 col-md-2">
+                <div class="col-4 col-md-3 col-lg-2">
                     <label class="form-label" style="color:red" id="select-label-moneda">Moneda:</label>
                     <select class="form-select" onchange="changeLabel(this,'select-label-moneda')" id="select-moneda"  name="comprobante[moneda]">
-                        <option class="text-danger" value="" selected>-Elige una moneda-</option>
+                        <option class="text-danger" value="" selected>-Elige-</option>
                         <option value="SOL">Soles</option>
                         <option value="DOLAR">Dolares</option>
                     </select>
                 </div>
-                <div class="col-6 col-md-2">
+                <div class="col-4 col-md-3 col-lg-2">
                   <label class="form-label" style="color:red" id="select-label-adquisicion">Adquisici&oacuten</label>
                   <select class="form-select" onchange="changeLabel(this,'select-label-adquisicion')" id="select-adquisicion" name="comprobante[adquisicion]">
-                      <option class="text-danger" value="" selected>-Elige una adquisici&oacuten-</option>
+                      <option class="text-danger" value="" selected>-Elige-</option>
                       @foreach($adquisiciones as $ad)
                       <option value="{{$ad['value']}}">{{$ad['name']}}</option>
                       @endforeach
                     </select>
                 </div>
-                <div class="col-6 col-md-2">
+                <div class="col-4 col-md-3 col-lg-2">
                     <label class="form-label" style="color:red" id="select-label-almacen">Almac&eacuten</label>
                     <select class="form-select" onchange="changeLabel(this,'select-label-almacen')" id="select-almacen" name="comprobante[almacen]">
-                        <option class="text-danger" value="">-Elige una ubicaci&oacuten-</option>
+                        <option class="text-danger" value="">-Elige-</option>
                         @foreach($ubicaciones as $ubi)
                         <option value="{{$ubi->idAlmacen}}">{{$ubi->descripcion}}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2 d-none d-md-block">
+                <div class="col-md-2 d-none d-lg-block">
                 </div>
-                <div class="col-md-2">
+                <div class="col-3 col-lg-2">
                     <label class="form-label">Descuento:</label>
                     <input type="number" id="importe-descuento-comprobante" class="form-control" name="" step="0.01" id="" value="0.00">
                 </div>
-                <div class="col-6 col-md-2 text-end">
+                <div class="col-3 col-lg-2 text-lg-end">
                     <label class="form-label">Importe Total:</label>
                     <input type="number" id="importe-total-comprobante" name="comprobante[total]" step="0.01" class="form-control" value="0.00" readonly>
                 </div>
-                <div class="col-md-6 mt-2">
+                <div class="col-md-3 col-lg-6 d-none d-md-block mt-2">
                     
                 </div>
-                <div class="col-3 col-md-6 mt-2 text-end">
+                <div class="col-6 col-md-6 mt-2 pt-4 text-end">
                     <button type="button" onclick="generatePlantilla()" class="btn bg-success text-light">Plantilla <i class="bi bi-file-earmark-excel-fill"></i></button>
                     <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#registerModal">Producto <i class="bi bi-cart-plus-fill"></i></button>
                 </div>
@@ -93,15 +93,15 @@
                         <small class="d-none d-md-inline">Cant.</small>
                         <small class="d-md-none">#</small>
                     </div>
-                    <div class="col-4 col-md-3 text-start">
+                    <div class="col-4 col-md-5 col-lg-3 text-start">
                         <small>Producto</small>
                     </div>
-                    <div class="col-2 d-none d-md-block">
+                    <div class="col-2 d-none d-lg-block">
                         <small>U.M.</small>
                     </div>
                     <div class="col-2 col-md-2">
-                        <small class="d-none d-md-inline">Precio Unitario</small>
-                        <small class="d-md-none">P.U</small>
+                        <small class="d-none d-lg-inline">Precio Unitario</small>
+                        <small class="d-lg-none">P.U</small>
                     </div>
                     <div class="col-2 col-md-2">
                         <small class="d-none d-md-inline">Precio Total</small>
@@ -151,7 +151,7 @@
                             <div class="col-md-1 d-none d-md-block">
                                 {{count($detalle->RegistroProducto)}}
                             </div>
-                            <div class="col-3 col-md-2 d-none d-md-block">
+                            <div class="col-3 col-md-2 d-none d-lg-block">
                                 {{$detalle->medida}}
                             </div>
                             <div class="col-3 col-md-1 d-none d-md-block">
@@ -215,13 +215,13 @@
             </ul>
         </div>
         @if($validate)
-        <div class="col-md-3">
-            <button type="button" onclick="deleteForm({{$documento->idComprobante}})" class="btn btn-danger"><i class="bi bi-trash3"></i> Eliminar {{$documento->TipoComprobante->descripcion}}</button>
+        <div class="col-3">
+            <button type="button" onclick="deleteForm({{$documento->idComprobante}})" class="btn btn-danger"><i class="bi bi-trash3"></i>  <span class="d-none d-lg-block">Eliminar</span> {{$documento->TipoComprobante->descripcion}}</button>
         </div>
-        <div class="col-md-6 text-center">
+        <div class="col-6 text-center">
             <button type="button" onclick="validateSeries({{$documento->idProveedor}})" class="btn btn-success" id="btnSubmit"  disabled><i class="bi bi-floppy-fill"></i> Registrar</button>
         </div>
-        <div class="col-md-3 text-end">
+        <div class="col-3 text-end">
         </div>
         @endif
     </div>

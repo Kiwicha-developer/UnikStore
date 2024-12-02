@@ -20,20 +20,21 @@ class RegistroProductoRepository implements RegistroProductoRepositoryInterface
         return RegistroProducto::where($column,'=', $data)->first();
     }
 
-    public function getAllByColumn($column, $data)
+    public function getAllByColumn($column,$data)
     {
         $this->validateColumns($column);
         return RegistroProducto::where($column,'=', $data)->get();
     }
 
-    public function getAllByColumnByThisMonth($column,$data){
+    public function paginateAllByColumn($column,$data,$cant)
+    {
         $this->validateColumns($column);
-        return RegistroProducto::where($column,'=',$data)->whereMonth('fechaMovimiento','=',now()->month)->get();
+        return RegistroProducto::where($column,'=', $data)->paginate($cant);
     }
 
-    public function getAllByColumnByToday($column,$data){
+    public function getAllByColumnByThisMonth($column,$data,$cant){
         $this->validateColumns($column);
-        return RegistroProducto::where($column,'=',$data)->whereDate('fechaMovimiento','=',now()->toDateString())->get();
+        return RegistroProducto::where($column,'=',$data)->whereMonth('fechaMovimiento','=',now()->month-1)->paginate($cant);
     }
 
     public function searchOne($column, $data)

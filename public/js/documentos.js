@@ -39,19 +39,19 @@ document.getElementById('search').addEventListener('input', function() {
                         divRow.classList.add('row');
                         
                         let divColProv = document.createElement('div');
-                        divColProv.classList.add('col-12','col-md-4', 'text-start');
+                        divColProv.classList.add('d-none','d-md-block','col-md-3', 'text-start');
                         let smallProv = document.createElement('small');
                         smallProv.textContent = item.preveedor.nombreProveedor;
                         divColProv.appendChild(smallProv);
                         
                         let divColNum = document.createElement('div');
-                        divColNum.classList.add('col-6','col-md-4');
+                        divColNum.classList.add('col-12','col-md-6');
                         let smallNum = document.createElement('small');
                         smallNum.textContent = item.numeroComprobante;
                         divColNum.appendChild(smallNum);
                         
                         let divColDate = document.createElement('div');
-                        divColDate.classList.add('col-6','col-md-4');
+                        divColDate.classList.add('col-12','col-md-3');
                         let smallDate = document.createElement('small');
                         smallDate.textContent = item.fechaPersonalizada;
                         divColDate.appendChild(smallDate);
