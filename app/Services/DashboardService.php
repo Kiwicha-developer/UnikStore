@@ -64,15 +64,15 @@ class DashboardService implements DashboardServiceInterface
         return $this->registroRepository->getAllByColumnByThisMonth('estado','ENTREGADO',250);
     }
     public function getDevolucionesInventario(){
-        return $this->registroRepository->getAllByColumn('estado','DEVOLUCION');
+        return $this->registroRepository->paginateAllByColumn('estado','DEVOLUCION',50);
     }
     public function getAbiertosInventario(){
-        return $this->registroRepository->getAllByColumn('estado','ABIERTO');
+        return $this->registroRepository->paginateAllByColumn('estado','ABIERTO',50);
     }
     public function getDefectuososInventario(){
-        return $this->registroRepository->getAllByColumn('estado','DEFECTUOSO');
+        return $this->registroRepository->paginateAllByColumn('estado','DEFECTUOSO',50);
     }
-    public function getRotosInventario(){
-        return $this->registroRepository->getAllByColumn('estado','ROTO');
+    public function getGarantiaInventario(){
+        return $this->registroRepository->paginateAllByColumn('estado','GARANTIA',50);
     }
 }

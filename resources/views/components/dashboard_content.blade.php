@@ -72,22 +72,26 @@
         <div class="col-6 col-lg-3 mt-3">
             <div class="row me-1">
                 <div class="col-md-12 mt-3">
+                    <a href="{{route('stockmindashboard')}}" class="text-decoration-none text-dark">
                     <div class="row border shadow rounded-3 pt-2 pb-2">
                         <div class="col-12">
                             <h4 class="mb-0">Stock</h4>
                             <small class="text-secondary">Productos por agotarse</small>
                         </div>
                         <div class="col-4"></div>
-                        <div class="col-4 text-center">
-                            @php
-                                $porcent = round((100 * $stockMin)/$productos,2);
-                            @endphp
-                                <div style="width: 100%;aspect-ratio: 1 / 1" class="border rounded-circle d-flex justify-content-center align-items-center mt-2 mb-2 {{$porcent < 10 ? 'border-success' : ($porcent < 40 ? 'border-info' : ($porcent < 80 ? 'border-warning' : 'border-danger'))}}">
-                                    <h1>{{$stockMin}}</h1>
-                                </div>
-                        </div>
+                        
+                            <div class="col-4 text-center">
+                                @php
+                                    $porcent = round((100 * $stockMin)/$productos,2);
+                                @endphp
+                                    <div style="width: 100%;aspect-ratio: 1 / 1" class="border rounded-circle d-flex justify-content-center align-items-center mt-2 mb-2 {{$porcent < 10 ? 'border-success' : ($porcent < 40 ? 'border-info' : ($porcent < 80 ? 'border-warning' : 'border-danger'))}}">
+                                        <h1>{{$stockMin}}</h1>
+                                    </div>
+                            </div>
+                        
                         <div class="col-4"></div>
                     </div>
+                    </a>
                 </div>
                 <div class="col-md-12 mt-3">
                     <div class="row border shadow rounded-3 pt-2 pb-2">

@@ -28,9 +28,11 @@ class PdfController extends Controller
     public function reportStockPdf()
     {
         $productos = $this->pdfService->getReportsAlmacen();
+        $almacenes = $this->pdfService->getAlmacenes();
         $fechaActual = Carbon::now()->format('d-m-Y');
         $data = ['title' => 'Reporte de stock '.$fechaActual,
-                'productos' => $productos];
+                'productos' => $productos,
+                'almacenes' => $almacenes];
         $pdf = Pdf::loadView('pdf.stock_pdf', $data);
         
         return $pdf->stream('reporte_stock_'.$fechaActual.'.pdf');

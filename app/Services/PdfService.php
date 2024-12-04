@@ -1,22 +1,24 @@
 <?php
 namespace App\Services;
 
+use App\Repositories\AlmacenRepositoryInterface;
 use App\Repositories\ComprobanteRepositoryInterface;
 use App\Repositories\ProductoRepositoryInterface;
-use App\Repositories\RegistroProductoRepositoryInterface;
-use Picqer\Barcode\BarcodeGeneratorJPG;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 
 class PdfService implements PdfServiceInterface
 {
     protected $comprobanteRepository;
     protected $productoRepository;
+    protected $almacenRepository;
 
     public function __construct(ComprobanteRepositoryInterface $comprobanteRepository,
-                                ProductoRepositoryInterface $productoRepository)
+                                ProductoRepositoryInterface $productoRepository,
+                                AlmacenRepositoryInterface $almacenRepository)
     {
         $this->comprobanteRepository = $comprobanteRepository;
         $this->productoRepository =  $productoRepository;
+        $this->almacenRepository = $almacenRepository;
     }
     
     public function getSerialsPrint($idComprobante){
@@ -36,7 +38,11 @@ class PdfService implements PdfServiceInterface
     }
 
     public function getReportsAlmacen(){
-        return $this->productoRepository->getProductsWithStock();
+        return $this->productoRepository->getProductsWithStock()->sortBy('codigoProducto');
+    }
+
+    public function getAlmacenes(){
+        return $this->almacenRepository->all()->sortBy('idAlmacen');
     }
     
 }

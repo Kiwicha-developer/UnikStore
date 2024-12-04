@@ -16,11 +16,17 @@
             font-size: 10px;
             text-align: center;
             padding: 5px;
-            width: 100px; /* Ancho fijo para todas las celdas */
-            height: 20px; /* Alto fijo para todas las celdas */
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #ffffff;
+        }
+
+        .header{
+            background-color: #dddddd;
+        }
+
+        .index{
+            width: 10px;
         }
     </style>
 </head>
@@ -29,9 +35,32 @@
     <table>
         <thead>
             <tr>
-                <th></th>
+                <th class="index header">#</th>
+                <th class="header">Codigo</th>
+                <th class="header">Modelo</th>
+                @foreach ($almacenes as $almacen)
+                <th class="header">{{$almacen->descripcion}}</th>
+                @endforeach
             </tr>
         </thead>
+        <tbody>
+            @php
+                $count = 1;
+            @endphp
+            @foreach ($productos as $producto)
+                <tr>
+                    <th class="index">{{$count}}</th>
+                    <th>{{$producto->codigoProducto}}</th>
+                    <th>{{$producto->modelo}}</th>
+                    @foreach ($producto->Inventario->sortBy('idAlmacen') as $inventario)
+                        <th>{{$inventario->stock}}</th>
+                    @endforeach
+                </tr>
+                @php
+                    $count ++;
+                @endphp
+            @endforeach
+        </tbody>
     </table>
 </body>
 </html>

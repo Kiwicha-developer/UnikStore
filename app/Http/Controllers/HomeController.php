@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CalculadoraServiceInterface;
 use App\Services\DashboardServiceInterface;
 use App\Services\HeaderServiceInterface;
 use Illuminate\Http\Request;
@@ -10,12 +11,15 @@ class HomeController extends Controller
 {
     protected $dashboardService;
     protected $headerService;
+    protected $calculadoraService;
 
     public function __construct(DashboardServiceInterface $dashboardService,
-                                HeaderServiceInterface $headerService)
+                                HeaderServiceInterface $headerService,
+                                CalculadoraServiceInterface $calculadoraService)
     {
         $this->dashboardService = $dashboardService;
         $this->headerService = $headerService;
+        $this->calculadoraService = $calculadoraService;
     }
 
     public function index(Request $request){
@@ -23,7 +27,7 @@ class HomeController extends Controller
         $userModel = $this->headerService->getModelUser();
         
         //variables del controlador
-        $productosStockMin = $this->dashboardService->getStockMinProducts()->count();
+        $productosStockMin = $this->dashboardService->getStockMinProducts()->total();
         $totalProductos = $this->dashboardService->getTotalProducts();
         $publicaciones = $this->dashboardService->getOldPublicaciones();
         $registros = $this->dashboardService->getRegistrosXEstados();
@@ -61,10 +65,35 @@ class HomeController extends Controller
                                 ]);
     }
 
-    public function dashboardInventario($estado){
+    public function dashboardInventario($estado,Request $request){
         //variables de la cabecera
         $userModel = $this->headerService->getModelUser();
         
+        $tipo = $this->caseRegistro($estado);
+        $registros = $tipo[0];
+        $data = $tipo[1];
+
+        if($request->query('page')){
+            $view = view('components.lista_registros_dashboard', ['registros' => $registros,'data' => $data,'container' => $request->query('container')])->render();
+            return response()->json(['html' => $view]);
+        }
+
+        return view('dashboard_inventario',['user' => $userModel,
+                                            'registros' => $registros,
+                                            'data' => $data]);
+    }
+
+    public function stockMinDashboard(){
+        //variables de la cabecera
+        $userModel = $this->headerService->getModelUser();
+
+        $productos = $this->dashboardService->getStockMinProducts();
+        return view('stockmin_dashboard',['user' => $userModel,
+                                        'productos' => $productos,
+                                        'tc' => $this->calculadoraService->getTasaCambio()]);
+    }
+
+    private function caseRegistro($estado){
         switch(decrypt($estado)){
             case 'NUEVO':
                 $registros = $this->dashboardService->getNuevosInventario();
@@ -80,22 +109,20 @@ class HomeController extends Controller
                 break;
             case 'ABIERTO':
                 $registros = $this->dashboardService->getAbiertosInventario();
-                $data = ['icon' => 'dropbox','pestania' => 'Abiertos' , 'titulo' => 'Productos Abiertos','color' => 'bg-marron'];
+                $data = ['icon' => 'dropbox','pestania' => 'Abiertos' , 'titulo' => 'Productos Abiertos','color' => 'bg-purple'];
                 break;
             case 'DEFECTUOSO':
                 $registros = $this->dashboardService->getDefectuososInventario();
-                $data = ['icon' => 'ban','pestania' => 'Defectuosos' , 'titulo' => 'Productos Defectuosos','color' => 'bg-purple'];
+                $data = ['icon' => 'x-lg','pestania' => 'Defectuosos' , 'titulo' => 'Productos Defectuosos','color' => 'bg-danger'];
                 break;
-            case 'ROTO':
-                $registros = $this->dashboardService->getRotosInventario();
-                $data = ['icon' => 'x-lg','pestania' => 'Rotos' , 'titulo' => 'Productos Rotos','color' => 'bg-danger'];
+            case 'GARANTIA':
+                $registros = $this->dashboardService->getGarantiaInventario();
+                $data = ['icon' => 'award','pestania' => 'Garantías' , 'titulo' => 'Productos en Garantía','color' => 'bg-marron'];
                 break;
             default:
                 return back();
         }
 
-        return view('dashboard_inventario',['user' => $userModel,
-                                            'registros' => $registros,
-                                            'data' => $data]);
+        return $response = [$registros,$data];
     }
 }

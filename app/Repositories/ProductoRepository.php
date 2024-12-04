@@ -114,9 +114,8 @@ class ProductoRepository implements ProductoRepositoryInterface
 
         $resultados = DB::select($query);
 
-        $productos = collect($resultados)->map(function ($item) {
-            return Producto::find($item->idProducto); 
-        });
+        $productIds = collect($resultados)->pluck('idProducto');
+        $productos = Producto::whereIn('idProducto', $productIds)->paginate(50);
         return $productos;
     }
 

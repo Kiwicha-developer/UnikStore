@@ -10,6 +10,18 @@
     color: #0000002a;
 }
 
+.text-marron {
+    color: #805300;
+}
+
+.text-purple {
+    color: #7b4dc0;
+}
+
+.text-green {
+    color: #007e43;
+}
+
 .truncate {
     white-space: nowrap;
     overflow: hidden;

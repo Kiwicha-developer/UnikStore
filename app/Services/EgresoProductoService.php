@@ -36,10 +36,10 @@ class EgresoProductoService implements EgresoProductoServiceInterface
         $this->almacenRepository = $almacenRepository;
     }
     
-    public function getEgresosByMonth($date){
+    public function getEgresosByMonth($date,$cant){
         Carbon::setLocale('es');
         $carbonMonth = Carbon::createFromFormat('Y-m', $date);
-        return $this->egresoRepository->getAllByMonth($carbonMonth->month);
+        return $this->egresoRepository->getAllByMonth($carbonMonth->month,$cant);
     }
 
     public function searchAjaxRegistro($serial){
@@ -106,6 +106,17 @@ class EgresoProductoService implements EgresoProductoServiceInterface
             $producto = $this->updateStock($idAlmacen,$data['idRegistro']);
             return $producto;
         }
+    }
+
+    public function updateEgreso($transaction,$idEgreso,$observacion){
+        $modelEgreso = $this->egresoRepository->getOne('idEgreso',$idEgreso);
+        $data['observacion'] = $observacion;
+
+        if($transaction == 'devolucion'){
+            $data['estado'] = 'DEVOLUCION';
+            $data['fechaMovimiento'] = now();
+        }
+        $this->registroRepository->update($modelEgreso->idRegistro,$data);
     }
 
     private function updateStock($idAlmacen,$idRegistro){

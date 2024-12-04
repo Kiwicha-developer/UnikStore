@@ -71,49 +71,11 @@ function dataModalDetalle(json) {
     let hidden = document.getElementById('idregistro-modal-detail');
     let ubicacion = document.getElementById('almacen-modal-detail');
 
-    let optionInvalid = document.createElement('option');
     titleProduct.textContent = json.registro_producto.detalle_comprobante.producto.nombreProducto;
     serialNumber.textContent = json.registro_producto.numeroSerie;
+    stateJson = json.registro_producto.estado;
 
-    if (json.registro_producto.estado === 'INVALIDO') {
-        optionInvalid.value = 'INVALIDO';
-        optionInvalid.textContent = 'Invalido';
-        optionInvalid.selected = true;
-
-        // Verificar si el option ya existe antes de agregarlo
-        if (!state.querySelector('option[value="INVALIDO"]')) {
-            state.appendChild(optionInvalid);
-        }
-
-        state.disabled = true;
-    } else if (json.registro_producto.estado === 'ENTREGADO') {
-        optionInvalid.value = 'ENTREGADO';
-        optionInvalid.textContent = 'Entregado';
-        optionInvalid.selected = true;
-
-        // Verificar si el option ya existe antes de agregarlo
-        if (!state.querySelector('option[value="ENTREGADO"]')) {
-            state.appendChild(optionInvalid);
-        }
-
-        state.disabled = true;
-    } else {
-        // Verificar si las opciones existen antes de intentar eliminarlas
-        let existingInvalidOption = state.querySelector('option[value="INVALIDO"]');
-        if (existingInvalidOption) {
-            existingInvalidOption.remove();
-        }
-
-        let existingEntregadoOption = state.querySelector('option[value="ENTREGADO"]');
-        if (existingEntregadoOption) {
-            existingEntregadoOption.remove();
-        }
-
-        state.disabled = false;
-        state.value = json.registro_producto.estado;
-    }
-
-
+    console.log(json);
     let fecha = new Date(json.registro_producto.fechaMovimiento);
     let day = fecha.getDate().toString().padStart(2, '0');
     let month = (fecha.getMonth() + 1).toString().padStart(2, '0');
@@ -125,6 +87,12 @@ function dataModalDetalle(json) {
     observacion.value = json.registro_producto.observacion;
     hidden.value = json.registro_producto.idRegistro;
     ubicacion.value = json.registro_producto.idAlmacen;
+    state.value = stateJson;
+    if(stateJson =='ENTREGADO' || stateJson == 'DEVOLUCION' || stateJson == 'GARANTIA'){
+        state.disabled = true;
+    }else{
+        state.disabled = false;
+    }
     myModal.show();
 }
 

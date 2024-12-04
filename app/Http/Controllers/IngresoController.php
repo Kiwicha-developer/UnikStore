@@ -51,7 +51,10 @@ class IngresoController extends Controller
 
                 $estados = [['value' => 'NUEVO', 'name' => 'Nuevo'],
                     ['value' => 'ABIERTO', 'name' => 'Abierto'],
-                    ['value' => 'DEFECTUOSO', 'name' => 'Defectuoso']
+                    ['value' => 'DEFECTUOSO', 'name' => 'Defectuoso'],
+                    ['value' => 'DEVOLUCION', 'name' => 'Devolución'],
+                    ['value' => 'ENTREGADO', 'name' => 'Entregado'],
+                    ['value' => 'GARANTIA', 'name' => 'Garantía']
                     ];
                 
                 $filtros = ['users' => $this->ingresoService->filtroUsuario($month),

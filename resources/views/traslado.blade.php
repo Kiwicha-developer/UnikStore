@@ -19,9 +19,9 @@
                 </ul>
             </div>
         </div>
-        {{-- <div class="col-md-2">
+        <div class="col-md-2">
             <x-scanner/>
-        </div> --}}
+        </div>
     </div>
     <br>
     <div class="row">

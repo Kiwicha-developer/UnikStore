@@ -31,7 +31,7 @@ class EgresoController extends Controller
         //variables propias del controlador
         Carbon::setLocale('es');
         $carbonMonth = Carbon::createFromFormat('Y-m', $month);
-        $egresos = $this->egresoService->getEgresosByMonth($month);
+        $egresos = $this->egresoService->getEgresosByMonth($month,150);
         $almacenes = $this->egresoService->getAllAlmacenes();
         
         return view('egresos',['user' => $userModel,
@@ -89,7 +89,19 @@ class EgresoController extends Controller
     }
 
     public function devolucionEgreso(Request $request){
-        dd($request);
+        $transaccion = $request->input('transaccion');
+        $idegreso = $request->input('idegreso');
+        $observacion = $request->input('observacion');
+
+        if(isset($transaccion) && isset($idegreso)){
+            $this->egresoService->updateEgreso($transaccion,$idegreso,$observacion);
+
+            $this->headerService->sendFlashAlerts('Operacion exitosa','No hubo ningún error en la operacion','success','btn-success');
+            return back();
+        }else{
+            $this->headerService->sendFlashAlerts('Datos incompletos','Verifica que los datos ingresados existan','info','btn-warning');
+            return back();
+        }
     }
     
     public function searchRegistro(Request $request){

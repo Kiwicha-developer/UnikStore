@@ -29,12 +29,12 @@ class RegistroProductoRepository implements RegistroProductoRepositoryInterface
     public function paginateAllByColumn($column,$data,$cant)
     {
         $this->validateColumns($column);
-        return RegistroProducto::where($column,'=', $data)->paginate($cant);
+        return RegistroProducto::where($column,'=', $data)->orderBy('fechaMovimiento','desc')->paginate($cant);
     }
 
     public function getAllByColumnByThisMonth($column,$data,$cant){
         $this->validateColumns($column);
-        return RegistroProducto::where($column,'=',$data)->whereMonth('fechaMovimiento','=',now()->month-1)->paginate($cant);
+        return RegistroProducto::where($column,'=',$data)->whereMonth('fechaMovimiento','=',now()->month)->orderBy('fechaMovimiento','desc')->paginate($cant);
     }
 
     public function searchOne($column, $data)

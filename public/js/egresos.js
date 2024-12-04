@@ -198,11 +198,12 @@ function searchPublicacion(inputElement) {
 
 function searchEgreso(inputElement) {
     let query = inputElement.value;
-
+    let hiddenBody = document.getElementById('hidden-body');
     function handleClickOutside(event) {
         let suggestions = document.getElementById('suggestions-egresos');
         if (!suggestions.contains(event.target) && event.target !== inputElement) {
             suggestions.innerHTML = ''; // Limpiar sugerencias si se hace clic fuera del input
+            hiddenBody.style.display = 'none';
         }
     }
 
@@ -216,6 +217,7 @@ function searchEgreso(inputElement) {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let data = JSON.parse(xhr.responseText);
                 let suggestions = document.getElementById('suggestions-egresos');
+                hiddenBody.style.display = 'block';
                 suggestions.innerHTML = '';
 
                 data.forEach(item => {
@@ -256,6 +258,7 @@ function searchEgreso(inputElement) {
         xhr.send();
     } else {
         document.getElementById('suggestions-egresos').innerHTML = '';
+        hiddenBody.style.display = 'none';
     }
 }
 

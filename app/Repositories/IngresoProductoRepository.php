@@ -114,9 +114,7 @@ class IngresoProductoRepository implements IngresoProductoRepositoryInterface
     public function getEstadosByMonth($month){
         return IngresoProducto::select('RegistroProducto.estado')->distinct()
                                 ->join('RegistroProducto','RegistroProducto.idRegistro','=','IngresoProducto.idRegistro')
-                                ->where('RegistroProducto.estado', '<>', 'ENTREGADO')
                                 ->where('RegistroProducto.estado', '<>', 'INVALIDO')
-                                ->where('RegistroProducto.estado', '<>', 'DEVOLUCION')
                                 ->whereYear('IngresoProducto.fechaIngreso', $month)
                                 ->whereMonth('IngresoProducto.fechaIngreso',$month)
                                 ->get();

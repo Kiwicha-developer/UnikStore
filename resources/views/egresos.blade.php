@@ -7,9 +7,12 @@
 
 @section('content')
     <div class="container">
+        <div class="bg-secondary" id="hidden-body"
+            style="position:fixed;left:0;width:100vw;height:100vh;z-index:998;opacity:0.5;display:none">
+        </div>
         <br>
         <div class="row">
-            <div class="col-6 col-md-5">
+            <div class="col-6 col-md-7 col-lg-5">
                 <div class="input-group mb-3" style="z-index:1000">
                     <span class="input-group-text"><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control" oninput="searchEgreso(this)" placeholder="Serial Number..." id="search">
@@ -17,12 +20,12 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-3"></div>
-            <div class="col-6 col-md-4 text-end">
+            <div class="col-md-3 d-none d-lg-block"></div>
+            <div class="col-6 col-md-5 col-lg-4 text-end">
                 <input type="month" class="form-control" id="month" name="month"
                     value="{{ $fecha->format('Y-m') }}">
             </div>
-            <div class="col-md-8">
+            <div class="col-8 col-md-8">
                 <h2><a href="{{ route('documentos', [now()->format('Y-m')]) }}" class="text-secondary"><i
                             class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-minus-fill"></i>
                     Egresos<span
@@ -30,101 +33,14 @@
                 </h2>
             </div>
 
-            <div class="col-md-4 text-end">
+            <div class="col-4 col-md-4 text-end">
                 <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#egresoModal"><i
-                        class="bi bi-plus-lg"></i> Nuevo Egreso</a>
+                        class="bi bi-plus-lg"></i> Nuevo <span class="d-none d-md-inline">Egreso</span> </a>
             </div>
         </div>
         <br>
-        <div class="row">
-            <ul class="list-group" style="position: relative;overflow-x:hidden;overflow-y:auto;height:70vh">
-                <li class="list-group-item bg-sistema-uno text-light" style="position:sticky;top:0;z-index:800">
-                    <div class="row text-center">
-                        <div class="col-md-2 text-start">
-                            <small>Producto</small>
-                        </div>
-                        <div class="col-md-2">
-                            <small>Nro Orden</small>
-                        </div>
-                        <div class="col-md-1">
-                            <small>Usuario</small>
-                        </div>
-                        <div class="col-md-2">
-                            <small>SKU</small>
-                        </div>
-                        <div class="col-md-2">
-                            <small>Serial Number</small>
-                        </div>
-                        <div class="col-md-1">
-                            <small>Estado</small>
-                        </div>
-                        <div class="col-md-1">
-                            <small>Pedido</small>
-                        </div>
-                        <div class="col-md-1">
-                            <small>Despacho</small>
-                        </div>
-                    </div>
-                </li>
-                @foreach ($egresos as $egreso)
-                    <li class="list-group-item">
-                        <div class="row text-center">
-                            <div class="col-md-2 text-start">
-                                <small>
-                                    <a
-                                        href="{{ route('producto', [encrypt($egreso->RegistroProducto->DetalleComprobante->Producto->idProducto)]) }}" class="decoration-link">
-                                        {{ $egreso->RegistroProducto->DetalleComprobante->Producto->codigoProducto }}
-                                    </a>
-                                </small>
-                            </div>
-                            <div class="col-md-2">
-                                <small>{{ is_null($egreso->numeroOrden) ? 'No aplica' : $egreso->numeroOrden }}</small>
-                            </div>
-                            <div class="col-md-1">
-                                <small>{{ $egreso->Usuario->user }}</small>
-                            </div>
-                            <div class="col-md-2">
-                                <small>{{ is_null($egreso->Publicacion) || is_null($egreso->Publicacion->sku) ? 'No aplica' : $egreso->Publicacion->sku }}</small>
-                            </div>
-                            <div class="col-md-2">
-                                @php
-                                    $egresoJson = [
-                                        'idEgreso' => $egreso->idEgreso,
-                                        'nombreProducto' => $egreso->RegistroProducto->DetalleComprobante->Producto->nombreProducto,
-                                        'numeroSerie' => $egreso->RegistroProducto->numeroSerie,
-                                        'estado' => $egreso->RegistroProducto->estado,
-                                        'fechaCompra' => $egreso->fechaCompra,
-                                        'fechaDespacho' => $egreso->fechaDespacho,
-                                        'fechaMovimiento' => $egreso->RegistroProducto->fechaMovimiento,
-                                        'usuario' => $egreso->Usuario->user,
-                                        'observacion' => $egreso->RegistroProducto->observacion,
-                                        'cuenta' => $egreso->Publicacion ? $egreso->Publicacion->CuentasPlataforma->nombreCuenta : null,
-                                        'sku' => $egreso->Publicacion ? $egreso->Publicacion->sku : null,
-                                        'numeroOrden' => $egreso->numeroOrden,
-                                        'imagenPublicacion' => $egreso->Publicacion ? asset('storage/'.$egreso->Publicacion->CuentasPlataforma->Plataforma->imagenPlataforma) : null
-                                    ];
-                                @endphp
-                                <a href="javascript:void(0)" 
-                                   onclick='viewModalEgreso(@json($egresoJson))' 
-                                   class="decoration-link">
-                                    <small>{{ $egreso->RegistroProducto->numeroSerie }}</small>
-                                </a>
-                            </div>
-                            <div class="col-md-1">
-                            <small>
-                                {{ $egreso->RegistroProducto->estado }}
-                            </small>
-                            </div>
-                            <div class="col-md-1">
-                                <small>{{ $egreso->fechaCompra->format('d/m/y') }}</small>
-                            </div>
-                            <div class="col-md-1">
-                                <small>{{ $egreso->fechaDespacho->format('d/m/y') }}</small>
-                            </div>
-                        </div>
-                    </li>
-                @endforeach
-            </ul>
+        <div id="container-lista-egresos">
+            <x-lista_egresos :egresos="$egresos" :container="'container-lista-egresos'" />
         </div>
         <!-- Modal -->
         <form action="{{ route('insertegreso') }}" method="POST">
@@ -150,10 +66,10 @@
                                 </div>
                                 <div class="col-md-12 mb-2">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-6">
                                             <label>SKU</label>
                                         </div>
-                                        <div class="col-md-6 text-end text-secondary">
+                                        <div class="col-6 text-end text-secondary">
                                             <label>No aplica</label>
                                         </div>
                                     </div>
@@ -176,11 +92,11 @@
                                     <input type="text" placeholder="Nro de Orden" id="input-numero-orden"
                                         name="numeroorden" class="form-control input-egreso">
                                 </div>
-                                <div class="col-md-6 mb-2">
+                                <div class="col-6 mb-2">
                                     <label>Fecha de pedido</label>
                                     <input type="date" name="fechapedido" class="form-control input-egreso">
                                 </div>
-                                <div class="col-md-6 mb-2">
+                                <div class="col-6 mb-2">
                                     <label>Fecha de despacho</label>
                                     <input type="date" name="fechadespacho" class="form-control input-egreso">
                                 </div>

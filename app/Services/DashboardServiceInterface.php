@@ -14,5 +14,5 @@ interface DashboardServiceInterface
     public function getDevolucionesInventario();
     public function getAbiertosInventario();
     public function getDefectuososInventario();
-    public function getRotosInventario();
+    public function getGarantiaInventario();
 }

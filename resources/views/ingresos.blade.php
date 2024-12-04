@@ -162,7 +162,7 @@
                                 <label class="form-label fw-bold">Estado:</label>
                                 <select id="state-modal-detail" name="estado" class="form-select">
                                     @foreach ($estados as $estado)
-                                    <option value="{{$estado['value']}}" {{$estado['value']=='NUEVO' ? 'disabled' :''}}>
+                                    <option value="{{$estado['value']}}" {{$estado['value']=='NUEVO' || $estado['value']=='ENTREGADO' || $estado['value']=='DEVOLUCION' ? 'disabled' :''}}>
                                         {{$estado['name']}}</option>
                                     @endforeach
                                 </select>

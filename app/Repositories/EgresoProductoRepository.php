@@ -26,10 +26,10 @@ class EgresoProductoRepository implements EgresoProductoRepositoryInterface
         return EgresoProducto::where($column,'=', $data)->get();
     }
     
-    public function getAllByMonth($month){
+    public function getAllByMonth($month,$cant){
         return EgresoProducto::whereMonth('fechaDespacho', $month)
                                     ->orderBy('fechaDespacho','desc')
-                                    ->get();
+                                    ->paginate($cant);
     }
 
     public function searchOne($column, $data)

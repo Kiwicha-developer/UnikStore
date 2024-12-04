@@ -67,9 +67,18 @@
                     <div class="col-md-1 d-none d-lg-block">
                         <small>{{$registro->RegistroProducto->DetalleComprobante->Comprobante->adquisicion}}</small>
                     </div>
-                    <div class="col-lg-1 d-none d-lg-block">
+                    @php
+                        $state = $registro->RegistroProducto->estado;
+                    @endphp
+                    <div class="col-lg-1 d-none d-lg-block {{$state == 'NUEVO' ? 'text-sistema-uno' : (
+                                                            $state == 'ENTREGADO' ? 'text-green' : (
+                                                            $state == 'DEVOLUCION' ? 'text-warning' : (
+                                                            $state == 'GARANTIA' ? 'text-marron' : (
+                                                            $state == 'ABIERTO' ? 'text-purple' : (
+                                                            $state == 'DEFECTUOSO' ? 'text-red' : '')))))}}">
+
                         <small>
-                            {{ $registro->RegistroProducto->estado }}
+                            {{ $state}}
                         </small>
                     </div>
                     <div class="col-3 col-md-2 col-lg-1 text-end">
