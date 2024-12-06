@@ -23,13 +23,11 @@
     </div>
     <br>
     <div class="editButton row border shadow rounded-3 pt-3 pb-3 mb-3">
-        <div class="row">
-            <div class="col-6">
-                <h3>Datos generales</h3>
-            </div>
-            <div class="col-6 text-end">
-                <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
-            </div>
+        <div class="mb-2 col-6">
+            <h3>Datos generales</h3>
+        </div>
+        <div class="mb-2 col-6 text-end">
+            <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
         </div>
         <div class="mb-3 col-12 col-lg-6">
             <label class="form-label">Titulo</label>
@@ -80,74 +78,67 @@
         </div>
     </div>
     <div class="editButton row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
-        <div class="row">
-            <div class="col-6 col-lg-4">
-                <h3>Precios:</h3>
+        <div class="mb-2 col-6 col-lg-4">
+            <h3>Precios:</h3>
+        </div>
+        <div class="mb-2 col-6 col-lg-8 text-end">
+            <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+        </div>
+        <div class="col-6 col-md-6">
+            <div class="row">
+                <h5>Precio producto</h5>
             </div>
-            <div class="col-6 col-lg-8 text-end">
-                <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+            <div class="row">
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="select-tipoprecio" class="form-label">Moneda:</label>
+                    <select class="form-select" onchange="changeTC()" name="tipoprecio" id="select-tipoprecio">
+                        <option value="DOLAR" selected>Dolares</option>
+                        <option value="SOL">Soles</option>
+                        </select>
+                </div>
+                <div class="col-md-8"></div>
+                <div class="mb-3 col-md-6">
+                    <label for="precio-producto" class="form-label">Sin IGV:</label>
+                        <input type="number" name="precio" value="{{number_format($producto->precioDolar, 2, '.', '')}}"id="precio-product"  aria-label="Last name" class="form-control input-edit price-product" step="0.01" disabled>
+                </div>
+                <div class="col-md-6"></div>
+                <div class="mb-3 col-md-6">
+                    <label for="precio-producto" class="form-label">Con IGV:</label>
+                        <input type="number"  value="{{number_format($producto->precioDolar * $igv, 2, '.', '')}}" id="precio-product-igv"   class="form-control input-edit price-product" step="0.01" disabled>
+                </div>
             </div>
         </div>
-        <br>
-        <div class="row">
-            <div class="col-6 col-md-6">
-                <div class="row">
-                    <h5>Precio producto</h5>
-                </div>
-                <div class="row">
-                    <div class="mb-3 col-md-6 col-lg-4">
-                        <label for="select-tipoprecio" class="form-label">Moneda:</label>
-                        <select class="form-select" onchange="changeTC()" name="tipoprecio" id="select-tipoprecio">
-                            <option value="DOLAR" selected>Dolares</option>
-                            <option value="SOL">Soles</option>
-                          </select>
-                    </div>
-                    <div class="col-md-8"></div>
-                    <div class="mb-3 col-md-6">
-                        <label for="precio-producto" class="form-label">Sin IGV:</label>
-                         <input type="number" name="precio" value="{{number_format($producto->precioDolar, 2, '.', '')}}"id="precio-product"  aria-label="Last name" class="form-control input-edit price-product" step="0.01" disabled>
-                    </div>
-                    <div class="col-md-6"></div>
-                    <div class="mb-3 col-md-6">
-                        <label for="precio-producto" class="form-label">Con IGV:</label>
-                         <input type="number"  value="{{number_format($producto->precioDolar * $igv, 2, '.', '')}}" id="precio-product-igv"   class="form-control input-edit price-product" step="0.01" disabled>
-                    </div>
-                </div>
+        <div class="col-6 col-md-6">
+            <div class="row">
+                <h5>Precio venta</h5>
             </div>
-            <div class="col-6 col-md-6">
-                <div class="row">
-                    <h5>Precio venta</h5>
+            <div class="row">
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="precio-producto" class="form-label">Utilidad:</label>
+                        <input type="number"  value="{{number_format($producto->gananciaExtra, 2, '.', '')}}" name="ganancia" id="precio-product-ganancia"  class="form-control input-edit price-product" step="0.01" disabled>
                 </div>
-                <div class="row">
-                    <div class="mb-3 col-md-6 col-lg-4">
-                        <label for="precio-producto" class="form-label">Utilidad:</label>
-                         <input type="number"  value="{{number_format($producto->gananciaExtra, 2, '.', '')}}" name="ganancia" id="precio-product-ganancia"  class="form-control input-edit price-product" step="0.01" disabled>
-                    </div>
-                    <div class="col-lg-8"></div>
-                    <div class="mb-3 col-md-6 col-lg-4">
-                        <label for="precio-producto" class="form-label">Precio Calculado:</label>
-                         <input type="number"  value="" id="precio-product-calculado" class="form-control price-product" step="0.01" disabled>
-                    </div>
-                    <div class="col-lg-8"></div>
-                        <div class="row" id="div-total-price">
-                        </div>
-                    <div class="col-md-8"></div>
+                <div class="col-lg-8"></div>
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="precio-producto" class="form-label">Precio Calculado:</label>
+                        <input type="number"  value="" id="precio-product-calculado" class="form-control price-product" step="0.01" disabled>
                 </div>
+                <div class="col-lg-8"></div>
+                    <div class="row" id="div-total-price">
+                    </div>
+                <div class="col-md-8"></div>
             </div>
         </div>
     </div>
     <div class="editButton row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
-        <div class="row">
-            <div class="col-6">
-                <h3>Datos clave</h3>
-            </div>
-            <div class="col-6 text-end">
-                @foreach ($user->Accesos as $access)
-                    @if($access->idVista  == 7)
-                        <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
-                    @endif
-                @endforeach
-            </div>
+        <div class="mb-2 col-6">
+            <h3>Datos clave</h3>
+        </div>
+        <div class="mb-2 col-6 text-end">
+            @foreach ($user->Accesos as $access)
+                @if($access->idVista  == 7)
+                    <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+                @endif
+            @endforeach
         </div>
         <div class="col-lg-4">
             <label class="form-label">UPC/EAN</label>
@@ -164,23 +155,21 @@
         </div>
     </div>
     <div class="editButton row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
-        <div class="row">
-            <div class="col-6">
-                <h3>Inventario disponible</h3>
-            </div>
-            <div class="col-6 text-end">
-                <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+        <div class="mb-2 col-6">
+            <h3>Inventario disponible</h3>
+        </div>
+        <div class="mb-2 col-6 text-end">
+            <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
+            @php
+                $ingresoEdit = "";
+            @endphp
+            @foreach ($user->Accesos as $access)
+                @if($access->idVista  == 10)
                 @php
-                    $ingresoEdit = "";
+                    $ingresoEdit = "input-edit";
                 @endphp
-                @foreach ($user->Accesos as $access)
-                    @if($access->idVista  == 10)
-                    @php
-                        $ingresoEdit = "input-edit";
-                    @endphp
-                    @endif
-                @endforeach
-            </div>
+                @endif
+            @endforeach
         </div>
         <div class="col-6 col-md-3 col-lg-2">
             <label  class="form-label">Stock Minimo:</label>
@@ -209,13 +198,11 @@
         </div>
     </div>
     <div class="editButton row border shadow rounded-3 pt-3 pb-3 mb-3 mt-3">
-        <div class="row">
-            <div class="col-6">
-                <h3>Detalles</h3>
-            </div>
-            <div class="col-6 text-end">
-                <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
-            </div>
+        <div class="col-6 mb-2">
+            <h3>Detalles</h3>
+        </div>
+        <div class="col-6 mb-2 text-end">
+            <button type="button" class="btn btn-info text-light btn-edit">Editar <i class="bi bi-pencil"></i></button>
         </div>
         <div class="col-md-6">
             <h5>Imagenes</h5>

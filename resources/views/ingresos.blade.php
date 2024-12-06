@@ -9,7 +9,7 @@
     </div>
     <br>
     <div class="row mb-2">
-        <div class="col-6 col-md-7 col-lg-5 text-end" style="position:relative;z-index:999">
+        <div class="col-9 col-md-7 col-lg-5 text-end" style="position:relative;z-index:999">
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control" placeholder="Serial Number..." id="search">
@@ -18,19 +18,20 @@
             </div>
         </div>
         <div class="col-lg-4 d-none d-lg-block"></div>
-        <div class="col-6 col-md-5 col-lg-3 text-end">
-            <input type="month" class="form-control" id="month" name="month" value="{{$fecha->format('Y-m')}}">
+        <div class="col-3 col-md-5 col-lg-3 text-end">
+            <input type="month" class="form-control hidde-month" id="month" name="month" value="{{$fecha->format('Y-m')}}">
+            <button class="btn btn-light border d-md-none" onclick="hiddeInputDate('month')">
+                <i class="bi bi-calendar3"></i>  <!-- Ícono de calendario -->
+            </button>
         </div>
-        <div class="col-6 col-lg-6">
-            <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i
-                        class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-plus-fill"></i> Ingresos
-                <span
-                    class="text-capitalize text-secondary fw-light"><em>({{$fecha->translatedFormat('F')}})</em></span>
+        <div class="col-10 col-lg-6">
+            <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-plus-fill"></i> Ingresos
+                <span class="text-capitalize text-secondary fw-light"><em>({{$fecha->translatedFormat('F')}})</em></span>
             </h2>
         </div>
-        <div class="col-6 col-lg-6 text-end">
+        <div class="col-2 col-lg-6 text-end">
             <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ingresoModal"><i
-                    class="bi bi-file-earmark-plus"></i> Nuevo Registro</a>
+                    class="bi bi-file-earmark-plus"></i><span class="d-none d-md-inline"> Nuevo Registro</span></a>
         </div>
     </div>
     <form action="{{url()->current()}}" method="get" id="form-filtro-componente">

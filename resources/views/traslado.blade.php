@@ -8,18 +8,20 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-4 col-md-7">
             <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> Traslados</h2>
         </div>
-        <div class="col-md-5">
+        
+        <div class="col-8 col-md-5">
             <div class="input-group mb-3" style="z-index:1000">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control" placeholder="Serial Number..." id="search" >
                 <ul class="list-group w-100" style="position:absolute;top:100%;z-index:1000" id="suggestions">
                 </ul>
             </div>
+            
         </div>
-        <div class="col-md-2">
+        <div class="col-12 text-end">
             <x-scanner/>
         </div>
     </div>

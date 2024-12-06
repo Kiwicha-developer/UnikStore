@@ -78,18 +78,18 @@
                             <h4 class="mb-0">Stock</h4>
                             <small class="text-secondary">Productos por agotarse</small>
                         </div>
-                        <div class="col-4"></div>
+                        <div class="col-2 col-md-4"></div>
                         
-                            <div class="col-4 text-center">
-                                @php
-                                    $porcent = round((100 * $stockMin)/$productos,2);
-                                @endphp
-                                    <div style="width: 100%;aspect-ratio: 1 / 1" class="border rounded-circle d-flex justify-content-center align-items-center mt-2 mb-2 {{$porcent < 10 ? 'border-success' : ($porcent < 40 ? 'border-info' : ($porcent < 80 ? 'border-warning' : 'border-danger'))}}">
-                                        <h1>{{$stockMin}}</h1>
-                                    </div>
-                            </div>
+                        <div class="col-8 col-md-4 text-center">
+                            @php
+                                $porcent = round((100 * $stockMin)/$productos,2);
+                            @endphp
+                                <div style="width: 100%;aspect-ratio: 1 / 1" class="border rounded-circle d-flex justify-content-center align-items-center mt-2 mb-2 {{$porcent < 10 ? 'border-success' : ($porcent < 40 ? 'border-info' : ($porcent < 80 ? 'border-warning' : 'border-danger'))}}">
+                                    <h1>{{$stockMin}}</h1>
+                                </div>
+                        </div>
                         
-                        <div class="col-4"></div>
+                        <div class="col-2 col-md-4"></div>
                     </div>
                     </a>
                 </div>
@@ -134,10 +134,10 @@
                                                 @foreach ($stock as $key => $value)
                                                     <li class="list-group-item">
                                                         <div class="row">
-                                                            <div class="col-8">
+                                                            <div class="col-md-8">
                                                                 <i class="bi bi-circle-fill" style="color: {{$colors[$key]}}"></i> {{$value['almacen']->descripcion}}
                                                             </div>
-                                                            <div class="col-4 text-end">
+                                                            <div class="col-md-4 text-center text-md-end">
                                                                 <span>{{$value['cantidad']}}</span>
                                                             </div>
                                                         </div>

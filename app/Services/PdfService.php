@@ -11,18 +11,20 @@ class PdfService implements PdfServiceInterface
     protected $comprobanteRepository;
     protected $productoRepository;
     protected $almacenRepository;
+    protected $generadorSeries;
 
     public function __construct(ComprobanteRepositoryInterface $comprobanteRepository,
                                 ProductoRepositoryInterface $productoRepository,
-                                AlmacenRepositoryInterface $almacenRepository)
+                                AlmacenRepositoryInterface $almacenRepository,
+                                BarcodeGeneratorPNG $generadorSeries)
     {
         $this->comprobanteRepository = $comprobanteRepository;
         $this->productoRepository =  $productoRepository;
         $this->almacenRepository = $almacenRepository;
+        $this->generadorSeries = $generadorSeries;
     }
     
     public function getSerialsPrint($idComprobante){
-        $generador = new BarcodeGeneratorPNG();
         $registros = $this->comprobanteRepository->getAllRegistrosByComprobanteId($idComprobante);
         $registrosFiltrados = $registros->filter(function($register) {
             return strpos($register->numeroSerie, 'UNK-') !== false;
@@ -31,7 +33,7 @@ class PdfService implements PdfServiceInterface
         $series = array();
 
         foreach($registrosFiltrados as $reg){
-            $barcode = $generador->getBarcode($reg->numeroSerie, BarcodeGeneratorPNG::TYPE_CODE_128);
+            $barcode = $this->generadorSeries->getBarcode($reg->numeroSerie, BarcodeGeneratorPNG::TYPE_CODE_128,1);
             $series[] = ['serie' => $reg->numeroSerie,'barcode' => base64_encode($barcode)];
         }
         return $series;

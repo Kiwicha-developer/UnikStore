@@ -12,7 +12,7 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-6 col-md-7 col-lg-5">
+            <div class="col-9 col-md-7 col-lg-5">
                 <div class="input-group mb-3" style="z-index:1000">
                     <span class="input-group-text"><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control" oninput="searchEgreso(this)" placeholder="Serial Number..." id="search">
@@ -21,11 +21,14 @@
                 </div>
             </div>
             <div class="col-md-3 d-none d-lg-block"></div>
-            <div class="col-6 col-md-5 col-lg-4 text-end">
-                <input type="month" class="form-control" id="month" name="month"
+            <div class="col-3 col-md-5 col-lg-4 text-end">
+                <input type="month" class="form-control hidde-month" id="month" name="month"
                     value="{{ $fecha->format('Y-m') }}">
+                <button class="btn btn-light border d-md-none" onclick="hiddeInputDate('month')">
+                    <i class="bi bi-calendar3"></i>  <!-- Ícono de calendario -->
+                </button>
             </div>
-            <div class="col-8 col-md-8">
+            <div class="col-10 col-md-8">
                 <h2><a href="{{ route('documentos', [now()->format('Y-m')]) }}" class="text-secondary"><i
                             class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-minus-fill"></i>
                     Egresos<span
@@ -33,9 +36,9 @@
                 </h2>
             </div>
 
-            <div class="col-4 col-md-4 text-end">
+            <div class="col-2 col-md-4 text-end">
                 <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#egresoModal"><i
-                        class="bi bi-plus-lg"></i> Nuevo <span class="d-none d-md-inline">Egreso</span> </a>
+                        class="bi bi-plus-lg"></i><span class="d-none d-md-inline"> Nuevo Egreso</span> </a>
             </div>
         </div>
         <br>

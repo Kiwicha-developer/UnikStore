@@ -7,12 +7,11 @@
     <div class="container">
         <br>
         <div class="row">
-            <div class="col-7 col-lg-4">
+            <div class="col-9 col-lg-4">
                 <x-buscador_producto />
             </div>
-            <div class="col-5 col-lg-8 text-end">
-                <a href="{{ route('createproducto') }}" class="btn btn-success"><i class="bi bi-plus-square"></i> Nuevo
-                    Producto</a>
+            <div class="col-3 col-lg-8 text-end">
+                <a href="{{ route('createproducto') }}" class="btn btn-success"><i class="bi bi-plus-square"></i> <span class="d-none d-md-inline"> Nuevo Producto</span></a>
             </div>
             <div class="col-6 col-md-8 pt-2">
                 <h3><i class="bi bi-box-fill"></i> Productos</h3>

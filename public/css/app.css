@@ -186,6 +186,14 @@
         z-index: 9990 !important;
         /* Establece el z-index para todos los modales */
     }
+
+    .hidde-month {
+        visibility: hidden;          /* Hace que el campo sea invisible */
+        position: absolute;     /* Lo saca del flujo visual de la página */
+        width: 0;               /* No ocupa espacio */
+        height: 0;
+        padding: 0;
+    }
 }
 
 .grafico-pastel {

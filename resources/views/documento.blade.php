@@ -7,7 +7,7 @@
     <br>
     <div class="row">
         <div class="col-md-6">
-            <h2><a href="{{route('documentos',[now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-filter-circle"></i></a> {{$documento->Preveedor->razSocialProveedor}}</h2>
+            <h2><a href="{{route('documentos',[$documento->fechaRegistro->format('Y-m')])}}" class="text-secondary"><i class="bi bi-filter-circle"></i></a> {{$documento->Preveedor->razSocialProveedor}}</h2>
         </div>
         <div class="col-8 col-md-6 ">
             <h2 class="text-end d-none d-sm-none d-md-block">{{$documento->numeroComprobante}}</h2>

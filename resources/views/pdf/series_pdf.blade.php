@@ -41,7 +41,7 @@
                     
                 </td>
                 @if ($index % 4 == 3 || $index == count($series) - 1)
-                    @if ($index % 4 != 3)
+                    @if ($index % 3 != 3)
                         @for ($i = 0; $i < 3 - ($index % 4); $i++)
                             <td></td>
                         @endfor

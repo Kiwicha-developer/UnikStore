@@ -9,7 +9,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-6 col-md-7 col-lg-5 text-end" style="position:relative;z-index:999">
+        <div class="col-9 col-md-7 col-lg-5 text-end" style="position:relative;z-index:999">
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control" placeholder="Nro documento" id="search">
@@ -18,9 +18,12 @@
             </div>
         </div>
         <div class="col-lg-4 d-none d-lg-block"></div>
-        <div class="col-6 col-md-5 col-lg-3 text-end">
-            <input type="month" class="form-control" id="month" name="month" placeholder="MM-YYYY"
+        <div class="col-3 col-md-5 col-lg-3 text-end">
+            <input type="month" class="form-control hidde-month" id="month" name="month" placeholder="MM-YYYY"
                 value="{{$fecha->format('Y-m')}}">
+            <button class="btn btn-light border d-md-none" onclick="hiddeInputDate('month')">
+                <i class="bi bi-calendar3"></i>  <!-- Ícono de calendario -->
+            </button>
         </div>
     </div>
     <br>
