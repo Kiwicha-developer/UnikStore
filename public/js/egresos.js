@@ -291,6 +291,7 @@ function viewModalEgreso(json){
     let divFecha = document.getElementById('modal-egreso-fecha');
     let divPublicacion = document.getElementById('modal-egreso-publicidad');
     let textAreaObservacion = document.getElementById('modal-egreso-observacion');
+    let btnDevolucionEgreso = document.getElementById('modal-egreso-btn-devolucion');
 
     labelSerialNumber.textContent = json.numeroSerie;
     labelEstado.textContent = json.estado;
@@ -298,6 +299,12 @@ function viewModalEgreso(json){
     textAreaObservacion.value = json.observacion;
     labelUsuario.textContent = json.usuario;
     hiddenIdEgreso.value = json.idEgreso;
+
+    if(json.estado == 'DEVOLUCION'){
+        btnDevolucionEgreso.style.display = 'none';
+    }else{
+        btnDevolucionEgreso.style.display = 'block';
+    }
 
     if(json.estado == 'ENTREGADO'){
         divFecha.innerHTML = '<p class="mb-0"><small><strong>Fecha Compra:</strong> '+stringDate(json.fechaCompra)+'</small></p>'+

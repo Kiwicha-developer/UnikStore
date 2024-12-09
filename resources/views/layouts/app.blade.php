@@ -11,13 +11,12 @@
     <link rel="stylesheet" href="{{ asset('css/boxicons/boxicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('css/quill.css') }}">
+
     <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/sweetalert/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('js/sheetjs/xlsx.full.min.js') }}"></script>
-    
-    <script src="https://cdn.tiny.cloud/1/k6l792gpo9laee87mxdwb4ejosazo6qn95361l4i6xxunsdd/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+    <script src="{{ asset('js/quill.js') }}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ route('js.header-scripts') }}"></script>
 </head>
@@ -224,17 +223,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="row" style="height: 300px">
-                                <div class="col-md-12 h-100">
+                                <div class="col-md-12 h-100" >
                                     <input type="hidden" name="id" value="" class="form-control"
                                         id="id-modal-bandeja">
-                                    <textarea name="bandeja" id="text-bandeja" type="text" maxlength="3000" class="form-control h-100"
-                                        style="width: 100%; overflow-y: auto;">{{ $user->bandeja }}</textarea>
+                                    <input type="hidden" name="bandeja" id="bandeja-input" value="">
+                                    <div id="text-bandeja" class="row h-75" style="width: 100%; overflow-y: auto;"> 
+                                        {!! $user->bandeja !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Cancelar</button>
+                                data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary"><i class="bi bi-floppy-fill"></i>
                                 Actualizar</button>
                         </div>

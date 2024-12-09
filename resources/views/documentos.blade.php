@@ -40,9 +40,9 @@
                 <span class="d-none d-md-inline">Traslado</span></a>
             @endif
             @endforeach
-            <a href="{{route('ingresos', [now()->format('Y-m')])}}" class="btn btn-success mb-2"><i
+            <a href="{{route('ingresos', [$fecha->format('Y-m')])}}" class="btn btn-success mb-2"><i
                     class="bi bi-file-earmark-plus-fill"></i> <span class="d-none d-md-inline">Ingresos</span></a>
-            <a href="{{route('egresos', [now()->format('Y-m')])}}" class="btn btn-warning mb-2"><i
+            <a href="{{route('egresos', [$fecha->format('Y-m')])}}" class="btn btn-warning mb-2"><i
                     class="bi bi-file-earmark-minus-fill"></i> <span class="d-none d-md-inline">Egresos</span></a>
         </div>
     </div>

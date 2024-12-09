@@ -1,8 +1,5 @@
-
     var inputsModalProduct = document.querySelectorAll('.input-modal-product');
-    var arrayUbicaciones = @json($ubicaciones);
     var arrayEstados = @json($estados);
-    var arrayAdquisiciones = @json($adquisiciones);
     
     var index = 1;
     var totalComprobante = 0;
@@ -74,7 +71,7 @@
             document.getElementById('modal-hidden-product').value = "";
         }
     }
-    
+
     function createProductList(){
         let productInput = document.getElementById('modal-hidden-product');
         let modalDiv = document.getElementById('registerModal');
@@ -86,88 +83,55 @@
             return;
         }
         
-        let liBtnAdd = document.getElementById('li-btn-add');
+        let liBtnAdd = document.getElementById('li-btn-add');//posiublemente borrar
         
         let ulIngreso = document.getElementById('ul-ingreso');
-        
-        let liProduct = document.createElement('li');
-        liProduct.classList.add('list-group-item','list-group-item-dark');
-        liProduct.id = 'header-list-product-' + index;
-        
-        let inputHiddenProduct = document.createElement('input');
-        inputHiddenProduct.type = "hidden";
-        inputHiddenProduct.value = index;
+
+        let liProduct = createLi(['list-group-item','list-group-item-dark'],'header-list-product-' + index);
+
+        let inputHiddenProduct = createInput(null,'header-hidden-product-' + index,'hidden',index,null);
         inputHiddenProduct.dataset.medida = selectModalMedida.value;
         inputHiddenProduct.dataset.price = inputModalPrice.value;
         inputHiddenProduct.dataset.id = productInput.dataset.id;
-        inputHiddenProduct.id = 'header-hidden-product-' + index;
         
-        let inputDetalleProducto = document.createElement('input');
-        inputDetalleProducto.type = 'hidden';
-        inputDetalleProducto.value = productInput.dataset.id;
-        inputDetalleProducto.name = 'detalle['+index+'][producto]';
+        let inputDetalleProducto = createInput(null,null,'hidden',productInput.dataset.id,'detalle['+index+'][producto]');
+        let inputDetalleMedida = createInput(null,null,'hidden',selectModalMedida.value,'detalle['+index+'][medida]');
+        let inputDetallePrecioUnitario = createInput(null,null,'hidden',inputModalPrice.value,'detalle['+index+'][preciounitario]');
+        let inputDetallePrecioTotal = createInput(null,'header-hidden-preciototal-' + index,'hidden',0,'detalle['+index+'][preciototal]');
         
-        let inputDetalleMedida = document.createElement('input');
-        inputDetalleMedida.type = 'hidden';
-        inputDetalleMedida.value = selectModalMedida.value;
-        inputDetalleMedida.name = 'detalle['+index+'][medida]';
+        let divRow = createDiv(['row'],null);
+
+        let divRowOptions = createDiv(['row'],null);
+
+        let divColOptions = createDiv(['col'],null);
         
-        let inputDetallePrecioUnitario = document.createElement('input');
-        inputDetallePrecioUnitario.type = 'hidden';
-        inputDetallePrecioUnitario.value = inputModalPrice.value;
-        inputDetallePrecioUnitario.name = 'detalle['+index+'][preciounitario]';
-        
-        let inputDetallePrecioTotal = document.createElement('input');
-        inputDetallePrecioTotal.type = 'hidden';
-        inputDetallePrecioTotal.value = 0;
-        inputDetallePrecioTotal.name = 'detalle['+index+'][preciototal]';
-        inputDetallePrecioTotal.id = 'header-hidden-preciototal-' + index;
-        
-        let divRow = document.createElement('div');
-        divRow.classList.add('row');
-        
-        let divColCantidad = document.createElement('div');
-        divColCantidad.classList.add('col-1','col-md-1','text-center');
-        let h5Cantidad = document.createElement('h5');
-        h5Cantidad.textContent = 0;
-        h5Cantidad.id = 'header-cantidad-product-' + inputHiddenProduct.value;
+        let divColCantidad = createDiv(['col-1','col-md-1','text-center'],null);
+        let h5Cantidad = createH5(null,'header-cantidad-product-' + inputHiddenProduct.value,'0');
         divColCantidad.appendChild(h5Cantidad);
         
-        let divColProduct = document.createElement('div');
-        divColProduct.classList.add('col-4','col-md-5','col-lg-3','d-flex','truncate');
-        let h5Product = document.createElement('h5');
-        h5Product.classList.add('h-100','text-uppercase');
-        h5Product.innerHTML  = productInput.value + "&nbsp;";
+        let divColProduct = createDiv(['col-4','col-md-5','col-lg-3','d-flex','truncate'],null);
+        let h5Product = createH5(['h-100','text-uppercase'],null,productInput.value + "&nbsp;");
         let smallProduct = document.createElement('small');
         smallProduct.classList.add('d-none','d-md-block');
         smallProduct.textContent = productInput.dataset.cod;
         divColProduct.appendChild(h5Product);
         divColProduct.appendChild(smallProduct);
         
-        let divColMedida = document.createElement('div');
-        divColMedida.classList.add('d-none','d-lg-block','col-lg-2','text-center');
-        let pMedida = document.createElement('p');
-        pMedida.textContent = selectModalMedida.value;
+        let divColMedida = createDiv(['d-none','d-lg-block','col-lg-2','text-center'],null);
+        let pMedida = createParrafo(null,null,selectModalMedida.value);
         divColMedida.appendChild(pMedida);
         
-        let divColPrecioUnitario = document.createElement('div');
-        divColPrecioUnitario.classList.add('col-2','col-md-2','text-center');
-        let pPrecioUnitario = document.createElement('p');
-        pPrecioUnitario.textContent = inputModalPrice.value;
+        let divColPrecioUnitario = createDiv(['col-2','col-md-2','text-center'],null);
+        let pPrecioUnitario = createParrafo(null,'header-preciounitario-product-' + inputHiddenProduct.value,inputModalPrice.value);
         pPrecioUnitario.dataset.price = inputModalPrice.value;
-        pPrecioUnitario.id = 'header-preciounitario-product-' + inputHiddenProduct.value;
         divColPrecioUnitario.appendChild(pPrecioUnitario);
-        
-        let divColPrecioTotal = document.createElement('div');
-        divColPrecioTotal.classList.add('col-2','col-md-2','text-center');
-        let h5TotalPrice = document.createElement('h5');
-        h5TotalPrice.textContent = '0';
+
+        let divColPrecioTotal = createDiv(['col-2','col-md-2','text-center'],null);
+        let h5TotalPrice = createH5(null,'header-preciototal-product-' + inputHiddenProduct.value,'0');
         h5TotalPrice.dataset.total = '0';
-        h5TotalPrice.id = 'header-preciototal-product-' + inputHiddenProduct.value;
         divColPrecioTotal.appendChild(h5TotalPrice);
         
-        let divColButtons = document.createElement('div');
-        divColButtons.classList.add('col-3','col-md-2','pe-0','ps-0','text-end');
+        let divColButtons = createDiv(['col-3','col-md-2','pe-0','ps-0','text-end'],null);
         let buttonAdd = document.createElement('button');
         buttonAdd.classList.add('btn','btn-success','btn-sm');
         buttonAdd.type = 'button';
@@ -188,8 +152,14 @@
             inputFile.click();
             setIdList(inputHiddenProduct.value);
         });
-        divColButtons.appendChild(buttonDelete);
-        divColButtons.appendChild(buttonExcel);
+        let buttonOption = document.createElement('button');
+        buttonOption.type = 'button';
+        buttonOption.classList.add('btn','btn-sm','btn-secondary','me-2');
+        buttonOption.innerHTML = '<i class="bi bi-three-dots-vertical"></i>';
+        //divColButtons.innerHTML = '<x-btn-scan :class="'btn-warning btn-sm'" :spanClass="'d-none d-md-inline'"/>';
+        //divColButtons.appendChild(buttonDelete);
+        //divColButtons.appendChild(buttonExcel);
+        divColButtons.appendChild(buttonOption);
         divColButtons.appendChild(buttonAdd);
         
         divRow.appendChild(divColCantidad);
@@ -198,12 +168,14 @@
         divRow.appendChild(divColPrecioUnitario);
         divRow.appendChild(divColPrecioTotal);
         divRow.appendChild(divColButtons);
+        divRowOptions.appendChild(divColOptions);
         liProduct.appendChild(inputDetalleProducto);
         liProduct.appendChild(inputHiddenProduct);
         liProduct.appendChild(inputDetalleMedida);
         liProduct.appendChild(inputDetallePrecioUnitario);inputDetallePrecioTotal
         liProduct.appendChild(inputDetallePrecioTotal);
         liProduct.appendChild(divRow);
+        liProduct.appendChild(divRowOptions);
         ulIngreso.appendChild(liProduct);
         
         index++;
@@ -375,10 +347,6 @@
     function updateBtnAdd(){
         updateValidate();
         validateRegistro();
-    }
-    
-    function exceptionCountProducts(id){
-        
     }
     
     function countProducts(id){

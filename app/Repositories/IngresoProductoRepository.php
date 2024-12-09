@@ -75,6 +75,15 @@ class IngresoProductoRepository implements IngresoProductoRepositoryInterface
         $this->validateColumns($column);
         return IngresoProducto::where($column, 'LIKE', '%' . $data . '%')->get();
     }
+
+    public function getOneBySerialNumber($data)
+    {
+        return IngresoProducto::join('RegistroProducto','RegistroProducto.idRegistro','=','IngresoProducto.idRegistro')
+                                ->where('RegistroProducto.estado', '<>', 'ENTREGADO')
+                                ->where('RegistroProducto.estado', '<>', 'INVALIDO')
+                                ->where('RegistroProducto.numeroSerie', '=',$data)
+                                ->first();
+    }
     
     public function searchBySerialNumber($data,$cant)
     {

@@ -55,20 +55,20 @@
                 </div>
                 <div class="col-md-2 d-none d-lg-block">
                 </div>
-                <div class="col-3 col-lg-2">
+                <div class="col-4 col-lg-2">
                     <label class="form-label">Descuento:</label>
                     <input type="number" id="importe-descuento-comprobante" class="form-control" name="" step="0.01" id="" value="0.00">
                 </div>
-                <div class="col-3 col-lg-2 text-lg-end">
+                <div class="col-4 col-lg-2 text-lg-end">
                     <label class="form-label">Importe Total:</label>
                     <input type="number" id="importe-total-comprobante" name="comprobante[total]" step="0.01" class="form-control" value="0.00" readonly>
                 </div>
                 <div class="col-md-3 col-lg-6 d-none d-md-block mt-2">
                     
                 </div>
-                <div class="col-6 col-md-6 mt-2 pt-4 text-end">
-                    <button type="button" onclick="generatePlantilla()" class="btn bg-success text-light">Plantilla <i class="bi bi-file-earmark-excel-fill"></i></button>
-                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#registerModal">Producto <i class="bi bi-cart-plus-fill"></i></button>
+                <div class="col-4 col-md-6 mt-2 pt-4 text-end">
+                    <button type="button" onclick="generatePlantilla()" class="btn bg-success text-light"><span class="d-none d-md-inline">Plantilla</span> <i class="bi bi-file-earmark-excel-fill"></i></button>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#registerModal"><span class="d-none d-md-inline">Producto</span> <i class="bi bi-cart-plus-fill"></i></button>
                 </div>
             </div>
             @else
@@ -216,7 +216,7 @@
         </div>
         @if($validate)
         <div class="col-3">
-            <button type="button" onclick="deleteForm({{$documento->idComprobante}})" class="btn btn-danger"><i class="bi bi-trash3"></i>  <span class="d-none d-lg-block">Eliminar</span> {{$documento->TipoComprobante->descripcion}}</button>
+            <button type="button" onclick="deleteForm({{$documento->idComprobante}})" class="btn btn-danger"><i class="bi bi-trash3"></i>  <span class="d-none d-lg-inline">Eliminar {{$documento->TipoComprobante->descripcion}}</span></button>
         </div>
         <div class="col-6 text-center">
             <button type="button" onclick="validateSeries({{$documento->idProveedor}})" class="btn btn-success" id="btnSubmit"  disabled><i class="bi bi-floppy-fill"></i> Registrar</button>
@@ -302,6 +302,7 @@
         <input type="hidden" name="id" id="hidden-form-deletecomprobante">
     </form>
 </div>
+<x-scanner/>
 <script src="{{ route('js.documento-scripts',[$documento->idComprobante]) }}"></script>
 
 @endsection

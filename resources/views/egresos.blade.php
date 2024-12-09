@@ -29,7 +29,7 @@
                 </button>
             </div>
             <div class="col-10 col-md-8">
-                <h2><a href="{{ route('documentos', [now()->format('Y-m')]) }}" class="text-secondary"><i
+                <h2><a href="{{ route('documentos', [$fecha->format('Y-m')]) }}" class="text-secondary"><i
                             class="bi bi-arrow-left-circle"></i></a> <i class="bi bi-file-earmark-minus-fill"></i>
                     Egresos<span
                         class="text-capitalize text-secondary fw-light"><em>({{ $fecha->translatedFormat('F') }})</em></span>
@@ -153,7 +153,7 @@
                         <div class="modal-footer">
                             <div class="row w-100 pe-0 ps-0">
                                 <div class="col-md-6 ps-0">
-                                    <button type="button" onclick="formDetailEgreso('devolucion')" class="btn btn-warning"><i class="bi bi-arrow-clockwise"></i> Devoluci&oacute;n</button>
+                                    <button type="button" onclick="formDetailEgreso('devolucion')" id="modal-egreso-btn-devolucion" class="btn btn-warning"><i class="bi bi-arrow-clockwise"></i> Devoluci&oacute;n</button>
                                 </div>
                                 <div class="col-md-6 pe-0 text-end">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>

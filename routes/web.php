@@ -63,6 +63,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/producto/deletedetail/{idProducto}', [ProductoController::class, 'deleteDetail'])->name('deletedetail');
     
     Route::get('/ingresos/searchingresos', [IngresoController::class, 'searchIngreso'])->name('searchingresos');
+    Route::get('/ingresos/getoneingreso', [IngresoController::class, 'getOneIngreso'])->name('getoneingreso');
     Route::get('/ingresos/{month}', [IngresoController::class, 'index'])->name('ingresos');
     Route::post('/ingreso/insertingreso/{comprobante}', [IngresoController::class, 'insertIngreso'])->name('insertingreso');
     Route::post('/ingreso/deleteingreso', [IngresoController::class, 'deleteIngreso'])->name('deleteingreso');

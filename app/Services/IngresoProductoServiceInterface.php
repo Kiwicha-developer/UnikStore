@@ -15,4 +15,5 @@ interface IngresoProductoServiceInterface
     public function filtroProveedor($date);
     public function filtroEstado($date);
     public function updateRegistro($idRegistro,$estado,$observacion);
+    public function getOneIngreso($data);
 }

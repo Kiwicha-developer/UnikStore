@@ -98,17 +98,3 @@ function disableReestablecer() {
         btnRes.classList.add('disabled');
     }
 }
-
-tinymce.init({
-    selector: '#text-bandeja', // Selector del campo de texto donde inicializamos TinyMCE
-    plugins: 'lists link image', // Plugins que quieres habilitar
-    toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image | forecolor backcolor', // Barra de herramientas
-    menubar: false, // Desactiva el menú
-    height: 300, // Altura del editor
-    width: '100%',
-    content_style: "body { max-height: 100%; overflow-y: auto; }",
-    resize: false,
-    language: 'es',
-    branding: false,
-    statusbar: false
-});

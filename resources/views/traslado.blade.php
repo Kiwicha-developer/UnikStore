@@ -8,11 +8,11 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-4 col-md-7">
+        <div class="col-5 col-md-7">
             <h2><a href="{{route('documentos', [now()->format('Y-m')])}}" class="text-secondary"><i class="bi bi-arrow-left-circle"></i></a> Traslados</h2>
         </div>
         
-        <div class="col-8 col-md-5">
+        <div class="col-7 col-md-5">
             <div class="input-group mb-3" style="z-index:1000">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control" placeholder="Serial Number..." id="search" >
@@ -22,6 +22,7 @@
             
         </div>
         <div class="col-12 text-end">
+            <x-btn-scan :class="'btn-warning'" :spanClass="'d-none d-md-inline'"/>
             <x-scanner/>
         </div>
     </div>
@@ -66,68 +67,40 @@
     
 </div>
 <script>
+    let hiddenBody = document.getElementById('hidden-body');
     var almacenes = @json($almacenes);
     document.getElementById('search').addEventListener('input', function() {
         let query =  this.value;
-        let hiddenBody = document.getElementById('hidden-body');
+        
         if(query.length > 2){
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', `/ingresos/searchingresos?query=${query}`, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    let data = JSON.parse(xhr.responseText);
-                    let suggestions = document.getElementById('suggestions');
-                    hiddenBody.style.display = 'block';
-                    suggestions.innerHTML = '';
-
-                        data.forEach(item => {
-                            let li = document.createElement('li');
-                            li.classList.add('list-group-item', 'hover-sistema-uno');
-                            li.style.cursor = "pointer";
-                            
-                            let divRow = document.createElement('div');
-                            divRow.classList.add('row','text-center');
-                            
-                            let divColProduct = document.createElement('div');
-                            divColProduct.classList.add('col-4','col-md-3', 'text-start');
-                            let smallProduct = document.createElement('small');
-                            smallProduct.textContent = item.Proveedor.nombreProveedor;
-                            divColProduct.appendChild(smallProduct);
-                            
-                            let divColSerial = document.createElement('div');
-                            divColSerial.classList.add('col-4','col-md-6');
-                            let smallSerial = document.createElement('small');
-                            smallSerial.textContent = item.numeroSerie;
-                            divColSerial.appendChild(smallSerial);
-                            
-                            let divColDate = document.createElement('div');
-                            divColDate.classList.add('col-4','col-md-3','text-end');
-                            let smallDate = document.createElement('small');
-                            smallDate.textContent = item.fechaIngresoPerso;
-                            divColDate.appendChild(smallDate);
-                            
-                            li.addEventListener('click', function() {
-                                document.getElementById('search').value = ''; 
-                                suggestions.innerHTML = ''; 
-                                
-                                addProductoSerial(item);
-                            });
-                            
-                            divRow.appendChild(divColProduct);
-                            divRow.appendChild(divColSerial);
-                            divRow.appendChild(divColDate);
-                            li.appendChild(divRow);
-                            suggestions.appendChild(li);
-                        });
-                }
-            };
-            xhr.send();
+            searchCodeToController(query);
         }else {
         document.getElementById('suggestions').innerHTML = ''; // Limpiar si hay menos de 3 caracteres
         hiddenBody.style.display = 'none';
         }
         
     });
+
+    function searchCodeToController(query){
+        let data = null;
+        let xhr = new XMLHttpRequest();
+            xhr.open('GET', `/ingresos/getoneingreso?query=${query}`, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    data = JSON.parse(xhr.responseText);
+                    addProductoSerial(data);
+                }
+            };
+            xhr.send();
+        return data;
+    }
+
+    function validateSerials(){
+        getSerials().forEach(function(x){
+            searchCodeToController(x);
+        });
+        
+    }
 
     function addProductoSerial(object){
         if(validateDuplicity(object.Registro.numeroSerie)){
@@ -243,5 +216,10 @@
         }
     }
     document.addEventListener('click', hideSuggestions);
+
+    document.getElementById('btn-list-scan-codes').addEventListener('click',function(event){
+
+        validateSerials();
+    });
 </script>
 @endsection

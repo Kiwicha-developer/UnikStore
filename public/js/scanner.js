@@ -1,199 +1,8 @@
-
-let toggleTorch = true;
-let currentStream = null;
-let currentTrack = null;
 let arrayCodes = [];
-const codeReader = new ZXing.BrowserMultiFormatReader();
-const videoElement = document.getElementById('video');
-const textResultadosCamera = document.getElementById('resultado-codes-camera');
-const hiddenResultadosCamera = document.getElementById('hidden-resultado-codes-camera');
-const messageError = document.getElementById('error-codes');
 const messageDuplicity = document.getElementById('duplicity-code');
 const checkLenguaje = document.getElementById('check-lenguaje-scan');
 
-function playVideo() {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        // Solicitamos acceso a la cámara
-        navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "environment" }
 
-        })
-            .then(function (stream) {
-                videoElement.srcObject = stream;
-                currentStream = stream;
-                currentTrack = stream.getVideoTracks()[0];
-                const capabilities = currentTrack.getCapabilities();
-
-                if (capabilities.torch) {
-                    // Si la cámara tiene soporte para linterna, la activamos
-                    document.getElementById('torch-btn').style.display = "block";
-                } else {
-                    document.getElementById('torch-btn').style.display = "none";
-                }
-                startScanning();
-            })
-            .catch(function (err) {
-                console.error("Error con la cámara delantera: ", err);
-                // Si falla con la delantera, intentar con la trasera
-                navigator.mediaDevices.getUserMedia({
-                    video: true
-                })
-                    .then(function (stream) {
-                        videoElement.srcObject = stream;
-                        currentStream = stream;
-                        startScanning(); // Iniciar escaneo con ZXing
-                    })
-                    .catch(function (err) {
-                        alert('No se puede acceder a la cámara.');
-                    });
-            });
-    } else {
-        alert('Tu navegador no soporta la cámara web.');
-    }
-}
-
-function stopVideo() {
-    if (currentStream) {
-        stopScanning();
-        currentStream.getTracks().forEach(track => track.stop());
-        videoElement.srcObject = null;
-
-        currentStream = null;
-    }
-}
-
-function activateTorch(bool) {
-    currentTrack.applyConstraints({
-        advanced: [{
-            torch: bool  // Activar el flash
-        }]
-    })
-        .then(() => {
-            console.log("Linterna activada");
-        })
-        .catch((err) => {
-            console.error("Error al activar la linterna:", err);
-        });
-}
-
-function changeButton(input) {
-    if (toggleTorch) {
-        input.classList.add('btn-light');
-        input.classList.remove('btn-dark');
-        activateTorch(true);
-        toggleTorch = false;
-    } else {
-        input.classList.add('btn-dark');
-        input.classList.remove('btn-light');
-        activateTorch(false);
-        toggleTorch = true;
-    }
-}
-
-function listDevices() {
-    navigator.mediaDevices.enumerateDevices()
-        .then(devices => {
-            // Filtramos solo los dispositivos de tipo video
-            const videoDevices = devices.filter(device => device.kind === 'videoinput');
-
-            // Creamos las opciones en el select
-            const select = document.getElementById('videoSource');
-            videoDevices.forEach(device => {
-                const option = document.createElement('option');
-                option.value = device.deviceId;
-                option.textContent = device.label ||
-                    `Cámara ${select.length + 1}`; // Si no tiene label, mostramos algo por defecto
-                select.appendChild(option);
-            });
-        })
-        .catch(err => console.error('Error al enumerar dispositivos:', err));
-}
-
-function startScanning() {
-    // Usamos ZXing para decodificar los códigos de barras desde el video
-    arrayCodes = [];
-    const scannerFrame = document.getElementById("scannerFrame");
-    const frameRect = scannerFrame.getBoundingClientRect();
-    codeReader.decodeFromVideoDevice(null, videoElement, (result, err) => {
-        if (result) {
-            textResultadosCamera.textContent = result.text;
-            hiddenResultadosCamera.value = result.text;
-            playBeepSound();
-            // arrayCodesCamera.push(result.text);
-            console.log("Código detectado:", result.text);
-            console.log('Formato del código:', result.format);
-        }
-        if (err && !(err instanceof ZXing.NotFoundException)) {
-            console.error(err);
-        }
-    },
-        {
-            // Puedes usar más trabajadores si el escáner tiene problemas en dispositivos de gama baja
-            numOfWorkers: 4, // Ajusta el número de trabajadores para mayor precisión y rendimiento
-            decoderWorker: ZXing.BrowserBarcodeReader.decodeWorker,
-            decodeInRealTime: true, // Decodificación en tiempo real para mejorar la precisión
-            highlightScanRegion: true,  // Resalta el área de escaneo
-            scanRegion: frameRect,
-            maxNumOfDecodersPerFrame: 1, // Limitar la cantidad de decodificadores por cuadro
-            delay: 500, // Aumentar el retraso entre intentos de lectura (mejora la precisión pero puede hacer más lento el escaneo)
-        }
-    );
-
-}
-
-function addModalCodesCamera() {
-    let code = hiddenResultadosCamera.value;
-
-    if (code != '' && code != null) {
-        if (arrayCodes.some(element => element == code)) {
-            messageError.textContent = 'Codigo repetido';
-            setTimeout(() => { messageError.textContent = ''; }, 1500);
-        } else {
-            arrayCodes.push(code);
-        }
-    }
-    console.log(arrayCodes);
-}
-
-
-
-function stopScanning() {
-    codeReader.reset();
-}
-
-function chooseDevice() {
-    const deviceId = document.getElementById('videoSource').value;
-
-    if (deviceId) {
-        stopScanning();
-        stopVideo();
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                deviceId: {
-                    exact: deviceId
-                }
-            }
-        })
-            .then(stream => {
-                videoElement.srcObject = stream;
-                currentStream = stream;
-                currentTrack = stream.getVideoTracks()[0];
-                const capabilities = currentTrack.getCapabilities();
-
-                if (capabilities.torch) {
-                    // Si la cámara tiene soporte para linterna, la activamos
-                    document.getElementById('torch-btn').style.display = "block";
-                } else {
-                    document.getElementById('torch-btn').style.display = "none";
-                }
-
-                startScanning();
-            })
-            .catch(err => {
-                alert('No se puede acceder a la cámara seleccionada.');
-            });
-    }
-}
 
 //---------------------------------------------------------------SCANNER---------------------------------------------------------------------
 function changeCharEngToEs(inputText) {
@@ -211,6 +20,7 @@ function changeCharEngToEs(inputText) {
     return updateText;
   }
 
+  let rowResponse = document.getElementById('scan-row-response');
   let serial = '';
   let timeoutId; 
 
@@ -242,14 +52,39 @@ document.getElementById('barcode-input').addEventListener('input', function(e) {
         messageDuplicity.textContent = 'Codigo repetido';
         setTimeout(() => { messageDuplicity.textContent = ''; }, 1500);
     } else {
+        let colSerial = document.createElement('div');
+        colSerial.classList.add('col-6','mb-2');
+        let rowSerial = document.createElement('div');
+        rowSerial.classList.add('row','ms-1','me-1','text-center','border','rounded-3');
+        rowSerial.innerHTML = '<small>' + serie + '</small>';
+        colSerial.appendChild(rowSerial);
+        rowResponse.appendChild(colSerial);
         arrayCodes.push(serie);
     }
     console.log('Código escaneado corregido:', arrayCodes);
     
   }
 
-//---------------------------------------------------------------GENERALES-------------------------------------------------------------------
+  function addModalCodesCamera() {
+    let code = hiddenResultadosCamera.value;
 
+    if (code != '' && code != null) {
+        if (arrayCodes.some(element => element == code)) {
+            messageError.textContent = 'Codigo repetido';
+            setTimeout(() => { messageError.textContent = ''; }, 1500);
+        } else {
+            arrayCodes.push(code);
+        }
+    }
+    console.log(arrayCodes);
+}
+
+  function clearListScan(){
+    rowResponse.innerHTML = '';
+    arrayCodes = [];
+  }
+
+//---------------------------------------------------------------GENERALES-------------------------------------------------------------------
 function listCodesModal() {
     let ulCodes = document.getElementById('list-codes-saved');
 
@@ -298,4 +133,10 @@ function getSerials() {
     return arrayCodes;
 }
 
-listDevices();
+document.getElementById('btn-modal-camera-uno').addEventListener('click',function(event){
+    listCodesModal();
+});
+
+document.getElementById('btn-modal-camera-dos').addEventListener('click',function(event){
+    addModalCodesCamera();
+});

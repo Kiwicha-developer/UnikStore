@@ -107,6 +107,14 @@ class IngresoController extends Controller
     
         return response()->json($results);
     }
+
+    public function getOneIngreso(Request $request){
+        $query = $request->input('query');
+    
+        $results = $this->ingresoService->getOneIngreso($query);
+    
+        return response()->json($results);
+    }
     
     public function deleteIngreso(Request $request){
         $userModel = $this->headerService->getModelUser();

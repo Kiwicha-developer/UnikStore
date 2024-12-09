@@ -150,5 +150,26 @@ class IngresoProductoService implements IngresoProductoServiceInterface
         return $proveedores; 
     }
 
-    
+    public function getOneIngreso($data)
+    {
+        $ingreso = $this->ingresoRepository->getOneBySerialNumber($data);
+
+        if ($ingreso) {
+            // Formatear fechas
+            $ingreso->fechaIngresoPerso = Carbon::parse($ingreso->fechaIngreso)->format('d-m-Y');
+            $ingreso->fechaMovimiento = Carbon::parse($ingreso->fechaMovimiento)->format('d-m-Y');
+
+            // Ocultar atributos sensibles del usuario
+            $ingreso->Usuario = $ingreso->Usuario->makeHidden(['pass', 'tokenSesion', 'registroSesion', 'estadoUsuario', 'horaSesion', 'bandeja']);
+
+            // Asignar relaciones
+            $ingreso->Registro = $ingreso->RegistroProducto;
+            $ingreso->Producto = $ingreso->RegistroProducto ? $ingreso->RegistroProducto->DetalleComprobante->Producto->makeHidden(['descripcionProducto', 'imagenProducto1', 'imagenProducto2', 'imagenProducto3', 'imagenProducto4']) : null;
+            $ingreso->Proveedor = $ingreso->RegistroProducto ? $ingreso->RegistroProducto->DetalleComprobante->Comprobante->Preveedor : null;
+            $ingreso->Almacen = $ingreso->RegistroProducto ? $ingreso->RegistroProducto->Almacen : null;
+        }
+
+        return $ingreso;
+    }
+
 }

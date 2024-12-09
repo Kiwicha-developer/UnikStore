@@ -33,7 +33,7 @@ class PdfService implements PdfServiceInterface
         $series = array();
 
         foreach($registrosFiltrados as $reg){
-            $barcode = $this->generadorSeries->getBarcode($reg->numeroSerie, BarcodeGeneratorPNG::TYPE_CODE_128,1);
+            $barcode = $this->generadorSeries->getBarcode($reg->numeroSerie, BarcodeGeneratorPNG::TYPE_CODE_128,1,50);
             $series[] = ['serie' => $reg->numeroSerie,'barcode' => base64_encode($barcode)];
         }
         return $series;
