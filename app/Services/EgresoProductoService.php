@@ -47,8 +47,12 @@ class EgresoProductoService implements EgresoProductoServiceInterface
         $result = $egresos->map(function($details) {
                         return [
                             'nombreProducto' => $details->DetalleComprobante->Producto->nombreProducto,
+                            'codigoProducto' => $details->DetalleComprobante->Producto->codigoProducto,
                             'idRegistroProducto' => $details->idRegistro,
-                            'numeroSerie' => $details->numeroSerie
+                            'numeroSerie' => $details->numeroSerie,
+                            'estado' => $details->estado,
+                            'modelo' => $details->DetalleComprobante->Producto->modelo,
+                            'image' => $details->DetalleComprobante->Producto->imagenProducto1
                         ];
                     });
         return $result;

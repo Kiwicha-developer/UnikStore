@@ -22,8 +22,8 @@
             
         </div>
         <div class="col-12 text-end">
-            <x-btn-scan :class="'btn-warning'" :spanClass="'d-none d-md-inline'"/>
-            <x-scanner/>
+            <x-btn-scan :class="'btn-warning'" :spanClass="'d-none d-md-inline'" :onClick="''" />
+            <x-scanner :multiple="true"/>
         </div>
     </div>
     <br>
@@ -73,7 +73,17 @@
         let query =  this.value;
         
         if(query.length > 2){
-            searchCodeToController(query);
+            let data = null;
+            let xhr = new XMLHttpRequest();
+                xhr.open('GET', `/ingresos/getoneingreso?query=${query}`, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        data = JSON.parse(xhr.responseText);
+                        addProductoSerial(data);
+                    }
+                };
+                xhr.send();
+            return data;
         }else {
         document.getElementById('suggestions').innerHTML = ''; // Limpiar si hay menos de 3 caracteres
         hiddenBody.style.display = 'none';
@@ -104,7 +114,7 @@
 
     function addProductoSerial(object){
         if(validateDuplicity(object.Registro.numeroSerie)){
-            alert('Producto ya agregado');
+            alertBootstrap('Producto '+object.Registro.numeroSerie +' ya agregado', 'warning');
             return;
         }
         let ulTraslado = document.getElementById('lista-traslado');

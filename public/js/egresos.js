@@ -1,6 +1,7 @@
-function sendDetailModal(json) {
-
-}
+const rowSerialVacio = document.getElementById('row-product-serial-number-vacio');
+const rowSerialExists = document.getElementById('row-product-serial-number-exists');
+const validateIconSku = document.getElementById('sku-modal-egreso-validate');
+var path = window.assetUrl;
 
 function checkSku() {
     let checkSku = document.getElementById('check-sku-egreso');
@@ -14,12 +15,16 @@ function checkSku() {
         inputNumberOrder.disabled = true;
         inputNumberOrder.value = checkSku.value;
         hiddenEgreso.value = 'NULO';
+        validateIconSku.classList.remove('bi-exclamation-circle','text-danger');
+        validateIconSku.classList.add('bi-check-circle','text-success');
     } else {
         inputEgreso.disabled = false;
         inputEgreso.value = '';
         inputNumberOrder.disabled = false;
         inputNumberOrder.value = '';
         hiddenEgreso.value = '';
+        validateIconSku.classList.add('bi-exclamation-circle','text-danger');
+        validateIconSku.classList.remove('bi-check-circle','text-success');
     }
 }
 
@@ -76,6 +81,7 @@ function searchRegistro(inputElement) {
                 let data = JSON.parse(xhr.responseText);
                 let suggestions = document.getElementById('suggestions-serial-number');
                 suggestions.innerHTML = '';
+                
 
                 data.forEach(item => {
                     let li = document.createElement('li');
@@ -112,6 +118,10 @@ function searchRegistro(inputElement) {
                             .idRegistroProducto;
                         suggestions.innerHTML =
                             ''; // Limpiar sugerencias después de seleccionar una
+                            console.log(item);
+                        rowSerialExists.style.display = 'flex';
+                        rowSerialVacio.style.display = 'none';
+                        updateDataRowSerial(item);
                     });
 
                     suggestions.appendChild(li);
@@ -122,7 +132,23 @@ function searchRegistro(inputElement) {
     } else {
         document.getElementById('suggestions-serial-number').innerHTML = ''; // Limpiar si hay menos de 3 caracteres
         document.getElementById('hidden-product-serial-number').value = "";
+        rowSerialExists.style.display = 'none';
+        rowSerialVacio.style.display = '';
     }
+}
+
+function updateDataRowSerial(object){
+    let imagen = rowSerialExists.querySelector('img');
+    let title =  rowSerialExists.querySelector('h6');
+    let modelo = rowSerialExists.querySelector('span');
+    let codigo = rowSerialExists.querySelector('.cod');
+    let estado = rowSerialExists.querySelector('p');
+
+    imagen.src = path + '/' + object.image;
+    title.textContent = object.nombreProducto;
+    modelo.textContent = object.modelo;
+    codigo.textContent = object.codigoProducto;
+    estado.textContent = object.estado;
 }
 
 function searchPublicacion(inputElement) {
@@ -183,6 +209,8 @@ function searchPublicacion(inputElement) {
                             .idPublicacion;
                         suggestions.innerHTML =
                             ''; // Limpiar sugerencias después de seleccionar una
+                        validateIconSku.classList.remove('bi-exclamation-circle','text-danger');
+                        validateIconSku.classList.add('bi-check-circle','text-success');
                     });
 
                     suggestions.appendChild(li);
@@ -193,6 +221,8 @@ function searchPublicacion(inputElement) {
     } else {
         document.getElementById('suggestions-sku').innerHTML = ''; // Limpiar si hay menos de 3 caracteres
         document.getElementById('hidden-publicacion-sku').value = "";
+        validateIconSku.classList.add('bi-exclamation-circle','text-danger');
+        validateIconSku.classList.remove('bi-check-circle','text-success');
     }
 }
 
@@ -354,4 +384,7 @@ function stringDate(date){
 
     return `${day}/${month}/${year}`;
 } 
+
+function closeEgresoModal(){
+}
 

@@ -1,3 +1,10 @@
+#div-alerts-bootstrap{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+
 .text-danger {
     color: #f34646 !important;
 }
@@ -93,15 +100,33 @@
 
 .btn-warning:hover {
     background-color: #5c3a8e !important;
-    /* Color de fondo en hover (puedes ajustarlo) */
     border-color: #5c3a8e !important;
-    /* Color del borde en hover */
 }
 
 .btn-warning:focus,
 .btn-warning.focus {
     box-shadow: 0 0 0 0.2rem rgba(103, 64, 161, 0.5) !important;
-    /* Sombra en foco */
+}
+
+.btn-outline-warning {
+    color: #6740a1 !important; 
+    border-color: #6740a1 !important; 
+}
+
+.btn-outline-warning:hover {
+    color: white !important; 
+    background-color: #6740a1 !important; 
+    border-color: #6740a1 !important; 
+}
+
+.btn-outline-warning:active {
+    color: #ffffff !important;
+    background-color: #6740a1 !important; 
+    border-color: #6740a1 !important;
+}
+
+.btn-outline-warning:focus {
+    box-shadow: 0 0 0 0.2rem rgba(130, 34, 255, 0.5) !important; 
 }
 
 .btn-xs {

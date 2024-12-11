@@ -156,3 +156,34 @@ function createButton(clases,id,html,type,metodos){
     return buttonElement;
 }
 
+function changeCharEngToEs(inputText) {
+    const mapaCaracteres = {
+      "'": '-',
+    };
+
+    let updateText = inputText;
+
+    for (let [charEng, charEs] of Object.entries(mapaCaracteres)) {
+      const regex = new RegExp(`\\${charEng}`, 'g');
+      updateText = updateText.replace(regex, charEs);
+    }
+
+    return updateText;
+  }
+
+
+  function alertBootstrap(message, type) {
+    const alertPlaceholder = document.getElementById('div-alerts-bootstrap');
+
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+    ].join('');
+
+    alertPlaceholder.append(wrapper);
+}
+
+

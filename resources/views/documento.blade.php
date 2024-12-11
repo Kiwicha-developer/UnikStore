@@ -302,7 +302,7 @@
         <input type="hidden" name="id" id="hidden-form-deletecomprobante">
     </form>
 </div>
-<x-scanner/>
+<x-scanner :multiple="true"/>
 <script src="{{ route('js.documento-scripts',[$documento->idComprobante]) }}"></script>
 
 @endsection

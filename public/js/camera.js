@@ -179,4 +179,9 @@ function chooseDevice() {
     }
 }
 
+function playBeepSound() {
+    const beep = document.getElementById("beepSound");
+    beep.play(); // Reproducir el beep
+}
+
 listDevices();

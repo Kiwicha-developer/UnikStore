@@ -49,7 +49,7 @@
         <form action="{{ route('insertegreso') }}" method="POST">
             @csrf
             <div class="modal fade" id="egresoModal" tabindex="-1" aria-labelledby="egresoModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="egresoModalLabel">Nuevo Egreso</h5>
@@ -57,51 +57,84 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-12 mb-2" style="position:relative">
-                                    <label>Numero de Serie</label>
-                                    <input type="text" oninput="searchRegistro(this)" name="serialnumber"
-                                        placeholder="Serial Number" class="form-control input-egreso"
-                                        id="input-serial-number">
-                                    <input type="hidden" value="" name="idregistro"
-                                        id="hidden-product-serial-number">
-                                    <ul class="list-group" id="suggestions-serial-number" name="idregistro"
-                                        style="position:absolute;z-index:1000;top:100%;left:0;width:100%"></ul>
-                                </div>
-                                <div class="col-md-12 mb-2">
+                                <div class="col-lg-6">
                                     <div class="row">
-                                        <div class="col-6">
-                                            <label>SKU</label>
+                                        <div class="col-md-12 mb-2">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label>SKU</label> <i id="sku-modal-egreso-validate" class="bi bi-exclamation-circle text-danger"></i>
+                                                </div>
+                                                <div class="col-6 text-end text-secondary">
+                                                    <label>No aplica</label>
+                                                </div>
+                                            </div>
+                                            <div class="input-group" style="position:relative">
+                                                <input type="text" oninput="searchPublicacion(this)" name="sku"
+                                                    class="form-control input-egreso" id="input-sku-egreso"
+                                                    placeholder="SKU de una publicacion">
+                                                <input type="hidden" id="hidden-publicacion-sku" name="idpublicacion"
+                                                    value="">
+                                                <div class="input-group-text">
+                                                    <input class="form-check-input mt-0" type="checkbox" id="check-sku-egreso"
+                                                        value="No aplica">
+                                                </div>
+                                                <ul class="list-group" id="suggestions-sku"
+                                                    style="position:absolute;z-index:1000;top:100%;left:0;width:100%"></ul>
+                                            </div>
                                         </div>
-                                        <div class="col-6 text-end text-secondary">
-                                            <label>No aplica</label>
+                                        <div class="col-md-12 mb-2">
+                                            <label>Numero de Orden</label>
+                                            <input type="text" placeholder="Nro de Orden" id="input-numero-orden"
+                                                name="numeroorden" class="form-control input-egreso">
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <label>Fecha de pedido</label>
+                                            <input type="date" name="fechapedido" class="form-control input-egreso">
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <label>Fecha de despacho</label>
+                                            <input type="date" name="fechadespacho" class="form-control input-egreso">
                                         </div>
                                     </div>
-                                    <div class="input-group" style="position:relative">
-                                        <input type="text" oninput="searchPublicacion(this)" name="sku"
-                                            class="form-control input-egreso" id="input-sku-egreso"
-                                            placeholder="SKU de una publicacion">
-                                        <input type="hidden" id="hidden-publicacion-sku" name="idpublicacion"
-                                            value="">
-                                        <div class="input-group-text">
-                                            <input class="form-check-input mt-0" type="checkbox" id="check-sku-egreso"
-                                                value="No aplica">
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-2" style="position:relative">
+                                            <label>Numero de Serie</label>
+                                            <div class="input-group mb-3">
+                                                <input type="text" oninput="searchRegistro(this)" name="serialnumber"
+                                                placeholder="Serial Number" class="form-control input-egreso"
+                                                id="input-serial-number">
+                                                <x-btn-scan :class="'btn-outline-warning'" :spanClass="'d-none'" :onClick="'closeEgresoModal()'" />
+                                            </div>
+                                            <input type="hidden" value="" name="idregistro"
+                                                id="hidden-product-serial-number">
+                                            <ul class="list-group" id="suggestions-serial-number" name="idregistro"
+                                                style="position:absolute;z-index:1000;top:100%;left:0;width:100%"></ul>
                                         </div>
-                                        <ul class="list-group" id="suggestions-sku"
-                                            style="position:absolute;z-index:1000;top:100%;left:0;width:100%"></ul>
+                                        <div class="col-md-12 ps-4 pe-4">
+                                            <div class="row" style="height: 150px" id="row-product-serial-number-vacio">
+                                                <div class="col-12 border rounded-3 d-flex align-items-center justify-content-center">
+                                                    <h3 class="text-secondary">Sin producto</h3>
+                                                </div>
+                                            </div>
+                                            <div class="row pt-2 pb-2 border rounded-3" id="row-product-serial-number-exists" style="display: none">
+                                                <div class="col-4">
+                                                    <img src="https://placehold.co/1000x1000" alt="" width="100%" class="rounded-2">
+                                                </div>
+                                                <div class="col-8">
+                                                    <h6 class="mb-0">Titulo del prodcuto puesto en la web</h6>
+                                                    <small><span class="text-secondary">Modelo</span></small>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <small class="cod">codigo</small>
+                                                </div>
+                                                <div class="col-8">
+                                                    <p class="text-end mb-0">Estado</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-12 mb-2">
-                                    <label>Numero de Orden</label>
-                                    <input type="text" placeholder="Nro de Orden" id="input-numero-orden"
-                                        name="numeroorden" class="form-control input-egreso">
-                                </div>
-                                <div class="col-6 mb-2">
-                                    <label>Fecha de pedido</label>
-                                    <input type="date" name="fechapedido" class="form-control input-egreso">
-                                </div>
-                                <div class="col-6 mb-2">
-                                    <label>Fecha de despacho</label>
-                                    <input type="date" name="fechadespacho" class="form-control input-egreso">
                                 </div>
                             </div>
                         </div>
@@ -166,5 +199,9 @@
             </div>
         </form>
     </div>
+    <x-scanner :multiple="false"/>
+    <script>
+        window.assetUrl = "{{ asset('storage/') }}"; 
+    </script>
     <script src="{{asset('js/egresos.js')}}"></script>
 @endsection

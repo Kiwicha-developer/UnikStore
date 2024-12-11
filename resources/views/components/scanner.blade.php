@@ -5,14 +5,14 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-6 mb-2">
-                        <button class="btn btn-info w-100 text-center" onclick="playVideo()" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#camaraModal">
-                            <i class="bi bi-camera" style="font-size: 100px"></i> 
+                        <button class="btn btn-info w-100 text-center" style="aspect-ratio: 1" onclick="playVideo()" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#camaraModal">
+                            <i class="bi bi-camera" style="font-size: 5rem"></i> 
                             <p>C&aacute;mara</p>
                         </button>
                     </div>
                     <div class="col-6 mb-2">
-                        <button class="btn btn-success w-100 text-center" onclick="clearListScan()" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#escanerModal">
-                            <i class="bi bi-upc-scan" style="font-size: 100px"></i> 
+                        <button class="btn btn-success w-100 text-center" style="aspect-ratio: 1" {!!$multiple == true ? 'onclick="clearListScan()" data-bs-target="#escanerModal"' : ''!!}  data-bs-dismiss="modal" data-bs-toggle="modal" >
+                            <i class="bi bi-upc-scan" style="font-size: 5rem"></i> 
                             <p>Escaner</p>
                         </button>
                     </div>
@@ -22,7 +22,7 @@
     </div>
 </div>
 <div class="modal fade" id="codesScanModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="codesScanModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="scanModalLabel">C&oacute;digos escaneados</h1>
@@ -83,5 +83,9 @@
     </div>
 </div>
 <x-camera_modal />
-<audio id="beepSound" src="{{asset('sounds/beep.mp3')}}" preload="auto"></audio>
-<script src="{{asset('js/scanner.js')}}"></script>
+@if($multiple == true)
+    <script src="{{asset('js/scanner.js')}}"></script>
+@else
+
+@endif
+

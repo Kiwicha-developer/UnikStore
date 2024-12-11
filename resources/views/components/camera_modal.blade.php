@@ -38,7 +38,7 @@
                                     <input type="hidden" name="" id="hidden-resultado-codes-camera">
                             </div>
                             <div class="col-12">
-                                <h6 class="text-danger" id="error-codes"></h6>
+                                <h6 id="error-codes"></h6>
                             </div>
                         </div>
                     </div>
@@ -61,4 +61,5 @@
         </div>
     </div>
 </div>
+<audio id="beepSound" src="{{asset('sounds/beep.mp3')}}" preload="auto"></audio>
 <script src="{{asset('js/camera.js')}}"></script>

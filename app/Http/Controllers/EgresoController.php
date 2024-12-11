@@ -39,6 +39,11 @@ class EgresoController extends Controller
                                 'almacenes' => $almacenes,
                                 'fecha' => $carbonMonth]);
     }
+
+    public function create(){
+        $userModel = $this->headerService->getModelUser();
+        return view('createegreso',['user' => $userModel]);
+    }
     
     public function insertEgreso(Request $request){
         $userModel = $this->headerService->getModelUser();

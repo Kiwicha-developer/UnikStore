@@ -1,1 +1,1 @@
-<button class="btn {{$class}}" type="button" data-bs-toggle="modal" data-bs-target="#typeScanModal"><i class="bi bi-qr-code"></i> <span class="{{$spanClass}}">Escanear</span></button>
+<button class="btn {{$class}}" onclick="{{$onClick}}" type="button" data-bs-toggle="modal" data-bs-target="#typeScanModal"><i class="bi bi-qr-code"></i> <span class="{{$spanClass}}">Escanear</span></button>

@@ -3,6 +3,7 @@
     
     var index = 1;
     var totalComprobante = 0;
+    var idIndexProduct = null;
     
     function sendIdToDelete(id){
         let inputDelete = document.getElementById('input-delete-ingreso');
@@ -141,19 +142,22 @@
                                     );
         let buttonDelete = createButton(['btn','btn-danger','me-2','btn-sm'],
                                             null,
-                                            '<i class="bi bi-trash"></i> Eliminar',
+                                            '<i class="bi bi-trash"></i> <span class="d-none d-md-inline">Eliminar</span>',
                                             'button',
                                             [() => deleteItem(liProduct),() => deleteList(inputHiddenProduct.value),() => countProducts(inputHiddenProduct.value)]
                                         );
         let buttonExcel = createButton(['btn','bg-success','ms-2','btn-sm','text-light'],
                                             null,
-                                            '<i class="bi bi-filetype-xlsx"></i> Excel',
+                                            '<i class="bi bi-filetype-xlsx"></i> <span class="d-none d-md-inline">Excel</span>',
                                             'button',
                                             [() => excelButton(inputHiddenProduct.value)]
                                         );
         
         divColDelete.appendChild(buttonDelete);
-        divColOptions.innerHTML = '<x-btn-scan :class="'btn-warning btn-sm'" :spanClass="'d-none d-md-inline'"/>';
+        divColOptions.innerHTML = `<x-btn-scan 
+                                    :class="'btn-warning btn-sm'" 
+                                    :spanClass="'d-none d-md-inline'" 
+                                    :onClick="'updateIdIndexProducto(\'${inputHiddenProduct.value}\')'" />`;
         divColOptions.appendChild(buttonExcel);
         let buttonOption = document.createElement('button');
         buttonOption.type = 'button';
@@ -163,9 +167,6 @@
         buttonOption.ariaControls = 'collapse-product-'+index;
         buttonOption.classList.add('btn','btn-sm','btn-secondary','me-2');
         buttonOption.innerHTML = '<i class="bi bi-three-dots-vertical"></i>';
-        //divColButtons.innerHTML = '<x-btn-scan :class="'btn-warning btn-sm'" :spanClass="'d-none d-md-inline'"/>';
-        //divColButtons.appendChild(buttonDelete);
-        //divColButtons.appendChild(buttonExcel);
         divColButtons.appendChild(buttonOption);
         divColButtons.appendChild(buttonAdd);
         
@@ -552,3 +553,15 @@
             }
         });
     }
+
+    function updateIdIndexProducto(idx){
+        idIndexProduct = idx;
+    }
+
+    document.getElementById('btn-list-scan-codes').addEventListener('click',function(event){
+        getSerials().forEach(function(x){
+            createItemList(idIndexProduct,x);
+            countProducts(idIndexProduct);
+            updateBtnAdd();
+        });
+    });

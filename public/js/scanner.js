@@ -5,20 +5,6 @@ const checkLenguaje = document.getElementById('check-lenguaje-scan');
 
 
 //---------------------------------------------------------------SCANNER---------------------------------------------------------------------
-function changeCharEngToEs(inputText) {
-    const mapaCaracteres = {
-      "'": '-',
-    };
-
-    let updateText = inputText;
-
-    for (let [charEng, charEs] of Object.entries(mapaCaracteres)) {
-      const regex = new RegExp(`\\${charEng}`, 'g');
-      updateText = updateText.replace(regex, charEs);
-    }
-
-    return updateText;
-  }
 
   let rowResponse = document.getElementById('scan-row-response');
   let serial = '';
@@ -42,7 +28,7 @@ document.getElementById('barcode-input').addEventListener('input', function(e) {
       timeoutId = setTimeout(() => {
         addModalCodesScan(serial);
         serial = '';
-      }, 1000);
+      }, 100);
     }
     
   });
@@ -50,7 +36,7 @@ document.getElementById('barcode-input').addEventListener('input', function(e) {
   function addModalCodesScan(serie){
     if (arrayCodes.some(element => element == serie)) {
         messageDuplicity.textContent = 'Codigo repetido';
-        setTimeout(() => { messageDuplicity.textContent = ''; }, 1500);
+        setTimeout(() => { messageDuplicity.textContent = ''; }, 1000);
     } else {
         let colSerial = document.createElement('div');
         colSerial.classList.add('col-6','mb-2');
@@ -71,9 +57,19 @@ document.getElementById('barcode-input').addEventListener('input', function(e) {
     if (code != '' && code != null) {
         if (arrayCodes.some(element => element == code)) {
             messageError.textContent = 'Codigo repetido';
-            setTimeout(() => { messageError.textContent = ''; }, 1500);
+            messageError.classList.add('text-danger');
+            setTimeout(() => { 
+                messageError.textContent = ''; 
+                messageError.classList.remove('text-danger');
+            }, 500);
         } else {
+            messageError.textContent = 'Codigo agregado';
+            messageError.classList.add('text-success');
             arrayCodes.push(code);
+            setTimeout(() => { 
+                messageError.textContent = ''; 
+                messageError.classList.remove('text-success');
+            }, 500);
         }
     }
     console.log(arrayCodes);
@@ -124,10 +120,6 @@ function listCodesModal() {
     }
 }
 
-function playBeepSound() {
-    const beep = document.getElementById("beepSound");
-    beep.play(); // Reproducir el beep
-}
 
 function getSerials() {
     return arrayCodes;
