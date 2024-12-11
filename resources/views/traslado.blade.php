@@ -200,7 +200,7 @@
         if(itemsProductos.length > 0){
             for (let i = 0; i < itemsProductos.length; i++) {
                 if (itemsProductos[i].dataset.serie == serial) {
-                     return true; 
+                    return true; 
                 } 
             }
         }

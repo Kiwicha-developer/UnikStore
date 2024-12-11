@@ -101,9 +101,10 @@
         
         let divRow = createDiv(['row'],null);
 
-        let divRowOptions = createDiv(['row'],null);
+        let divRowOptions = createDiv(['row','collapse'],'collapse-product-'+index);
 
-        let divColOptions = createDiv(['col'],null);
+        let divColOptions = createDiv(['col-8','text-end','pe-0'],null);
+        let divColDelete = createDiv(['col-4','text-start'],null);
         
         let divColCantidad = createDiv(['col-1','col-md-1','text-center'],null);
         let h5Cantidad = createH5(null,'header-cantidad-product-' + inputHiddenProduct.value,'0');
@@ -132,28 +133,34 @@
         divColPrecioTotal.appendChild(h5TotalPrice);
         
         let divColButtons = createDiv(['col-3','col-md-2','pe-0','ps-0','text-end'],null);
-        let buttonAdd = document.createElement('button');
-        buttonAdd.classList.add('btn','btn-success','btn-sm');
-        buttonAdd.type = 'button';
-        buttonAdd.innerHTML = '<i class="bi bi-plus-lg"></i>';
-        buttonAdd.addEventListener('click', function() {createItemList(inputHiddenProduct.value,'');countProducts(inputHiddenProduct.value);});
-        let buttonDelete = document.createElement('button');
-        buttonDelete.classList.add('btn','btn-danger','me-2','btn-sm');
-        buttonDelete.type = 'button';
-        buttonDelete.innerHTML = '<i class="bi bi-trash"></i>';
-        buttonDelete.addEventListener('click', function() {deleteItem(liProduct);deleteList(inputHiddenProduct.value);countProducts(inputHiddenProduct.value);});
-        let buttonExcel = document.createElement('button');
-        buttonExcel.classList.add('btn','bg-success','me-2','btn-sm','text-light');
-        buttonExcel.type = 'button';
-        buttonExcel.innerHTML = '<i class="bi bi-filetype-xlsx"></i>';
-        buttonExcel.addEventListener('click',function(){
-            let inputFile = document.getElementById('excel-file');
-            inputFile.accept = '.xls,.xlsx';
-            inputFile.click();
-            setIdList(inputHiddenProduct.value);
-        });
+        let buttonAdd = createButton(['btn', 'btn-success', 'btn-sm'],
+                                        null,
+                                        '<i class="bi bi-plus-lg"></i>',
+                                        'button',
+                                        [() => createItemList(inputHiddenProduct.value, ''),() => countProducts(inputHiddenProduct.value)]
+                                    );
+        let buttonDelete = createButton(['btn','btn-danger','me-2','btn-sm'],
+                                            null,
+                                            '<i class="bi bi-trash"></i> Eliminar',
+                                            'button',
+                                            [() => deleteItem(liProduct),() => deleteList(inputHiddenProduct.value),() => countProducts(inputHiddenProduct.value)]
+                                        );
+        let buttonExcel = createButton(['btn','bg-success','ms-2','btn-sm','text-light'],
+                                            null,
+                                            '<i class="bi bi-filetype-xlsx"></i> Excel',
+                                            'button',
+                                            [() => excelButton(inputHiddenProduct.value)]
+                                        );
+        
+        divColDelete.appendChild(buttonDelete);
+        divColOptions.innerHTML = '<x-btn-scan :class="'btn-warning btn-sm'" :spanClass="'d-none d-md-inline'"/>';
+        divColOptions.appendChild(buttonExcel);
         let buttonOption = document.createElement('button');
         buttonOption.type = 'button';
+        buttonOption.dataset.bsToggle = 'collapse';
+        buttonOption.dataset.bsTarget = '#collapse-product-'+index;
+        buttonOption.ariaExpanded = 'false';
+        buttonOption.ariaControls = 'collapse-product-'+index;
         buttonOption.classList.add('btn','btn-sm','btn-secondary','me-2');
         buttonOption.innerHTML = '<i class="bi bi-three-dots-vertical"></i>';
         //divColButtons.innerHTML = '<x-btn-scan :class="'btn-warning btn-sm'" :spanClass="'d-none d-md-inline'"/>';
@@ -168,6 +175,7 @@
         divRow.appendChild(divColPrecioUnitario);
         divRow.appendChild(divColPrecioTotal);
         divRow.appendChild(divColButtons);
+        divRowOptions.appendChild(divColDelete);
         divRowOptions.appendChild(divColOptions);
         liProduct.appendChild(inputDetalleProducto);
         liProduct.appendChild(inputHiddenProduct);
@@ -184,6 +192,13 @@
             x.value = "";
         });
     }
+
+    function excelButton(id){
+        let inputFile = document.getElementById('excel-file');
+        inputFile.accept = '.xls,.xlsx';
+        inputFile.click();
+        setIdList(id);
+    }
     
     function createItemList(id,serial){
         let headerLi = document.getElementById('header-list-product-' + id);
@@ -191,37 +206,23 @@
         
         cont = document.querySelectorAll('.item-list-product-' + id).length ;
         
-        let liItem = document.createElement('li');
-        liItem.classList.add('list-group-item','item-list-product-' + id);
+        let liItem = createLi(['list-group-item','item-list-product-' + id],null);
+
+        let divRow = createDiv(['row'],null);
         
-        let divRow = document.createElement('div');
-        divRow.classList.add('row');
-        
-        let divColSerialNumber = document.createElement('div');
-        divColSerialNumber.classList.add('col-6','col-md-4','col-lg-3');
-        let divInputGroup = document.createElement('div');
-        divInputGroup.classList.add('input-group','input-group-sm');
-        let inputSerialNumber = document.createElement('input');
-        inputSerialNumber.classList.add('form-control','form-control-sm','input-serial', 'input-serial-' + id);
-        inputSerialNumber.type="text";
-        if(serial != ''){
-            inputSerialNumber.value = serial;
-        }
+        let divColSerialNumber = createDiv(['col-6','col-md-4','col-lg-3'],null);
+        let divInputGroup = createDiv(['input-group','input-group-sm'],null);
+        let inputSerialNumber = createInput(['form-control','form-control-sm','input-serial', 'input-serial-' + id],null,'text',serial ? serial : null,'detalle['+id+'][ingreso]['+cont+'][serialnumber]');
         inputSerialNumber.placeholder="Serial number..";
-        inputSerialNumber.name = 'detalle['+id+'][ingreso]['+cont+'][serialnumber]';
-        let divInputGroupText = document.createElement('div');
-        divInputGroupText.classList.add('input-group-text');
-        let checkSerialNumber = document.createElement('input');
-        checkSerialNumber.type = 'checkbox';
+        let divInputGroupText = createDiv(['input-group-text'],null);
+        let checkSerialNumber = createInput(['form-check-input','check-serial-' + id],null,'checkbox',null,null);
         checkSerialNumber.addEventListener('change', function() {disabledSerialNumber(this,inputSerialNumber);});
-        checkSerialNumber.classList.add('form-check-input','check-serial-' + id);
         divInputGroupText.appendChild(checkSerialNumber);
         divInputGroup.appendChild(inputSerialNumber);
         divInputGroup.appendChild(divInputGroupText);
         divColSerialNumber.appendChild(divInputGroup);
         
-        let divColEstado = document.createElement('div');
-        divColEstado.classList.add('col-4','col-md-2');
+        let divColEstado = createDiv(['col-4','col-md-2'],null);
         let selectEstado = document.createElement('select');
         selectEstado.classList.add('form-select','form-select-sm');
         selectEstado.name = 'detalle['+id+'][ingreso]['+cont+'][estado]';
@@ -234,22 +235,15 @@
         selectEstado.value = 'NUEVO';
         divColEstado.appendChild(selectEstado);
         
-        let divColObservacion = document.createElement('div');
-        divColObservacion.classList.add('d-none','d-md-block','col-md-5','col-lg-6');
-        let inputObservacion = document.createElement('input');
-        inputObservacion.classList.add('form-control','form-control-sm');
-        inputObservacion.type="text";
-        inputObservacion.name = 'detalle['+id+'][ingreso]['+cont+'][observacion]';
+        let divColObservacion = createDiv(['d-none','d-md-block','col-md-5','col-lg-6'],null);
+        let inputObservacion = createInput(['form-control','form-control-sm'],null,'text',null,'detalle['+id+'][ingreso]['+cont+'][observacion]');
         inputObservacion.placeholder="Observaciones...";
         divColObservacion.appendChild(inputObservacion);
         
-        let divColDelete = document.createElement('div');
-        divColDelete.classList.add('col-2','col-md-1','text-end');
-        let btnDelete = document.createElement('button');
-        btnDelete.classList.add('btn','btn-danger','btn-sm');
-        btnDelete.innerHTML = '<i class="bi bi-x-lg"></i>' ;
-        btnDelete.type="button";
-        btnDelete.addEventListener('click', function() {deleteItem(liItem);countProducts(id);});
+        let divColDelete = createDiv(['col-2','col-md-1','text-end'],null);
+        let btnDelete = createButton(['btn','btn-danger','btn-sm'],null,'<i class="bi bi-x-lg"></i>','button',[ () => deleteItem(liItem),
+                                                                                                                () => countProducts(id)
+                                                                                                                ]);
         divColDelete.appendChild(btnDelete);
         
         divRow.appendChild(divColSerialNumber);
@@ -426,8 +420,6 @@
                         }else{
                             createItemList(listData,x.SERIES);
                         }
-                        console.log(x.SERIES); 
-                        
                         countProducts(listData);
                         invalidarChecks(listData);
                         updateBtnAdd();
@@ -438,7 +430,6 @@
                     listData = '';
                 }
                 input.value = '';
-                console.log(jsonData); 
             }; 
         reader.readAsBinaryString(file); 
         } 
