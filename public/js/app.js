@@ -117,6 +117,23 @@ function createH5(clases,id,html){
     return h5Element;
 }
 
+function createH4(clases,id,html){
+    let h4Element = document.createElement('h4');
+    if(id != null){
+        h4Element.id = id;
+    }   
+    
+    if(clases && clases.length > 0){
+        clases.forEach(function(x){
+            h4Element.classList.add(x);
+        });
+    }
+
+    h4Element.innerHTML = html;
+    return h4Element;
+}
+
+
 function createParrafo(clases,id,html){
     let parrafElement = document.createElement('p');
     if(id != null){
@@ -154,6 +171,29 @@ function createButton(clases,id,html,type,metodos){
     }
     
     return buttonElement;
+}
+
+function createLink(clases,id,html,href,metodos){
+    let linkElement = document.createElement('a');
+    if(id != null){
+        linkElement.id = id;
+    }   
+    
+    if(clases && clases.length > 0){
+        clases.forEach(function(x){
+            linkElement.classList.add(x);
+        });
+    }
+
+    linkElement.innerHTML = html;
+    linkElement.href = href;
+    if(metodos && metodos.length > 0){
+        metodos.forEach(function(x){
+            linkElement.addEventListener('click', x);
+        });
+    }
+    
+    return linkElement;
 }
 
 function changeCharEngToEs(inputText) {

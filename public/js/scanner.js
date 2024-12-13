@@ -47,8 +47,6 @@ document.getElementById('barcode-input').addEventListener('input', function(e) {
         rowResponse.appendChild(colSerial);
         arrayCodes.push(serie);
     }
-    console.log('Código escaneado corregido:', arrayCodes);
-    
   }
 
   function addModalCodesCamera() {
@@ -72,7 +70,6 @@ document.getElementById('barcode-input').addEventListener('input', function(e) {
             }, 500);
         }
     }
-    console.log(arrayCodes);
 }
 
   function clearListScan(){
@@ -106,7 +103,6 @@ function listCodesModal() {
             btnDelete.addEventListener('click', function (event) {
                 arrayCodes.splice(index, 1);
                 itemCode.remove();
-                console.log(arrayCodes);
             });
             divColBtnDelete.appendChild(btnDelete);
 

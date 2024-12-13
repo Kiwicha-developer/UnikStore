@@ -73,39 +73,41 @@ function validateSerials() {
 }
 
 function addProductoSerial(object) {
+    console.log(object);
+    if (object == null || Object.keys(object).length == 0) {
+        alertBootstrap('Producto no registrado','warning');
+        return;
+    }
     if (validateDuplicity(object.Registro.numeroSerie)) {
         alertBootstrap('Producto ' + object.Registro.numeroSerie + ' ya agregado', 'warning');
         return;
     }
     let ulTraslado = document.getElementById('lista-traslado');
 
-    let itemTraslado = document.createElement('li');
-    itemTraslado.classList.add('list-group-item', 'item-traslado');
+    let itemTraslado = createLi(['list-group-item', 'item-traslado'],null);
     itemTraslado.setAttribute('data-serie', object.Registro.numeroSerie);
 
-    let divRow = document.createElement('div');
-    divRow.classList.add('row', 'text-center');
+    let divRow = createDiv(['row', 'text-center'],null);
 
-    let divColProducto = document.createElement('div');
-    divColProducto.classList.add('col-md-4', 'text-start');
-    divColProducto.innerHTML = "<strong>" + object.Producto.modelo + "</strong><br><small class='text-secondary'>" + object.Producto.codigoProducto + "</small>";
+    let divColProducto = createDiv(['col-10','col-md-4', 'text-start'],null);
+    divColProducto.innerHTML = "<strong>" + object.Producto.modelo + "</strong><br class='d-none d-md-inline'><small class='text-secondary d-none d-md-inline'>" + object.Producto.codigoProducto + "</small>";
 
-    let divColSerie = document.createElement('div');
-    divColSerie.classList.add('col-md-2');
-    divColSerie.innerHTML = '<small>' + object.Registro.numeroSerie + '</small><br><small class="text-secondary">' + object.Proveedor.nombreProveedor + '</small>';
+    let divColLinkDelete = createDiv(['col-2','d-md-none', 'text-end'],null);
+    let linkDelete = createLink(['text-danger'],null,'<i class="bi bi-x-lg"></i>','javascript:void(0)',[() => itemTraslado.remove(),() => validateProductos()]);
+    divColLinkDelete.appendChild(linkDelete);
 
-    let divColEstado = document.createElement('div');
-    divColEstado.classList.add('col-md-1');
+    let divColSerie = createDiv(['col-md-2','text-start','text-md-center'],null);
+    divColSerie.innerHTML = '<small>' + object.Registro.numeroSerie + '</small><br class="d-none d-md-inline"><small class="text-secondary d-none d-md-inline">' + object.Proveedor.nombreProveedor + '</small>';
+
+    let divColEstado = createDiv(['col-md-1','d-none','d-md-block'],null);
     divColEstado.innerHTML = '<small>' + object.Registro.estado + '</small>';
 
-    let divColOrigen = document.createElement('div');
-    divColOrigen.classList.add('col-md-2');
-    divColOrigen.innerHTML = "<select class='form-select form-select-sm' disabled>" +
+    let divColOrigen = createDiv(['col-6','col-md-2'],null);
+    divColOrigen.innerHTML = '<small class="form-label d-md-none">Origen</small>'+"<select class='form-select form-select-sm' disabled>" +
         "<option selected>" + object.Almacen.descripcion + "</option>"
         + "</select>";
 
-    let divColDestino = document.createElement('div');
-    divColDestino.classList.add('col-md-2');
+    let divColDestino = createDiv(['col-6','col-md-2'],null);
     let selectDestino = document.createElement('select');
     selectDestino.name = 'traslado[' + object.idRegistro + ']'
     selectDestino.classList.add('form-select', 'form-select-sm');
@@ -121,21 +123,15 @@ function addProductoSerial(object) {
             selectDestino.appendChild(optionDestino);
         }
     });
+    divColDestino.innerHTML = '<small class="form-label d-md-none">Destino</small>';
     divColDestino.appendChild(selectDestino);
 
-    let divColBtnDelete = document.createElement('div');
-    divColBtnDelete.classList.add('col-md-1');
-    let btnDelete = document.createElement('button');
-    btnDelete.classList.add('btn', 'btn-danger', 'btn-sm');
-    btnDelete.type = 'button';
-    btnDelete.innerHTML = '<i class="bi bi-trash-fill"></i>';
-    btnDelete.addEventListener('click', function (event) {
-        itemTraslado.remove();
-        validateProductos();
-    });
+    let divColBtnDelete = createDiv(['col-md-1','text-start','text-md-center','d-none','d-md-block'],null);
+    let btnDelete = createButton(['btn', 'btn-danger', 'btn-sm'],null,'<i class="bi bi-trash-fill"></i>','button',[() => itemTraslado.remove(),() => validateProductos()]);
     divColBtnDelete.appendChild(btnDelete);
 
     divRow.appendChild(divColProducto);
+    divRow.appendChild(divColLinkDelete);
     divRow.appendChild(divColSerie);
     divRow.appendChild(divColEstado);
     divRow.appendChild(divColOrigen);

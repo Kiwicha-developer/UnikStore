@@ -97,6 +97,5 @@
             </div>
         </form>
     </div>
-    <x-scanner :multiple="false"/>
     <script src="{{asset('js/egresos.js')}}"></script>
 @endsection

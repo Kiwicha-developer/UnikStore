@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Documentos')
+@section('title', 'Traslados')
 
 @section('content')
 <div class="container">
@@ -37,16 +37,16 @@
                             <div class="col-md-4">
                                 <h6>Producto</h6>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 d-none d-md-block">
                                 <h6>Serie</h6>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 d-none d-md-block">
                                 <h6>Estado</h6>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 d-none d-md-block">
                                 <h6>Origen</h6>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 d-none d-md-block">
                                 <h6>Destino</h6>
                             </div>
                         </div>

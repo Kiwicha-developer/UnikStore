@@ -8,7 +8,7 @@ interface EgresoProductoServiceInterface
     public function searchAjaxEgreso($serie,$cant);
     public function getRegistro($serial);
     public function getPublicacion($sku);
-    public function createEgreso(array $data);
+    public function createEgreso(array $data, array $registros);
     public function getAllAlmacenes();
     public function updateEgreso($transaction,$idEgreso,$observacion);
 }

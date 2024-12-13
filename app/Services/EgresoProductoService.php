@@ -95,21 +95,31 @@ class EgresoProductoService implements EgresoProductoServiceInterface
         return $this->almacenRepository->all();
     }
 
-    public function createEgreso(array $data){
-        if($data){
-            $registro = $this->registroRepository->getOne('idRegistro',$data['idRegistro']);
-            $idAlmacen = $registro->idAlmacen;
-            $data['idEgreso'] = $this->getNewIdEgreso();
-            $data['idUser'] = $this->headerService->getModelUser()->idUser;
-
-            $arrayRegistro =['estado' => 'ENTREGADO',
-                            'fechaMovimiento' => now()];
+    public function createEgreso(array $data, array $registros){
+        $productos = array();
+        if(!empty($data) && !empty($registros)){
+            foreach($registros as $idRegistro){
+                $validateRegistro = $this->egresoRepository->getOne('idRegistro',$idRegistro);
+                if($validateRegistro){
+                    continue;
+                }
+                $registro = $this->registroRepository->getOne('idRegistro',$idRegistro);
+                $idAlmacen = $registro->idAlmacen;
+                $data['idRegistro'] = $idRegistro;
+                $data['idEgreso'] = $this->getNewIdEgreso();
+                $data['idUser'] = $this->headerService->getModelUser()->idUser;
+    
+                $arrayRegistro =['estado' => 'ENTREGADO',
+                                'fechaMovimiento' => now()];
+                
+                $this->egresoRepository->create($data);
+                $this->registroRepository->update($idRegistro,$arrayRegistro);
+                $productos[] = $this->updateStock($idAlmacen,$idRegistro);
+                
+            }
             
-            $this->egresoRepository->create($data);
-            $this->registroRepository->update($data['idRegistro'],$arrayRegistro);
-            $producto = $this->updateStock($idAlmacen,$data['idRegistro']);
-            return $producto;
         }
+        return $productos;
     }
 
     public function updateEgreso($transaction,$idEgreso,$observacion){

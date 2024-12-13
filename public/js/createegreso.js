@@ -1,4 +1,7 @@
 const validateIconSku = document.getElementById('sku-modal-egreso-validate');
+const hiddenBody = document.getElementById('hidden-body');
+const itemEgresoDiv = document.getElementById('div-items-create-egreso');
+const btnSubmitCreateEgreso = document.getElementById('btn-create-egreso-submit');
 var path = window.assetUrl;
 
 function searchPublicacion(inputElement) {
@@ -8,6 +11,7 @@ function searchPublicacion(inputElement) {
         let suggestions = document.getElementById('suggestions-sku');
         if (!suggestions.contains(event.target) && event.target !== inputElement) {
             suggestions.innerHTML = ''; // Limpiar sugerencias si se hace clic fuera del input
+            hiddenBody.style.display = 'none';
         }
     }
 
@@ -22,6 +26,8 @@ function searchPublicacion(inputElement) {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let data = JSON.parse(xhr.responseText);
                 let suggestions = document.getElementById('suggestions-sku');
+                hiddenBody.style.display = 'block';
+                inputElement.style.zIndex = '1000';
                 suggestions.innerHTML = '';
 
                 data.forEach(item => {
@@ -57,9 +63,12 @@ function searchPublicacion(inputElement) {
                         inputElement.value = item.sku;
                         document.getElementById('hidden-publicacion-sku').value = item
                             .idPublicacion;
+                        hiddenBody.style.display = 'none';
+                        inputElement.style.zIndex = '1';
                         suggestions.innerHTML = ''; // Limpiar sugerencias después de seleccionar una
                         validateIconSku.classList.remove('bi-exclamation-circle', 'text-danger');
                         validateIconSku.classList.add('bi-check-circle', 'text-success');
+                        validateSubmit();
                     });
 
                     suggestions.appendChild(li);
@@ -72,6 +81,8 @@ function searchPublicacion(inputElement) {
         document.getElementById('hidden-publicacion-sku').value = "";
         validateIconSku.classList.add('bi-exclamation-circle', 'text-danger');
         validateIconSku.classList.remove('bi-check-circle', 'text-success');
+        hiddenBody.style.display = 'none';
+        inputElement.style.zIndex = '1';
     }
 }
 
@@ -107,6 +118,7 @@ function searchRegistro(inputElement) {
         let suggestions = document.getElementById('suggestions-serial-number');
         if (!suggestions.contains(event.target) && event.target !== inputElement) {
             suggestions.innerHTML = ''; // Limpiar sugerencias si se hace clic fuera del input
+            hiddenBody.style.display = 'none';
         }
     }
 
@@ -121,6 +133,8 @@ function searchRegistro(inputElement) {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 let data = JSON.parse(xhr.responseText);
                 let suggestions = document.getElementById('suggestions-serial-number');
+                hiddenBody.style.display = 'block';
+                inputElement.style.zIndex = '1000';
                 suggestions.innerHTML = '';
 
 
@@ -158,9 +172,10 @@ function searchRegistro(inputElement) {
                         document.getElementById('hidden-product-serial-number').value = item
                             .idRegistroProducto;
                         suggestions.innerHTML =''; 
-                        rowSerialExists.style.display = 'flex';
-                        rowSerialVacio.style.display = 'none';
-                        updateDataRowSerial(item);
+                        hiddenBody.style.display = 'none';
+                        inputElement.style.zIndex = '1';
+                        createItem(item);
+                        validateSubmit();
                     });
 
                     suggestions.appendChild(li);
@@ -171,10 +186,89 @@ function searchRegistro(inputElement) {
     } else {
         document.getElementById('suggestions-serial-number').innerHTML = ''; // Limpiar si hay menos de 3 caracteres
         document.getElementById('hidden-product-serial-number').value = "";
-        rowSerialExists.style.display = 'none';
-        rowSerialVacio.style.display = '';
+        hiddenBody.style.display = 'none';
+        inputElement.style.zIndex = '1';
     }
+}
+
+function createItem(object){
+    itemEgresoDiv;
+    let divRowItem = createDiv(['row','pt-2','pb-2','border'],null);
+    let inputHidden = createInput(['body-form'],null,'hidden',object.idRegistroProducto,'idregistros[]');
+    let divColImg = createDiv(['col-1'],null);
+    let divColContent = createDiv(['col-11'],null);
+    let divRowContent = createDiv(['row'],null);
+
+    let imgItem = document.createElement('img');
+    imgItem.classList.add('w-100','border');
+    imgItem.style.width = '100%';
+    imgItem.src = path + '/' + object.image;
+    divColImg.appendChild(imgItem);
+
+    let divColTitle = createDiv(['col-10','pt-2'],null);
+    let h4Title = createH5(null,null,object.nombreProducto);
+    divColTitle.appendChild(h4Title);
+
+    let divColBtnDelete = createDiv(['col-2','text-end'],null);
+    let btnDeleteItem = createLink(['text-danger','fs-4'],null,'<i class="bi bi-x-lg"></i>','javascript:void(0)',[() => divRowItem.remove(),() => validateSubmit()  ]);
+    divColBtnDelete.appendChild(btnDeleteItem);
+
+    let divColModelo = createDiv(['col-4'],null);
+    divColModelo.innerHTML = 'Modelo: '+ object.modelo;
+
+    let divColCodigo = createDiv(['col-3'],null);
+    divColCodigo.innerHTML = 'Codigo: ' + object.codigoProducto;
+
+    let divColSerial = createDiv(['col-3'],null);
+    divColSerial.innerHTML = 'SN: ' + object.numeroSerie;
+
+    let divColEstado = createDiv(['col-2','text-end'],null);
+    divColEstado.innerHTML = object.estado;
+
+    console.log(object);
+    divRowContent.appendChild(divColTitle);
+    divRowContent.appendChild(divColBtnDelete);
+    divRowContent.appendChild(divColModelo);
+    divRowContent.appendChild(divColCodigo);
+    divRowContent.appendChild(divColSerial);
+    divRowContent.appendChild(divColEstado);
+    divColContent.appendChild(divRowContent);
+    divRowItem.appendChild(divColImg);
+    divRowItem.appendChild(inputHidden);
+    divRowItem.appendChild(divColContent);
+    itemEgresoDiv.appendChild(divRowItem);
+}
+
+function validateSubmit() {
+    let validate = true;
+    let inputsCab = document.querySelectorAll('.cab-form');
+    let inputBody = document.querySelectorAll('.body-form');
+
+    inputsCab.forEach(function(x) {
+        if (x.value === '') {
+            validate = false; 
+        }
+    });
+
+    if(inputBody.length < 1){
+        validate = false; 
+    }
+
+    btnSubmitCreateEgreso.disabled = !validate; 
 }
 
 
 document.getElementById('check-sku-egreso').addEventListener('change', checkSku);
+document.getElementById('check-sku-egreso').addEventListener('change', validateSubmit);
+
+document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('input').forEach(function(x){
+        x.addEventListener('input',validateSubmit);
+    });
+    validateSubmit();
+})
+
+document.getElementById('btn-list-scan-codes').addEventListener('click', function () {
+
+    console.log(getSerials());
+});

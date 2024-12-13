@@ -47,20 +47,16 @@ class EgresoController extends Controller
     
     public function insertEgreso(Request $request){
         $userModel = $this->headerService->getModelUser();
-        $numeroserie = $request->input('serialnumber');
-        $idregistro = $request->input('idregistro');
         $sku = $request->input('sku');
         $idpublicacion = $request->input('idpublicacion');
         $numeroorden = $request->input('numeroorden');
         $fechapedido = $request->input('fechapedido');
         $fechadespacho = $request->input('fechadespacho');
+        $registros = $request->input('idregistros');
         
-        $validateRegistro = '';
-        if(is_null($idregistro)){
-            $modelRegistro = $this->egresoService->getRegistro($numeroserie);
-            $validateRegistro = $modelRegistro == null ? null : $modelRegistro->idRegistro;
-        }else{
-            $validateRegistro = $idregistro;
+        if(count($registros) < 1){
+            $this->headerService->sendFlashAlerts('Error en el formulario','Verifica que las series esten correctas existan','info','btn-warning');
+            return back();
         }
 
         $validatePublicacion = '';
@@ -71,17 +67,16 @@ class EgresoController extends Controller
             $validatePublicacion = $idpublicacion;
         }
         
-        if(!is_null($validateRegistro) && !is_null($validatePublicacion) && !is_null($fechapedido) && !is_null($fechadespacho)){
-            // try{
-                $arrayEgreso = ['idRegistro' => $validateRegistro,
-                                'idPublicacion' => $validatePublicacion == 'NULO' ? null : $validatePublicacion,
+        if(!is_null($validatePublicacion) && !is_null($fechapedido) && !is_null($fechadespacho)){
+                $arrayEgreso = ['idPublicacion' => $validatePublicacion == 'NULO' ? null : $validatePublicacion,
                                 'numeroOrden' => $validatePublicacion == 'NULO' ? null : $numeroorden,
                                 'fechaCompra' => $fechapedido,
                                 'fechaDespacho' => $fechadespacho];
                 
-                $producto = $this->egresoService->createEgreso($arrayEgreso);
-                $this->productoService->validateState($producto->idProducto);
-                
+                $productos = $this->egresoService->createEgreso($arrayEgreso,$registros);
+                foreach($productos as $producto){
+                    $this->productoService->validateState($producto->idProducto);
+                }
                 $this->headerService->sendFlashAlerts('Egreso registrado','Operacion exitosa','success','btn-success');
                 return back();
                 

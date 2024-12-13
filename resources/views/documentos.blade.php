@@ -35,15 +35,26 @@
         </div>
         <div class="col-6 col-md-6 text-end">
             @foreach ($user->Accesos as $vista)
-            @if($vista->idVista == 11)
-            <a href="{{route('traslados')}}" class="btn btn-info mb-2"><i class="bi bi-arrow-left-right"></i>
-                <span class="d-none d-md-inline">Traslado</span></a>
-            @endif
+                @switch($vista->idVista)
+                    @case(8)
+                        <a href="{{route('ingresos', [$fecha->format('Y-m')])}}" class="btn btn-success mb-2"><i
+                        class="bi bi-file-earmark-plus-fill"></i> <span class="d-none d-md-inline">Ingresos</span></a>
+                        @break
+                    @case(9)
+                        <a href="{{route('egresos', [$fecha->format('Y-m')])}}" class="btn btn-warning mb-2"><i
+                        class="bi bi-file-earmark-minus-fill"></i> <span class="d-none d-md-inline">Egresos</span></a>
+                        @break    
+                    @case(11)
+                        <a href="{{route('traslados')}}" class="btn btn-info mb-2"><i class="bi bi-arrow-left-right"></i>
+                        <span class="d-none d-md-inline">Traslado</span></a>
+                        @break
+                    @default
+                        
+                @endswitch
+                
             @endforeach
-            <a href="{{route('ingresos', [$fecha->format('Y-m')])}}" class="btn btn-success mb-2"><i
-                    class="bi bi-file-earmark-plus-fill"></i> <span class="d-none d-md-inline">Ingresos</span></a>
-            <a href="{{route('egresos', [$fecha->format('Y-m')])}}" class="btn btn-warning mb-2"><i
-                    class="bi bi-file-earmark-minus-fill"></i> <span class="d-none d-md-inline">Egresos</span></a>
+                <a href="#" class="btn bg-marron text-light mb-2">
+                    <i class="bi bi-award-fill"></i> <span class="d-none d-md-inline">Garantías</span></a>
         </div>
     </div>
     <form action="{{url()->current()}}" method="get" id="form-filtro-componente">
