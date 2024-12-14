@@ -53,7 +53,7 @@
                 @endswitch
                 
             @endforeach
-                <a href="#" class="btn bg-marron text-light mb-2">
+                <a href="{{route('garantias',[$fecha->format('Y-m')])}}" class="btn btn-marron mb-2">
                     <i class="bi bi-award-fill"></i> <span class="d-none d-md-inline">Garantías</span></a>
         </div>
     </div>

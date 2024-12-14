@@ -51,6 +51,10 @@ class RegistroProducto extends Model
         return $this->belongsTo(EgresoProducto::class,'idRegistro','idRegistro');
     }
 
+    public function Garantia(){
+        return $this->hasMany(Garantia::class,'idRegistro','idRegistro');
+     }
+
     public function Almacen(){
         return $this->belongsTo(Almacen::class,'idAlmacen','idAlmacen');
     }

@@ -75,6 +75,8 @@ use App\Repositories\EgresoProductoRepository;
 use App\Repositories\EgresoProductoRepositoryInterface;
 use App\Repositories\EmpresaRepository;
 use App\Repositories\EmpresaRepositoryInterface;
+use App\Repositories\GarantiaRepository;
+use App\Repositories\GarantiaRepositoryInterface;
 use App\Repositories\PublicacionRepositoryInterface;
 use App\Repositories\PublicacionRepository;
 use App\Repositories\RangoPrecioRepository;
@@ -89,6 +91,8 @@ use App\Services\DashboardService;
 use App\Services\DashboardServiceInterface;
 use App\Services\EgresoProductoService;
 use App\Services\EgresoProductoServiceInterface;
+use App\Services\GarantiaService;
+use App\Services\GarantiaServiceInterface;
 use App\Services\PdfService;
 use App\Services\PdfServiceInterface;
 use App\Services\PlataformaService;
@@ -152,6 +156,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DashboardServiceInterface::class,DashboardService::class);
         $this->app->bind(CaracteristicasProductoRepositoryInterface::class,CaracteristicasProductoRepository::class);
         $this->app->bind(ScriptServiceInterface::class,ScriptService::class);
+        $this->app->bind(GarantiaServiceInterface::class,GarantiaService::class);
+        $this->app->bind(GarantiaRepositoryInterface::class,GarantiaRepository::class);
     }
 
     /**

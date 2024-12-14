@@ -12,8 +12,10 @@ use App\Http\Controllers\PlataformaController;
 use App\Http\Controllers\PublicidadController;
 use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\CalculadoraController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\GarantiaController;
 use App\Http\Controllers\PdfController;
 
 //scripts
@@ -86,6 +88,9 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/egresos/{month}', [EgresoController::class, 'index'])->name('egresos');
     Route::post('/egresos/insertegreso', [EgresoController::class, 'insertEgreso'])->name('insertegreso');
     Route::post('/egresos/devolucionegreso', [EgresoController::class, 'devolucionEgreso'])->name('devolucionegreso');
+
+    Route::get('/garantia/creategarantia',[GarantiaController::class,'create'])->name('creategarantia');
+    Route::get('/garantias/{date}',[GarantiaController::class,'index'])->name('garantias');
     
     Route::get('/plataformas', [PlataformaController::class, 'index'])->name('plataformas');
     Route::post('/plataforma/updatecuenta', [PlataformaController::class, 'updateCuentas'])->name('updatecuenta');
@@ -100,6 +105,8 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/insert-publicacion', [PublicacionController::class, 'insertPublicacion'])->name('insertpublicacion');
     Route::post('/update-estado-publicacion', [PublicacionController::class, 'updateEstado'])->name('update-estado-publicacion');
     Route::get('/searchpublicacion', [PublicacionController::class, 'searchPublicacion'])->name('searchpublicacion');
+
+    Route::get('/clientes',[ClienteController::class,'index'])->name('clientes');
     
     //Configuracion-WEB
     Route::get('/configuracion/web', [ConfiguracionController::class, 'web'])->name('configweb');

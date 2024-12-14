@@ -29,79 +29,102 @@ class EgresoController extends Controller
         $userModel = $this->headerService->getModelUser();
         
         //variables propias del controlador
-        Carbon::setLocale('es');
-        $carbonMonth = Carbon::createFromFormat('Y-m', $month);
-        $egresos = $this->egresoService->getEgresosByMonth($month,150);
-        $almacenes = $this->egresoService->getAllAlmacenes();
-        
-        return view('egresos',['user' => $userModel,
-                                'egresos' => $egresos,
-                                'almacenes' => $almacenes,
-                                'fecha' => $carbonMonth]);
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 9){
+                Carbon::setLocale('es');
+                $carbonMonth = Carbon::createFromFormat('Y-m', $month);
+                $egresos = $this->egresoService->getEgresosByMonth($month,150);
+                $almacenes = $this->egresoService->getAllAlmacenes();
+                
+                return view('egresos',['user' => $userModel,
+                                        'egresos' => $egresos,
+                                        'almacenes' => $almacenes,
+                                        'fecha' => $carbonMonth]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
 
     public function create(){
         $userModel = $this->headerService->getModelUser();
-        return view('createegreso',['user' => $userModel]);
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 9){
+                return view('createegreso',['user' => $userModel]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function insertEgreso(Request $request){
         $userModel = $this->headerService->getModelUser();
-        $sku = $request->input('sku');
-        $idpublicacion = $request->input('idpublicacion');
-        $numeroorden = $request->input('numeroorden');
-        $fechapedido = $request->input('fechapedido');
-        $fechadespacho = $request->input('fechadespacho');
-        $registros = $request->input('idregistros');
-        
-        if(count($registros) < 1){
-            $this->headerService->sendFlashAlerts('Error en el formulario','Verifica que las series esten correctas existan','info','btn-warning');
-            return back();
-        }
-
-        $validatePublicacion = '';
-        if(is_null($idpublicacion)){
-            $modelPublicacion = $this->egresoService->getPublicacion($sku);
-            $validatePublicacion = $modelPublicacion == null ? null : $modelPublicacion->idPublicacion;
-        }else{
-            $validatePublicacion = $idpublicacion;
-        }
-        
-        if(!is_null($validatePublicacion) && !is_null($fechapedido) && !is_null($fechadespacho)){
-                $arrayEgreso = ['idPublicacion' => $validatePublicacion == 'NULO' ? null : $validatePublicacion,
-                                'numeroOrden' => $validatePublicacion == 'NULO' ? null : $numeroorden,
-                                'fechaCompra' => $fechapedido,
-                                'fechaDespacho' => $fechadespacho];
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 9){
+                $sku = $request->input('sku');
+                $idpublicacion = $request->input('idpublicacion');
+                $numeroorden = $request->input('numeroorden');
+                $fechapedido = $request->input('fechapedido');
+                $fechadespacho = $request->input('fechadespacho');
+                $registros = $request->input('idregistros');
                 
-                $productos = $this->egresoService->createEgreso($arrayEgreso,$registros);
-                foreach($productos as $producto){
-                    $this->productoService->validateState($producto->idProducto);
+                if(count($registros) < 1){
+                    $this->headerService->sendFlashAlerts('Error en el formulario','Verifica que las series esten correctas existan','info','btn-warning');
+                    return back();
                 }
-                $this->headerService->sendFlashAlerts('Egreso registrado','Operacion exitosa','success','btn-success');
-                return back();
+
+                $validatePublicacion = '';
+                if(is_null($idpublicacion)){
+                    $modelPublicacion = $this->egresoService->getPublicacion($sku);
+                    $validatePublicacion = $modelPublicacion == null ? null : $modelPublicacion->idPublicacion;
+                }else{
+                    $validatePublicacion = $idpublicacion;
+                }
                 
-        }else{
-            $this->headerService->sendFlashAlerts('Datos incompletos','Verifica que los datos ingresados existan','info','btn-warning');
-            return back();
+                if(!is_null($validatePublicacion) && !is_null($fechapedido) && !is_null($fechadespacho)){
+                        $arrayEgreso = ['idPublicacion' => $validatePublicacion == 'NULO' ? null : $validatePublicacion,
+                                        'numeroOrden' => $validatePublicacion == 'NULO' ? null : $numeroorden,
+                                        'fechaCompra' => $fechapedido,
+                                        'fechaDespacho' => $fechadespacho];
+                        
+                        $productos = $this->egresoService->createEgreso($arrayEgreso,$registros);
+                        foreach($productos as $producto){
+                            $this->productoService->validateState($producto->idProducto);
+                        }
+                        $this->headerService->sendFlashAlerts('Egreso registrado','Operacion exitosa','success','btn-success');
+                        return back();
+                        
+                }else{
+                    $this->headerService->sendFlashAlerts('Datos incompletos','Verifica que los datos ingresados existan','info','btn-warning');
+                    return back();
+                }
+            }
         }
-            
-        
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
 
     public function devolucionEgreso(Request $request){
-        $transaccion = $request->input('transaccion');
-        $idegreso = $request->input('idegreso');
-        $observacion = $request->input('observacion');
+        $userModel = $this->headerService->getModelUser();
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 9){
+                $transaccion = $request->input('transaccion');
+                $idegreso = $request->input('idegreso');
+                $observacion = $request->input('observacion');
 
-        if(isset($transaccion) && isset($idegreso)){
-            $this->egresoService->updateEgreso($transaccion,$idegreso,$observacion);
+                if(isset($transaccion) && isset($idegreso)){
+                    $this->egresoService->updateEgreso($transaccion,$idegreso,$observacion);
 
-            $this->headerService->sendFlashAlerts('Operacion exitosa','No hubo ningún error en la operacion','success','btn-success');
-            return back();
-        }else{
-            $this->headerService->sendFlashAlerts('Datos incompletos','Verifica que los datos ingresados existan','info','btn-warning');
-            return back();
+                    $this->headerService->sendFlashAlerts('Operacion exitosa','No hubo ningún error en la operacion','success','btn-success');
+                    return back();
+                }else{
+                    $this->headerService->sendFlashAlerts('Datos incompletos','Verifica que los datos ingresados existan','info','btn-warning');
+                    return back();
+                }
+            }
         }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
     }
     
     public function searchRegistro(Request $request){

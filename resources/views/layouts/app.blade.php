@@ -47,13 +47,13 @@
                             <i class="bi bi-list" style="font-size:2rem"></i>
                         </a>
                     </div>
-                    <div class="col-6 col-lg-9 d-flex justify-content-start align-items-center">
+                    <div class="col-4 col-lg-9 d-flex justify-content-start align-items-center">
                         <img class="d-none d-lg-block" alt="logo"
                             src="{{ asset('storage/logos/logosysfondo.webp') }}" style="width:50px">
                         <h5 class="d-none d-lg-flex justify-content-start align-items-center mb-0 h-100">Unik Technology
-                            &nbsp;<span class="text-secondary"> v1.20.0</span></h5>
+                            &nbsp;<span class="text-secondary"> v1.21.0</span></h5>
                     </div>
-                    <div class="col-4 col-lg-2" style="position:relative;z-index:9000">
+                    <div class="col-6 col-lg-2" style="position:relative;z-index:9000">
                         <div class="row h-100 d-flex align-items-center text-end pt-2" id="header-user-nav"
                             style="cursor:pointer">
                             <h5 class="w-100"><i class="bi bi-person-circle"></i> {{ $user->user }}</h5>
@@ -103,7 +103,7 @@
                     <div class="row d-block">
                         <h5 class="mb-0 text-light">Unik Technology
                         </h5>
-                        <small class="text-secondary">v1.20.0</small>
+                        <small class="text-secondary">v1.21.0</small>
                     </div>
                 </div>
                 <h5 class="d-none d-sm-flex offcanvas-title text-light">Men&uacute;</h5>
@@ -116,47 +116,62 @@
                             class="btn text-light">Dashboard <i class="bi bi-house-fill"></i></a></li>
                     <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('calculadora') }}"
                             class="btn text-light">Calculadora <i class="bi bi-calculator"></i></a></li>
-                    @foreach ($user->Accesos as $access)
-                        @switch($access->idVista)
-                            @case(1)
-                                <li class="list-group-item bg-sistema-uno menu-border"><a
-                                        href="{{ route('publicaciones', [now()->format('Y-m')]) }}"
-                                        class="btn text-light">Publicaciones <i class="bi bi-megaphone-fill"></i></a></li>
-                            @break
-
-                            @case(2)
-                                <li class="list-group-item bg-sistema-uno menu-border"><a
-                                        href="{{ route('productos', [encrypt(1), encrypt(1)]) }}"
-                                        class="btn text-light">Productos <i class="bi bi-box-fill"></i></a></li>
-                            @break
-
-                            @case(3)
-                                <li class="list-group-item bg-sistema-uno menu-border"><a
-                                        href="{{ route('documentos', [now()->format('Y-m')]) }}"
-                                        class="btn text-light">Registros <i class="bi bi-folder-fill"></i></a></li>
-                            @break
-
-                            @case(4)
-                                <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('plataformas') }}"
-                                        class="btn text-light">Plataformas <i class="bi bi-shop"></i></a></li>
-                            @break
-
-                            @case(5)
-                                <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('publicidad') }}"
-                                        class="btn text-light">Web <i class="bi bi-globe"></i></a></li>
-                            @break
-
-                            @case(6)
-                                <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('usuarios') }}"
-                                        class="btn text-light">Usuarios <i class="bi bi-person-fill"></i></a></li>
-                            @break
-
-                            @case(7)
-                                <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('configweb') }}"
-                                        class="btn text-light">Configuraci&oacuten <i class="bi bi-gear-fill"></i></a></li>
-                            @break
-                        @endswitch
-                    @endforeach
+                            @php
+                            $order = [2, 3, 1, 4, 5, 12, 6, 7]; // Orden personalizado
+                        @endphp
+                        
+                        @foreach ($order as $idVista)
+                            @php
+                                $access = $user->Accesos->firstWhere('idVista', $idVista);
+                            @endphp
+                            @if ($access)
+                                @switch($access->idVista)
+                                    @case(1)
+                                        <li class="list-group-item bg-sistema-uno menu-border"><a
+                                                href="{{ route('publicaciones', [now()->format('Y-m')]) }}"
+                                                class="btn text-light">Publicaciones <i class="bi bi-megaphone-fill"></i></a></li>
+                                    @break
+                        
+                                    @case(2)
+                                        <li class="list-group-item bg-sistema-uno menu-border"><a
+                                                href="{{ route('productos', [encrypt(1), encrypt(1)]) }}"
+                                                class="btn text-light">Productos <i class="bi bi-box-fill"></i></a></li>
+                                    @break
+                        
+                                    @case(3)
+                                        <li class="list-group-item bg-sistema-uno menu-border"><a
+                                                href="{{ route('documentos', [now()->format('Y-m')]) }}"
+                                                class="btn text-light">Registros <i class="bi bi-folder-fill"></i></a></li>
+                                    @break
+                        
+                                    @case(4)
+                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('plataformas') }}"
+                                                class="btn text-light">Plataformas <i class="bi bi-shop"></i></a></li>
+                                    @break
+                        
+                                    @case(5)
+                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('publicidad') }}"
+                                                class="btn text-light">Web <i class="bi bi-globe"></i></a></li>
+                                    @break
+                        
+                                    @case(12)
+                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('clientes') }}"
+                                                class="btn text-light">Clientes <i class="bi bi-person-standing"></i></a></li>
+                                    @break
+                        
+                                    @case(6)
+                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('usuarios') }}"
+                                                class="btn text-light">Usuarios <i class="bi bi-person-fill"></i></a></li>
+                                    @break
+                        
+                                    @case(7)
+                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('configweb') }}"
+                                                class="btn text-light">Configuraci&oacuten <i class="bi bi-gear-fill"></i></a></li>
+                                    @break
+                                @endswitch
+                            @endif
+                        @endforeach
+                        
                 </ul>
             </div>
         </div>
