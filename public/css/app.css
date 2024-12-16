@@ -1,5 +1,5 @@
-#div-alerts-bootstrap{
-    position: absolute;
+#div-alerts-bootstrap {
+    position: sticky;
     top: 0;
     left: 0;
     z-index: 9999;
@@ -146,24 +146,24 @@
 }
 
 .btn-outline-warning {
-    color: #6740a1 !important; 
-    border-color: #6740a1 !important; 
+    color: #6740a1 !important;
+    border-color: #6740a1 !important;
 }
 
 .btn-outline-warning:hover {
-    color: white !important; 
-    background-color: #6740a1 !important; 
-    border-color: #6740a1 !important; 
+    color: white !important;
+    background-color: #6740a1 !important;
+    border-color: #6740a1 !important;
 }
 
 .btn-outline-warning:active {
     color: #ffffff !important;
-    background-color: #6740a1 !important; 
+    background-color: #6740a1 !important;
     border-color: #6740a1 !important;
 }
 
 .btn-outline-warning:focus {
-    box-shadow: 0 0 0 0.2rem rgba(130, 34, 255, 0.5) !important; 
+    box-shadow: 0 0 0 0.2rem rgba(130, 34, 255, 0.5) !important;
 }
 
 .btn-xs {
@@ -307,4 +307,20 @@
 
 .pagination .page-link:focus {
     box-shadow: 0 0 5px rgb(58, 225, 255);
+}
+
+.dropdown-item.active {
+    color: #fff;
+    background-color: #00b1b9;
+}
+
+/* Estilo cuando el elemento está enfocado */
+.dropdown-item:focus {
+    color: #fff;
+    background-color: #00b1b9;
+}
+
+.dropdown-item.disabled {
+    color: white;
+    pointer-events: none;
 }

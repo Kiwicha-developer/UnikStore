@@ -92,6 +92,7 @@
                 </div>
             </div>
         </div>
+        <div id="div-alerts-bootstrap"></div>
     </header>
     <nav>
         <div class="offcanvas offcanvas-start bg-sistema-uno" tabindex="-1" id="offcanvasDashboard"
@@ -177,7 +178,7 @@
         </div>
     </nav>
     <main class="content" style="position: relative">
-        <div id="div-alerts-bootstrap"></div>
+        
         @yield('content')
 
         <!-- Modal -->

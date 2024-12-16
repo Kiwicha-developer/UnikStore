@@ -127,6 +127,48 @@ class ConfiguracionController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
 
+    public function especificacionesGrupo($idCategoria){
+        $userModel = $this->headerService->getModelUser();
+        
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                $categorias = $this->configuracionService->getAllCategorias();
+                $categoria = $this->configuracionService->getOneCategoria(decrypt($idCategoria));
+                $spects = $this->configuracionService->getAllEspecificaciones();
+                $subDivide = 'GRUPOS';
+                
+                return view('configespecificaciones-grupo',['user' => $userModel,
+                                        'pagina' => 'especificaciones',
+                                        'categorias' => $categorias,
+                                        'categoria' => $categoria,
+                                        'caracteristicas' => $spects,
+                                        'subDivide' => $subDivide
+                ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
+    public function especificacionesGeneral(){
+        $userModel = $this->headerService->getModelUser();
+        
+        foreach($userModel->Accesos as $acceso){
+            if($acceso->idVista == 7){
+                $spects = $this->configuracionService->getAllEspecificaciones();
+                $subDivide = 'GENERAL';
+                
+                return view('configespecificaciones-general',['user' => $userModel,
+                                        'pagina' => 'especificaciones',
+                                        'caracteristicas' => $spects,
+                                        'subDivide' => $subDivide
+                ]);
+            }
+        }
+        $this->headerService->sendFlashAlerts('Acceso denegado','No tienes permiso para ingresar a esta pestaña','warning','btn-danger');
+        return redirect()->route('dashboard',['user' => $userModel]);
+    }
+
     public function createCaracteristica(Request $request){
         $userModel = $this->headerService->getModelUser();
         $descripcion = $request->input('descripcion');
@@ -148,6 +190,7 @@ class ConfiguracionController extends Controller
     }
 
     public function updateCaracteristica(Request $request){
+        dd($request);
         $userModel = $this->headerService->getModelUser();
         $operacion = $request->input('operacion');
         $idCaracteristica = $request->input('id');
@@ -215,9 +258,8 @@ class ConfiguracionController extends Controller
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
                 if($idGrupo && $idCaracteristica){
-                    $this->configuracionService->insertCaracteristicaXGrupo($idGrupo,$idCaracteristica);
-                    $this->headerService->sendFlashAlerts('Operacion exitosa','Datos registrados correctamente','success','btn-success');
-                    return back();
+                    $model = $this->configuracionService->insertCaracteristicaXGrupo($idGrupo,$idCaracteristica);
+                    return response()->json($model->load('GrupoProducto','Caracteristicas'));
                 }else{
                     $this->headerService->sendFlashAlerts('Faltan datos','Ingresa datos validos','warning','btn-danger');
                     return back();
@@ -237,8 +279,7 @@ class ConfiguracionController extends Controller
             if($acceso->idVista == 7){
                 if($idCaracteristica && $idGrupo){
                     $this->configuracionService->deleteCaracteristicaXGrupo($idGrupo,$idCaracteristica);
-                    $this->headerService->sendFlashAlerts('Operacion exitosa','Datos eliminados correctamente','success','btn-success');
-                    return back();
+                    return response()->json('Eliminación exitosa');
                 }
             }
         }    

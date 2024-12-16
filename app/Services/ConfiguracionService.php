@@ -170,10 +170,12 @@ class ConfiguracionService implements ConfiguracionServiceInterface
             if(!$modelo){
                 $data = ['idGrupoProducto' => $idGrupo,
                 'idCaracteristica' => $idCaracteristica];
-                $this->caracteristicasGrupoRepository->create($data);
+                return $this->caracteristicasGrupoRepository->create($data);
             }
             
         }
+
+        return null;
     }
 
     public function deleteCaracteristicaXGrupo($idGrupo,$idCaracteristica){
