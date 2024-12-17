@@ -15,8 +15,8 @@ class Caracteristicas_Sugerencias extends Model
     protected $fillable = ['idSugerencia',
                             'idCaracteristica',
                             'sugerencia',
+                            'estado'
                             ];
-
     
     protected $hidden = [
         
@@ -25,14 +25,13 @@ class Caracteristicas_Sugerencias extends Model
     
     protected $casts = [
         'idSugerencia' => 'int',
-        'idCaracteristica' => 'int'
+        'idCaracteristica' => 'int',
+        'estado' => 'int'
     ];
 
     public function Caracteristicas_Grupo(){
         return $this->belongsTo(Caracteristicas::class,'idCaracteristica','idCaracteristica');
     }
-
-
     /**
      * Obtener las relaciones del modelo.
      */

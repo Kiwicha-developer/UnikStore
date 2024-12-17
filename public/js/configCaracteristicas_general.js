@@ -66,7 +66,7 @@ function createSugerencias(object,container){
             let inputSugerencia = document.createElement('input');
             inputSugerencia.type = 'text';
             inputSugerencia.classList.add('form-control','border-0');
-            inputSugerencia.value = valor.sugerencia;
+            inputSugerencia.value = valor.sugerencia + valor.estado;
             inputSugerencia.name = 'updatesugerencia['+ valor.idSugerencia +']';
             inputGroup.appendChild(inputSugerencia);
     

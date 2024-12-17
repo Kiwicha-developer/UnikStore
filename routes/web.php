@@ -81,7 +81,6 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/documentos/{date}', [DocumentoController::class, 'list'])->name('documentos');
     Route::post('/documento/deletecomprobante', [DocumentoController::class, 'deleteComprobante'])->name('deletecomprobante');
     
-    
     Route::get('/egresos/searchregistro', [EgresoController::class, 'searchRegistro'])->name('searchregistro');
     Route::get('/egresos/searchegreso', [EgresoController::class, 'searchEgreso'])->name('searchegreso');
     Route::get('/egresos/nuevosegresos', [EgresoController::class, 'create'])->name('createegreso');

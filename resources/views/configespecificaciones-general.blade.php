@@ -44,6 +44,7 @@
                         <div class="row h-100">
                             <div class="col-md-3">
                                 <strong>{{$caracteristica->especificacion}}</strong>
+                                <small>{{$caracteristica->tipo}}</small>
                             </div>
                             <div class="col-md-8 text-secondary text-center">
                                 @foreach ($caracteristica->Caracteristicas_Grupo as $grupo)
@@ -53,7 +54,15 @@
                             </div>
                             <div class="col-md-1 text-end">
                                 <button class="btn btn-sm btn-success" data-bs-toggle="modal" 
-                                    data-bs-target="#removeSpectModal" onclick='sendDataToEdit({{$caracteristica->idCaracteristica}},"{{$caracteristica->tipo}}","{{$caracteristica->especificacion}}",@json($caracteristica->Caracteristicas_Sugerencias->sortBy("sugerencia")))'>
+                                    data-bs-target="#removeSpectModal" 
+                                    onclick='sendDataToEdit({{$caracteristica->idCaracteristica}},
+                                                            "{{$caracteristica->tipo}}",
+                                                            "{{$caracteristica->especificacion}}",
+                                                            @json($caracteristica->Caracteristicas_Sugerencias
+                                                                    ->sortBy("sugerencia")
+                                                                    ->filter(function($item){
+                                                                        return $item->estado != 0;
+                                                                    })))'>
                                     <i class="bi bi-pencil-fill"></i>
                                 </button>
                             </div>
