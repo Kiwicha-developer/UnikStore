@@ -106,6 +106,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/searchpublicacion', [PublicacionController::class, 'searchPublicacion'])->name('searchpublicacion');
 
     Route::get('/clientes',[ClienteController::class,'index'])->name('clientes');
+    Route::post('/cliente/create',[ClienteController::class,'createCliente'])->name('createcliente');
     
     //Configuracion-WEB
     Route::get('/configuracion/web', [ConfiguracionController::class, 'web'])->name('configweb');

@@ -26,7 +26,6 @@ document.getElementById('search').addEventListener('input', function () {
                     let colProducto = createDiv(['col-12','text-secondary'],null);
                     colProducto.innerHTML = '<small>'+item.Producto.codigoProducto+'</small>';
 
-                    console.log(item);
                     rowItem.appendChild(colSerie);
                     rowItem.appendChild(colProducto);
                     liItem.appendChild(rowItem);
@@ -51,6 +50,10 @@ document.getElementById('search').addEventListener('input', function () {
 
 });
 
+function scanOperations(){
+    searchCodeToController(getSerial());
+}
+
 function searchCodeToController(query) {
     let data = null;
     let xhr = new XMLHttpRequest();
@@ -65,12 +68,6 @@ function searchCodeToController(query) {
     return data;
 }
 
-function validateSerials() {
-    getSerials().forEach(function (x) {
-        searchCodeToController(x);
-    });
-
-}
 
 function addProductoSerial(object) {
     console.log(object);
@@ -182,8 +179,3 @@ function hideSuggestions(event) {
     }
 }
 document.addEventListener('click', hideSuggestions);
-
-document.getElementById('btn-list-scan-codes').addEventListener('click', function (event) {
-
-    validateSerials();
-});

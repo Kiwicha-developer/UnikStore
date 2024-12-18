@@ -13,17 +13,18 @@
         </div>
         
         <div class="col-7 col-md-5">
-            <div class="input-group mb-3" style="z-index:1000">
+            <div class="input-group" style="z-index:1000">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
-                <input type="text" class="form-control" placeholder="Serial Number..." id="search" >
+                <input type="text" class="form-control" placeholder="Serial Number..." id="search">
+                <div class="input-group-text">
+                    <x-scan_check :clases="'form-check-input mt-0'" :idInput="'search'"/>
+                </div>
                 <ul class="list-group w-100" style="position:absolute;top:100%;z-index:1000" id="suggestions">
                 </ul>
             </div>
-            
-        </div>
-        <div class="col-12 text-end">
-            <x-btn-scan :class="'btn-warning'" :spanClass="'d-none d-md-inline'" :onClick="''" />
-            <x-scanner :multiple="true"/>
+            <div class="w-100 text-end text-secondary">
+                <small>scanner</small>
+            </div>
         </div>
     </div>
     <br>

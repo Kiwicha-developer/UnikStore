@@ -40,34 +40,35 @@
                     </div>
                 </li>
                 @foreach ($caracteristicas as $caracteristica)
-                    <li class="list-group-item">
-                        <div class="row h-100">
-                            <div class="col-md-3">
-                                <strong>{{$caracteristica->especificacion}}</strong>
-                                <small>{{$caracteristica->tipo}}</small>
-                            </div>
-                            <div class="col-md-8 text-secondary text-center">
-                                @foreach ($caracteristica->Caracteristicas_Grupo as $grupo)
-                                {{ $loop->index  == 0 ? '' : ' | '}}
-                                <small class="text-decoration-underline">{{$grupo->GrupoProducto->nombreGrupo}}</small>
-                                @endforeach
-                            </div>
-                            <div class="col-md-1 text-end">
-                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" 
-                                    data-bs-target="#removeSpectModal" 
-                                    onclick='sendDataToEdit({{$caracteristica->idCaracteristica}},
-                                                            "{{$caracteristica->tipo}}",
-                                                            "{{$caracteristica->especificacion}}",
-                                                            @json($caracteristica->Caracteristicas_Sugerencias
-                                                                    ->sortBy("sugerencia")
-                                                                    ->filter(function($item){
-                                                                        return $item->estado != 0;
-                                                                    })))'>
-                                    <i class="bi bi-pencil-fill"></i>
-                                </button>
-                            </div>
+                 @if($caracteristica->tipo != 'INVALIDO')
+                 <li class="list-group-item">
+                    <div class="row h-100">
+                        <div class="col-md-3">
+                            <strong>{{$caracteristica->especificacion}}</strong>
+                            <br>
+                            <small>{{$caracteristica->tipo}}</small>
                         </div>
-                    </li> 
+                        <div class="col-md-8 text-secondary text-center">
+                            @foreach ($caracteristica->Caracteristicas_Grupo as $grupo)
+                            {{ $loop->index  == 0 ? '' : ' | '}}
+                            <small class="text-decoration-underline">{{$grupo->GrupoProducto->nombreGrupo}}</small>
+                            @endforeach
+                        </div>
+                        <div class="col-md-1 text-end">
+                            <button class="btn btn-sm btn-success" data-bs-toggle="modal" 
+                                data-bs-target="#removeSpectModal" 
+                                onclick='sendDataToEdit({{$caracteristica->idCaracteristica}},
+                                                        "{{$caracteristica->tipo}}",
+                                                        "{{$caracteristica->especificacion}}",
+                                                        @json($caracteristica->Caracteristicas_Sugerencias
+                                                                ->sortBy("sugerencia")))'>
+                                <i class="bi bi-pencil-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li> 
+                 @endif
+                    
                 @endforeach
             </ul>
         </div>
@@ -83,9 +84,19 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-8">
                                 <label>Especificacion:</label>
-                                <input type="text" name="descripcion" class="form-control">
+                                <input type="text" name="descripcion" class="form-control" required>
+                            </div>
+                            <div class="col-4">
+                                <label>Tipo:</label>
+                                <select name="tipo"  onchange="changeTypeCreate(this)" class="form-select" required>
+                                    <option value="FILTRO">Filtro</option>
+                                    <option value="DETALLE" selected>Detalle</option>
+                                </select>
+                            </div>
+                            <div class="col-12" id="filtros-modal-createespecificacion">
+
                             </div>
                         </div>
                     </div>
@@ -114,7 +125,7 @@
                             <input type="hidden" value="" id="operacion-modal-editespecificacion" name="operacion">
                             <div class="col-12">
                                 <label class="form-label">Tipo de caracteristica:</label>
-                                <select name="tipo" id="tipo-modal-editespecificacion" class="form-select">
+                                <select name="tipo" id="tipo-modal-editespecificacion" onchange="changeTypeSugerencia(this)" class="form-select">
                                     <option value="FILTRO">Filtro</option>
                                     <option value="DETALLE">Detalle</option>
                                 </select>
@@ -138,6 +149,11 @@
                 </div>
             </div>
         </div>
+    </form>
+    <form action="{{route('removesugerencia')}}" method="post" id="form-delete-sugerencia">
+        @csrf
+        <input type="hidden" name="sugerencia" value="" id="hidden-delete-sugerencia">
+        <input type="hidden" name="type" value="" id="hidden-delete-sugerencia-type">
     </form>
 </div>
 <script src="{{asset('js/configCaracteristicas_general.js')}}"></script>

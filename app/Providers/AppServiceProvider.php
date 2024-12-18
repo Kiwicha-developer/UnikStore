@@ -47,6 +47,8 @@ use App\Repositories\CaracteristicasRepository;
 use App\Repositories\CaracteristicasRepositoryInterface;
 use App\Repositories\CaracteristicasSugerenciasRepository;
 use App\Repositories\CaracteristicasSugerenciasRepositoryInterface;
+use App\Repositories\ClienteRepository;
+use App\Repositories\ClienteRepositoryInterface;
 use App\Repositories\ComisionPlataformaRepository;
 use App\Repositories\ComisionPlataformaRepositoryInterface;
 use App\Repositories\InventarioRepositoryInterface;
@@ -81,10 +83,14 @@ use App\Repositories\PublicacionRepositoryInterface;
 use App\Repositories\PublicacionRepository;
 use App\Repositories\RangoPrecioRepository;
 use App\Repositories\RangoPrecioRepositoryInterface;
+use App\Repositories\TipoDocumentoRepository;
+use App\Repositories\TipoDocumentoRepositoryInterface;
 use App\Repositories\TipoProductoRepository;
 use App\Repositories\TipoProductoRepositoryInterface;
 use App\Repositories\VistaRepository;
 use App\Repositories\VistaRepositoryInterface;
+use App\Services\ClienteService;
+use App\Services\ClienteServiceInterface;
 use App\Services\ConfiguracionService;
 use App\Services\ConfiguracionServiceInterface;
 use App\Services\DashboardService;
@@ -158,6 +164,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ScriptServiceInterface::class,ScriptService::class);
         $this->app->bind(GarantiaServiceInterface::class,GarantiaService::class);
         $this->app->bind(GarantiaRepositoryInterface::class,GarantiaRepository::class);
+        $this->app->bind(ClienteServiceInterface::class,ClienteService::class);
+        $this->app->bind(TipoDocumentoRepositoryInterface::class,TipoDocumentoRepository::class);
+        $this->app->bind(ClienteRepositoryInterface::class,ClienteRepository::class);
     }
 
     /**

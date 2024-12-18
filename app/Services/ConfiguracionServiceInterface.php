@@ -19,7 +19,7 @@ interface ConfiguracionServiceInterface
     public function updateCalculadora($igv,$fact);
     public function updateComisionValue($idGrupo,$idRango,$comision);
     public function getAllEspecificaciones();
-    public function createCaracteristica($descripcion);
+    public function createCaracteristica($descripcion,$tipo,$sugerencias);
     public function removeCaracteristica($idCaracteristica);
     public function updateOrCreateCaracteristica($id,$tipo,$updates,$creates);
     public function insertCaracteristicaXGrupo($idGrupo,$idCaracteristica);
@@ -30,5 +30,5 @@ interface ConfiguracionServiceInterface
     public function deleteComisionPlataforma($idComisionPlataforma);
     public function createMarcaProducto($nombre,$img);
     public function createGrupoProducto($categoria,$grupo,$tipo,$img);
-    public function removeSugerencia($idSugerencia);
+    public function removeSugerencia($idSugerencia,$tipo);
 }

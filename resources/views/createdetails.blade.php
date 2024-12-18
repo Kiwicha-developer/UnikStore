@@ -38,7 +38,8 @@
     <input type="hidden" name="idproducto" value="{{$producto->idProducto}}">
     <div class="row" id="containerDivs">
         @foreach($producto->Caracteristicas_Producto as $car)
-            <div class="input-group mb-3">
+            @if($car->Caracteristicas->tipo != 'INVALIDO')
+                <div class="input-group mb-3">
                     <span class="input-group-text update-details label-car bg-sistema-light text-light">{{$car->Caracteristicas->especificacion}}:</span>
                     @if($car->Caracteristicas->tipo == 'FILTRO')
                         <select class="form-select" name="updatecaracteristicas[{{ $car->idCaracteristica }}]" value="{{$car->caracteristicaProducto}}">
@@ -54,6 +55,7 @@
                         <i class="bi bi-trash"></i>
                     </button>
             </div>
+            @endif
         @endforeach
     </div>
     <div class="row" >

@@ -184,24 +184,33 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         }
     }
 
-    public function createCaracteristica($descripcion){
+    public function createCaracteristica($descripcion,$tipo,$sugerencias){
         if($descripcion){
             $modelo = $this->caracteristicasRepository->getOne('especificacion',$descripcion);
             if(!$modelo){
                 $data = ['idCaracteristica' => $this->getNewIdCaracteristica(),
                         'especificacion' => $descripcion,
-                        'tipo' => 'DETALLE'];
+                        'tipo' => $tipo];
                 $this->caracteristicasRepository->create($data);
+                if(isset($sugerencias)){
+                    foreach($sugerencias as $sug){
+                        if($sug != null && $sug != ''){
+                            $arrayNewSugerencia = ['idSugerencia' => $this->getNewIdSugerencia(),
+                            'idCaracteristica' => $data['idCaracteristica'],
+                            'sugerencia' => $sug,
+                            'estado' => 1];
+                            $this->sugerenciaRepository->create($arrayNewSugerencia);
+                        }   
+                    }
+                }
             }
         }
     }
 
     public function removeCaracteristica($idCaracteristica){
         if($idCaracteristica){
-            $caracteristicaModel = $this->caracteristicasRepository->getOne('idCaracteristica',$idCaracteristica)->Caracteristicas_Grupo;
-            if(count($caracteristicaModel) < 1){
-                $this->caracteristicasRepository->remove($idCaracteristica);
-            }
+            $data = ['tipo' => 'INVALIDO'];
+            $this->caracteristicasRepository->update($idCaracteristica,$data);
         }
     }
 
@@ -220,10 +229,13 @@ class ConfiguracionService implements ConfiguracionServiceInterface
 
         if(isset($creates)){
             foreach($creates as $create){
-                $arrayNewSugerencia = ['idSugerencia' => $this->getNewIdSugerencia(),
-                                        'idCaracteristica' => $id,
-                                        'sugerencia' => $create];
-                $this->sugerenciaRepository->create($arrayNewSugerencia);
+                if($create != null && $create != ''){
+                    $arrayNewSugerencia = ['idSugerencia' => $this->getNewIdSugerencia(),
+                    'idCaracteristica' => $id,
+                    'sugerencia' => $create,
+                    'estado' => 1];
+                    $this->sugerenciaRepository->create($arrayNewSugerencia);
+                }   
             }
         }
     }
@@ -311,8 +323,9 @@ class ConfiguracionService implements ConfiguracionServiceInterface
         $this->grupoRepository->update($newGrupo->idGrupoProducto,$updateData);
     }
 
-    public function removeSugerencia($idSugerencia){
-        $this->sugerenciaRepository->remove($idSugerencia);
+    public function removeSugerencia($idSugerencia,$tipo){
+        $data = ['estado' => $tipo == 'RESTORE' ? 1 : 0];
+        return $this->sugerenciaRepository->update($idSugerencia,$data);
     }
 
     private function getNewIdMarca(){

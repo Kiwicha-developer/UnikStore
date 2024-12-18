@@ -219,11 +219,14 @@ function changeCharEngToEs(inputText) {
     wrapper.innerHTML = [
         `<div class="alert alert-${type} alert-dismissible" role="alert" style="position:absolute">`,
         `   <div>${message}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
         '</div>'
     ].join('');
 
     alertPlaceholder.append(wrapper);
+
+    setTimeout(function(){
+        alertPlaceholder.innerHTML = '';
+    },1500);
 }
 
 

@@ -172,11 +172,12 @@ class ConfiguracionController extends Controller
     public function createCaracteristica(Request $request){
         $userModel = $this->headerService->getModelUser();
         $descripcion = $request->input('descripcion');
-
+        $tipo = $request->input('tipo');
+        $sugerencias = $request->input('createsugerencia');
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
                 if($descripcion){
-                    $this->configuracionService->createCaracteristica($descripcion);
+                    $this->configuracionService->createCaracteristica($descripcion,$tipo,$sugerencias);
                     $this->headerService->sendFlashAlerts('Especificacion creada',$descripcion . ' creada correctamente.','success','btn-success');
                     return back();
                 }else{
@@ -189,8 +190,7 @@ class ConfiguracionController extends Controller
         return redirect()->route('dashboard',['user' => $userModel]);
     }
 
-    public function updateCaracteristica(Request $request){
-        dd($request);
+    public function updateCaracteristica(Request $request){ 
         $userModel = $this->headerService->getModelUser();
         $operacion = $request->input('operacion');
         $idCaracteristica = $request->input('id');
@@ -202,13 +202,9 @@ class ConfiguracionController extends Controller
             if($acceso->idVista == 7){
                 if($operacion == 'DELETE'){
                     if(isset($idCaracteristica)){
-                        $caracteristicaModelo = $this->configuracionService->getOneCaracteristica($idCaracteristica);
-                        $validateDelete = count($caracteristicaModelo->Caracteristicas_Producto) + count($caracteristicaModelo->Caracteristicas_Grupo);
-                        if($validateDelete < 1){
-                            $this->configuracionService->removeCaracteristica($idCaracteristica);
-                            $this->headerService->sendFlashAlerts('Operacion exitosa','Datos eliminados correctamente','success','btn-success');
-                            return back();
-                        }
+                        $this->configuracionService->removeCaracteristica($idCaracteristica);
+                        $this->headerService->sendFlashAlerts('Operacion exitosa','Datos eliminados correctamente','success','btn-success');
+                        return back();
                         $this->headerService->sendFlashAlerts('Error en la operacion','No puedes eliminar una especificacion si esta en uso.','warning','btn-danger');
                         return back();
                     }
@@ -237,12 +233,12 @@ class ConfiguracionController extends Controller
     public function removeSugerencia(Request $request){
         $userModel = $this->headerService->getModelUser();
         $sugerencia = $request->input('sugerencia');
+        $type = $request->input('type');
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 7){
                 if(isset($sugerencia)){
-                    $this->configuracionService->removeSugerencia($sugerencia);
-                    $this->headerService->sendFlashAlerts('Operacion exitosa','Datos eliminados correctamente','success','btn-success');
-                    return back();
+                    $model = $this->configuracionService->removeSugerencia($sugerencia,$type);
+                    return response()->json($model);
                 }
             }
         }    

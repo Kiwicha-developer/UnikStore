@@ -223,7 +223,7 @@ class ComprobanteService implements ComprobanteServiceInterface
                         'idDetalleComprobante' => $data['idDetalleComprobante'],
                         'numeroSerie' => $registro['serialnumber'],
                         'estado' => $registro['estado'],
-                        'observacion' => $registro['observacion'],
+                        'observacion' => $registro['observacion'] ? $registro['observacion'] : null,
                         'idAlmacen' => $idAlmacen
                         ];
                         try {

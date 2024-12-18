@@ -9,8 +9,11 @@ function sendDataToEdit(spect,tipo,title,sugerencias){
     tipoSelectModal.value = tipo;
     divFiltros.innerHTML = '';
 
+    createSugerencias(sugerencias,divFiltros);
     if(tipo == 'FILTRO'){
-        createSugerencias(sugerencias,divFiltros);
+        divFiltros.style.display = 'block';
+    }else{
+        divFiltros.style.display = 'none';
     }
 }
 
@@ -36,13 +39,14 @@ function createSugerencias(object,container){
         newInput.type = 'text';
         newInput.classList.add('form-control','border-0');
         newInput.name = 'createsugerencia[]';
+        newInput.required = true;
         newInputGroup.appendChild(newInput);
 
         let btnRemoveInput = document.createElement('button');
         btnRemoveInput.classList.add('btn','btn-outline-danger');
         btnRemoveInput.innerHTML = '<i class="bi bi-x-lg"></i>';
         btnRemoveInput.type = 'button';
-        btnRemoveInput.addEventListener('click',function(event){
+        btnRemoveInput.addEventListener('click',function(){
             newLiSugerencia.remove();
         });
         newInputGroup.appendChild(btnRemoveInput);
@@ -58,29 +62,11 @@ function createSugerencias(object,container){
     if(object != null){
         Object.values(object).forEach((valor) => {
             let liSugerencia = document.createElement('li');
+            liSugerencia.id = 'item-sugerencia-' + valor.idSugerencia;
             liSugerencia.classList.add('list-group-item','pt-0','pb-0','ps-0','pe-0');
-    
-            let inputGroup = document.createElement('div');
-            inputGroup.classList.add('input-group');
-    
-            let inputSugerencia = document.createElement('input');
-            inputSugerencia.type = 'text';
-            inputSugerencia.classList.add('form-control','border-0');
-            inputSugerencia.value = valor.sugerencia + valor.estado;
-            inputSugerencia.name = 'updatesugerencia['+ valor.idSugerencia +']';
-            inputGroup.appendChild(inputSugerencia);
-    
-            let btnDeleteSugerencia = document.createElement('button');
-            btnDeleteSugerencia.classList.add('btn','btn-outline-danger');
-            btnDeleteSugerencia.innerHTML = '<i class="bi bi-x-lg"></i>';
-            btnDeleteSugerencia.type = 'button';
-            btnDeleteSugerencia.addEventListener('click',function(event){
-                sendDataToRemoveSugerencia(valor.idSugerencia);
-            });
-            inputGroup.appendChild(btnDeleteSugerencia);
-    
-            console.log( valor);
-            liSugerencia.appendChild(inputGroup);
+            
+            createItemSugerencia(liSugerencia,valor);
+            
             listaSugerencias.appendChild(liSugerencia);
         });
     }
@@ -92,8 +78,103 @@ function createSugerencias(object,container){
     container.appendChild(listaSugerencias);
 }
 
+function createItemSugerencia(container,object){
+    let inputGroup = document.createElement('div');
+    inputGroup.classList.add('input-group');
+
+    let inputSugerencia = document.createElement('input');
+    inputSugerencia.type = 'text';
+    inputSugerencia.classList.add('form-control','border-0');
+    inputSugerencia.value = object.sugerencia;
+    inputSugerencia.readOnly = object.estado == 0 ? true : false;
+    inputSugerencia.name = 'updatesugerencia['+ object.idSugerencia +']';
+    inputSugerencia.required = true;
+    inputGroup.appendChild(inputSugerencia);
+
+    let btnDeleteSugerencia = document.createElement('button');
+    btnDeleteSugerencia.type = 'button';
+    if(object.estado == 0){
+        btnDeleteSugerencia.classList.add('btn','btn-outline-success');
+        btnDeleteSugerencia.innerHTML = '<i class="bi bi-arrow-clockwise"></i>';
+        btnDeleteSugerencia.addEventListener('click',function(){
+            sendDataToRemoveSugerencia(object.idSugerencia,'RESTORE');
+        });
+    }
+
+    if(object.estado == 1){
+        btnDeleteSugerencia.classList.add('btn','btn-outline-danger');
+        btnDeleteSugerencia.innerHTML = '<i class="bi bi-x-lg"></i>';
+        btnDeleteSugerencia.addEventListener('click',function(){
+            sendDataToRemoveSugerencia(object.idSugerencia,'DELETE');
+        });
+    }
+    inputGroup.appendChild(btnDeleteSugerencia);
+    
+    container.appendChild(inputGroup);
+}
+
 function changeOperacionModal(valor){
     let inputOperacion = document.getElementById('operacion-modal-editespecificacion');
 
     inputOperacion.value = valor;
+}
+
+function changeTypeSugerencia(input){
+    let divSugerencias = document.getElementById('filtros-modal-editespecificacion');
+    if(input.value == 'FILTRO'){
+        divSugerencias.style.display = 'block';    
+    }else{
+        divSugerencias.style.display = 'none';
+    }
+}
+
+function changeTypeCreate(input){
+    let divSugerencias = document.getElementById('filtros-modal-createespecificacion');
+    if(input.value == 'FILTRO'){
+        createSugerencias(null,divSugerencias);
+    }else{
+        divSugerencias.innerHTML = '';
+    }
+}
+
+function sendDataToRemoveSugerencia(idSugerencia,tipo) {
+    let formDelete = document.getElementById('form-delete-sugerencia');
+    let inputIdSugerencia = document.getElementById('hidden-delete-sugerencia');
+    let inputType = document.getElementById('hidden-delete-sugerencia-type');
+    let confirmDelete = null;
+    if(tipo == 'DELETE'){
+        confirmDelete = confirm("¿Estás seguro de que quieres eliminar esta sugerencia?");
+    }
+    
+    if(tipo == 'RESTORE'){
+        confirmDelete = confirm("¿Quieres restaurar esta sugerencia?");
+    }
+
+    inputIdSugerencia.value = idSugerencia;
+    inputType.value = tipo;
+    const formData = new FormData(formDelete);
+
+    if (confirmDelete) {
+        fetch('/configuracion/removesugerencia', { 
+            method: 'POST',
+            body: formData
+        })
+        .then(response => { 
+            if (response.ok) { 
+                return response.json(); 
+            } else { 
+                throw new Error('Error al procesar la sugerencia'); 
+            } 
+        })
+        .then(data => { 
+            let itemSugerencia = document.getElementById('item-sugerencia-' + data.idSugerencia);
+            itemSugerencia.innerHTML = '';
+            createItemSugerencia(itemSugerencia,data);
+            alertBootstrap('Sugerencia '+ data.sugerencia + ' ' + (tipo == 'DELETE' ? 'eliminada' : 'restaurada') +' exitosamente' , 'success')
+        }) 
+        .catch(error => {
+            console.log('error: ' + error);
+            alertBootstrap('error: ' + error, 'danger')
+        });
+    }
 }
