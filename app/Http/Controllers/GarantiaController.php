@@ -31,6 +31,9 @@ class GarantiaController extends Controller
     public function create(){
         $userModel = $this->headerService->getModelUser();
 
-        return view('creategarantia',['user' => $userModel]);
+        $tipoDocumentos = $this->garantiaService->getAllTipoDocumentos();
+
+        return view('creategarantia',['user' => $userModel,
+                                    'tipoDocumentos' => $tipoDocumentos]);
     }
 }

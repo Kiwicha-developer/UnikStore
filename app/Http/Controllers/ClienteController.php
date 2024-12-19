@@ -37,9 +37,8 @@ class ClienteController extends Controller
         $correo = $request->input('correo');
 
         if(isset($nombre) && isset($tipoDoc) && isset($numeroDoc)){
-            $this->clienteService->createCliente($nombre,$apePaterno,$apeMaterno,$tipoDoc,$numeroDoc,$telefono,$correo);
-            $this->headerService->sendFlashAlerts('Cliente registrado','Operación exitosa','success','btn-success');
-            return back();
+            $response =  $this->clienteService->createCliente($nombre,$apePaterno,$apeMaterno,$tipoDoc,$numeroDoc,$telefono,$correo);
+            return response()->json($response);
         }
     }
 }

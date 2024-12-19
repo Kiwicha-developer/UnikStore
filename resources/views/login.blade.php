@@ -27,6 +27,21 @@
         });
     </script>
 @endif
+
+@if (session('title') && session('message') && session('icon') && session('button'))
+    <script>
+        Swal.fire({
+            title: '{{ session('title') }}!',
+            text: '{{ session('message') }}',
+            icon: '{{ session('icon') }}',
+            iconColor: '#00b1b9',
+            confirmButtonText: 'Aceptar',
+            customClass: {
+                confirmButton: '{{ session('button') }}'
+            }
+        });
+    </script>
+@endif
     <div class="container">
         <div class="row">
             <div class="col-12 d-flex justify-content-center align-items-center">

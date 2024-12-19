@@ -22,7 +22,13 @@ class ClienteService implements ClienteServiceInterface
 
     public function createCliente($nombre,$apePaterno,$apeMaterno,$tipoDoc,$numeroDoc,$telefono,$correo)
     {
-        if(isset($nombre) && isset($tipoDoc) && isset($numeroDoc)){
+        $message = 'Faltan Datos';
+        if(!empty($nombre) && !empty($tipoDoc) && !empty($numeroDoc)){
+            $validate = $this->clienteRepository->validateDuplicity($tipoDoc,$numeroDoc);
+            if($validate){
+                $message = 'Cliente ya registrado en la base de datos.';
+                return $message;
+            }
             $data = ['idCliente' => $this->getNewIdCliente(),
                     'nombre' => $nombre,
                     'apellidoPaterno' => $apePaterno,
@@ -31,9 +37,12 @@ class ClienteService implements ClienteServiceInterface
                     'idTipoDocumento' => $tipoDoc,
                     'telefono' => $telefono,
                     'correo' => $correo];
-            return $this->clienteRepository->create($data);
+
+            $response = $this->clienteRepository->create($data);
+            $message = 'Cliente '.$response->numeroDocumento.' Registrado';
+            return $message;
         }
-        return null;
+        return $message;
     }
 
     public function paginateAllCliente($cant){

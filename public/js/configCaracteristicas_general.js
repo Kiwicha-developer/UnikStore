@@ -170,11 +170,11 @@ function sendDataToRemoveSugerencia(idSugerencia,tipo) {
             let itemSugerencia = document.getElementById('item-sugerencia-' + data.idSugerencia);
             itemSugerencia.innerHTML = '';
             createItemSugerencia(itemSugerencia,data);
-            alertBootstrap('Sugerencia '+ data.sugerencia + ' ' + (tipo == 'DELETE' ? 'eliminada' : 'restaurada') +' exitosamente' , 'success')
+            alertBootstrap('Sugerencia '+ data.sugerencia + ' ' + (tipo == 'DELETE' ? 'eliminada' : 'restaurada') +' exitosamente' , 'success');
         }) 
         .catch(error => {
             console.log('error: ' + error);
-            alertBootstrap('error: ' + error, 'danger')
+            alertBootstrap('error: ' + error, 'danger');
         });
     }
 }

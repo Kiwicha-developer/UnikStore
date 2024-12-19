@@ -7,7 +7,7 @@
     <br>
     <div class="row">
         <div class="col-8">
-            <h2>Productos en Garant&iacute;a</h2>
+            <h2>Productos en Garant&iacute;a <i class="bi bi-award"></i></h2>
         </div>
         <div class="col-4 text-end">
             <a class="btn btn-success" href="{{route('creategarantia')}}" target="_blank">Nueva garant&iacute;a</a>

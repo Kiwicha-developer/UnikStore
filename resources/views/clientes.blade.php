@@ -10,7 +10,7 @@
             <h2><i class="bi bi-person-standing"></i> Clientes</h2>
         </div>
         <div class="col-4 text-end">
-            <x-btn_modal_cliente :clases="'btn-success'"  :documentos="$tipoDocumentos"/>
+            <x-btn_modal_cliente :clases="'btn-success'" :spanClass="''" :documentos="$tipoDocumentos"/>
         </div>
     </div>
     <br>
@@ -53,7 +53,7 @@
                                 <div class="col-2">
                                     <small>{{$cli->apellidoPaterno.' '.$cli->apellidoMaterno}}</small>
                                 </div>
-                                <div class="col-1">
+                                <div class="col-1 text-truncate">
                                     <small>{{$cli->TipoDocumento->descripcion}}</small>
                                 </div>
                                 <div class="col-2">

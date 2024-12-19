@@ -145,6 +145,27 @@
     box-shadow: 0 0 0 0.2rem rgba(103, 64, 161, 0.5) !important;
 }
 
+.btn-outline-success {
+    color: #00b1b9 !important;
+    border-color: #00b1b9 !important;
+}
+
+.btn-outline-success:hover {
+    color: white !important;
+    background-color: #00b1b9 !important;
+    border-color: #00b1b9 !important;
+}
+
+.btn-outline-success:active {
+    color: #ffffff !important;
+    background-color: #04868d !important;
+    border-color: #04868d !important;
+}
+
+.btn-outline-success:focus {
+    box-shadow: 0 0 0 0.2rem rgba(12, 227, 255, 0.5) !important;
+}
+
 .btn-outline-warning {
     color: #6740a1 !important;
     border-color: #6740a1 !important;
