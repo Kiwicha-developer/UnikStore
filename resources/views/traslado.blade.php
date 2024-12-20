@@ -17,7 +17,7 @@
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control" placeholder="Serial Number..." id="search">
                 <div class="input-group-text">
-                    <x-scan_check :clases="'form-check-input mt-0'" :idInput="'search'"/>
+                    <x-scan_check :clases="'form-check-input scan-check mt-0'" :idInput="'search'"/>
                 </div>
                 <ul class="list-group w-100" style="position:absolute;top:100%;z-index:1000" id="suggestions">
                 </ul>

@@ -23,8 +23,8 @@
 
 <body style="position: relative">
     @if (session('title') && session('message') && session('icon') && session('button'))
-        <script>
-            Swal.fire({
+    <script>
+        Swal.fire({
                 title: '{{ session('title') }}!',
                 text: '{{ session('message') }}',
                 icon: '{{ session('icon') }}',
@@ -34,9 +34,9 @@
                     confirmButton: '{{ session('button') }}'
                 }
             });
-        </script>
+    </script>
     @endif
-    
+
     <header style="position:sticky;top:0;z-index:1001">
         <div class="text-light bg-sistema-uno">
             <div class="container">
@@ -48,8 +48,8 @@
                         </a>
                     </div>
                     <div class="col-4 col-lg-9 d-flex justify-content-start align-items-center">
-                        <img class="d-none d-lg-block" alt="logo"
-                            src="{{ asset('storage/logos/logosysfondo.webp') }}" style="width:50px">
+                        <img class="d-none d-lg-block" alt="logo" src="{{ asset('storage/logos/logosysfondo.webp') }}"
+                            style="width:50px">
                         <h5 class="d-none d-lg-flex justify-content-start align-items-center mb-0 h-100">Unik Technology
                             &nbsp;<span class="text-secondary"> v1.21.1</span></h5>
                     </div>
@@ -99,8 +99,7 @@
             aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
                 <div class="d-flex justify-content-start d-sm-none">
-                    <img alt="logo" src="{{ asset('storage/logos/logosysfondo.webp') }}"
-                    style="width:50px">
+                    <img alt="logo" src="{{ asset('storage/logos/logosysfondo.webp') }}" style="width:50px">
                     <div class="row d-block">
                         <h5 class="mb-0 text-light">Unik Technology
                         </h5>
@@ -117,68 +116,65 @@
                             class="btn text-light">Dashboard <i class="bi bi-house-fill"></i></a></li>
                     <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('calculadora') }}"
                             class="btn text-light">Calculadora <i class="bi bi-calculator"></i></a></li>
-                            @php
-                            $order = [2, 3, 1, 4, 5, 12, 6, 7]; // Orden personalizado
-                        @endphp
-                        
-                        @foreach ($order as $idVista)
-                            @php
-                                $access = $user->Accesos->firstWhere('idVista', $idVista);
-                            @endphp
-                            @if ($access)
-                                @switch($access->idVista)
-                                    @case(1)
-                                        <li class="list-group-item bg-sistema-uno menu-border"><a
-                                                href="{{ route('publicaciones', [now()->format('Y-m')]) }}"
-                                                class="btn text-light">Publicaciones <i class="bi bi-megaphone-fill"></i></a></li>
-                                    @break
-                        
-                                    @case(2)
-                                        <li class="list-group-item bg-sistema-uno menu-border"><a
-                                                href="{{ route('productos', [encrypt(1), encrypt(1)]) }}"
-                                                class="btn text-light">Productos <i class="bi bi-box-fill"></i></a></li>
-                                    @break
-                        
-                                    @case(3)
-                                        <li class="list-group-item bg-sistema-uno menu-border"><a
-                                                href="{{ route('documentos', [now()->format('Y-m')]) }}"
-                                                class="btn text-light">Registros <i class="bi bi-folder-fill"></i></a></li>
-                                    @break
-                        
-                                    @case(4)
-                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('plataformas') }}"
-                                                class="btn text-light">Plataformas <i class="bi bi-shop"></i></a></li>
-                                    @break
-                        
-                                    @case(5)
-                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('publicidad') }}"
-                                                class="btn text-light">Web <i class="bi bi-globe"></i></a></li>
-                                    @break
-                        
-                                    @case(12)
-                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('clientes') }}"
-                                                class="btn text-light">Clientes <i class="bi bi-person-standing"></i></a></li>
-                                    @break
-                        
-                                    @case(6)
-                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('usuarios') }}"
-                                                class="btn text-light">Usuarios <i class="bi bi-person-fill"></i></a></li>
-                                    @break
-                        
-                                    @case(7)
-                                        <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('configweb') }}"
-                                                class="btn text-light">Configuraci&oacuten <i class="bi bi-gear-fill"></i></a></li>
-                                    @break
-                                @endswitch
-                            @endif
-                        @endforeach
-                        
+                    @php
+                    $order = [2, 1, 4, 5, 3, 6, 7]; // Orden personalizado
+                    @endphp
+
+                    @foreach ($order as $idVista)
+                    @php
+                    $access = $user->Accesos->firstWhere('idVista', $idVista);
+                    @endphp
+                    @if ($access)
+                    @switch($access->idVista)
+                    @case(1)
+                    <li class="list-group-item bg-sistema-uno menu-border"><a
+                            href="{{ route('publicaciones', [now()->format('Y-m')]) }}"
+                            class="btn text-light">Publicaciones <i class="bi bi-megaphone-fill"></i></a></li>
+                    @break
+
+                    @case(2)
+                    <li class="list-group-item bg-sistema-uno menu-border"><a
+                            href="{{ route('productos', [encrypt(1), encrypt(1)]) }}" class="btn text-light">Productos
+                            <i class="bi bi-box-fill"></i></a></li>
+                    <li class="list-group-item bg-sistema-uno menu-border"><a
+                        href="{{ route('documentos', [now()->format('Y-m')]) }}" class="btn text-light">Registros <i
+                            class="bi bi-folder-fill"></i></a></li>
+                    @break
+
+                    @case(4)
+                    <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('plataformas') }}"
+                            class="btn text-light">Plataformas <i class="bi bi-shop"></i></a></li>
+                    @break
+
+                    @case(5)
+                    <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('publicidad') }}"
+                            class="btn text-light">Web <i class="bi bi-globe"></i></a></li>
+                    @break
+
+                    @case(3)
+                    <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('clientes') }}"
+                            class="btn text-light">Clientes <i class="bi bi-person-standing"></i></a></li>
+                    @break
+
+                    @case(6)
+                    <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('usuarios') }}"
+                            class="btn text-light">Usuarios <i class="bi bi-person-fill"></i></a></li>
+                    @break
+
+                    @case(7)
+                    <li class="list-group-item bg-sistema-uno menu-border"><a href="{{ route('configweb') }}"
+                            class="btn text-light">Configuraci&oacuten <i class="bi bi-gear-fill"></i></a></li>
+                    @break
+                    @endswitch
+                    @endif
+                    @endforeach
+
                 </ul>
             </div>
         </div>
     </nav>
     <main class="content" style="position: relative">
-        
+
         @yield('content')
 
         <!-- Modal -->
@@ -190,17 +186,14 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title " id="modalNewPassLabel">Reestablecer contraseña</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-12 mb-2">
-                                    <input type="hidden" name="id" value="" class="form-control"
-                                        id="id-modal-password">
+                                    <input type="hidden" name="id" value="" class="form-control" id="id-modal-password">
                                     <label class="form-label">Nueva contraseña</label>
-                                    <input type="password" name="pass" class="form-control"
-                                        id="pass-modal-password">
+                                    <input type="password" name="pass" class="form-control" id="pass-modal-password">
                                     <small id="passwordError" class="text-danger"></small>
                                 </div>
                                 <div class="col-12">
@@ -236,24 +229,21 @@
                     <div class="modal-content ">
                         <div class="modal-header">
                             <h5 class="modal-title " id="bandejaModalLabel">Pendientes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row" style="height: 300px">
-                                <div class="col-md-12 h-100" >
-                                    <input type="hidden" name="id" value="" class="form-control"
-                                        id="id-modal-bandeja">
+                                <div class="col-md-12 h-100">
+                                    <input type="hidden" name="id" value="" class="form-control" id="id-modal-bandeja">
                                     <input type="hidden" name="bandeja" id="bandeja-input" value="">
-                                    <div id="text-bandeja" class="row h-75" style="width: 100%; overflow-y: auto;"> 
+                                    <div id="text-bandeja" class="row h-75" style="width: 100%; overflow-y: auto;">
                                         {!! $user->bandeja !!}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary"><i class="bi bi-floppy-fill"></i>
                                 Actualizar</button>
                         </div>
@@ -267,4 +257,5 @@
     @stack('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
+
 </html>

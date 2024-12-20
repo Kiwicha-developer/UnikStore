@@ -13,16 +13,26 @@
             <h2>Nuevo egreso</h2>
         </div>
         <div class="col-7 col-md-5 mb-2" style="position:relative">
-            <div class="input-group mt-1">
-                <input type="text" oninput="searchRegistro(this)" name="serialnumber"
-                placeholder="Serial Number" class="form-control input-egreso"
-                id="input-serial-number">
-                <x-btn-scan :class="'btn-outline-warning'" :spanClass="'d-none'" :onClick="''" />
+            <div class="row">
+                <div class="col-12">
+                    <div class="input-group mt-1">
+                        <input type="text" oninput="searchRegistro(this)" name="serialnumber"
+                        placeholder="Serial Number" class="form-control input-egreso"
+                        id="input-serial-number">
+                        <div class="input-group-text">
+                            <x-scan_check :clases="'form-check-input scan-check mt-0'" :idInput="'input-serial-number'"/>
+                        </div>
+                    </div>
+                    <input type="hidden" value="" name="idregistro"
+                        id="hidden-product-serial-number">
+                    <ul class="list-group" id="suggestions-serial-number" name="idregistro"
+                        style="position:absolute;z-index:1000;top:100%;left:0;width:100%"></ul>
+                </div>
+                <div class="col-12 text-end">
+                    <small class="text-secondary">scanner</small>
+                </div>
             </div>
-            <input type="hidden" value="" name="idregistro"
-                id="hidden-product-serial-number">
-            <ul class="list-group" id="suggestions-serial-number" name="idregistro"
-                style="position:absolute;z-index:1000;top:100%;left:0;width:100%"></ul>
+            
         </div>
     </div>
     <br>
@@ -42,12 +52,13 @@
                 <input type="text" oninput="searchPublicacion(this)" name="sku"
                     class="form-control input-egreso" id="input-sku-egreso"
                     placeholder="SKU de una publicacion">
-                <input type="hidden" id="hidden-publicacion-sku" name="idpublicacion" class="cab-form"
-                    value="" required>
                 <div class="input-group-text">
                     <input class="form-check-input mt-0" type="checkbox" id="check-sku-egreso"
                         value="No aplica">
                 </div>
+                <input type="hidden" id="hidden-publicacion-sku" name="idpublicacion" class="form-control cab-form"
+                    value="" required>
+                
                 <ul class="list-group" id="suggestions-sku"
                     style="position:absolute;z-index:1000;top:100%;left:0;width:100%"></ul>
             </div>
@@ -80,7 +91,6 @@
     </div>
     </form>
 </div>
-<x-scanner :multiple="true"/>
 <script>
     window.assetUrl = "{{ asset('storage/') }}"; 
 </script>

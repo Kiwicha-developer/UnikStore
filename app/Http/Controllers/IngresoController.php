@@ -31,7 +31,7 @@ class IngresoController extends Controller
         $userModel = $this->headerService->getModelUser();
         
         foreach($userModel->Accesos as $acceso){
-            if($acceso->idVista == 8){
+            if($acceso->idVista == 2){
                 Carbon::setLocale('es');
                 $fechacompleta = $month. '-01';
                 $carbonMonth = Carbon::createFromFormat('Y-m-d', $fechacompleta);
@@ -173,7 +173,7 @@ class IngresoController extends Controller
         $observacion =  $request->input('observacion');
 
         foreach($userModel->Accesos as $acceso){
-            if($acceso->idVista == 8){
+            if($acceso->idVista == 2){
                 if(isset($idRegistro)){
                     $this->ingresoService->updateRegistro($idRegistro,$estado,$observacion);
                 }

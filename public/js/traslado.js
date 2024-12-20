@@ -31,7 +31,7 @@ document.getElementById('search').addEventListener('input', function () {
                     liItem.appendChild(rowItem);
 
                     liItem.addEventListener('click',function(){
-                        addProductoSerial(item);
+                        addProductoSerial(item,query);
                         suggestionUl.innerHTML = '';
                         hiddenBody.style.display = 'none';
                         inputQuery.value = item.numeroSerie;
@@ -61,7 +61,7 @@ function searchCodeToController(query) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             data = JSON.parse(xhr.responseText);
-            addProductoSerial(data);
+            addProductoSerial(data,query);
         }
     };
     xhr.send();
@@ -69,10 +69,10 @@ function searchCodeToController(query) {
 }
 
 
-function addProductoSerial(object) {
+function addProductoSerial(object,query) {
     console.log(object);
     if (object == null || Object.keys(object).length == 0) {
-        alertBootstrap('Producto no registrado','warning');
+        alertBootstrap('Producto '+query+' no encontrado','warning');
         return;
     }
     if (validateDuplicity(object.Registro.numeroSerie)) {

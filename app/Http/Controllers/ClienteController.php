@@ -41,4 +41,9 @@ class ClienteController extends Controller
             return response()->json($response);
         }
     }
+
+    public function searchCliente(Request $request){
+        $response = $this->clienteService->searchAjaxCLiente($request->query('query'));
+        return response()->json($response);
+    }
 }

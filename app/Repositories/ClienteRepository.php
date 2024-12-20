@@ -28,6 +28,11 @@ class ClienteRepository implements ClienteRepositoryInterface
         return Cliente::where('idTipoDocumento','=',$type)->where('numeroDocumento','=',$number)->first();
     }
 
+    public function searchCliente($doc,$cant)
+    {
+        return Cliente::where('numeroDocumento','LIKE','%'.$doc.'%')->take($cant)->get();
+    }
+
     public function create(array $data)
     {
         return Cliente::create($data);

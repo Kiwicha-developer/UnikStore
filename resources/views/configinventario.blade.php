@@ -96,11 +96,11 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label for="" class="form-label">Raz&oacute;n Social:</label>
-                        <input type="text" class="form-control" value="" name="razonsocial" required>
+                        <input type="text" class="form-control" value="" name="razonsocial" placeholder="EMPRESA S.A.C" required>
                     </div>
                     <div class="col-md-6">
                         <label for="" class="form-label">Nombre Comercial:</label>
-                        <input type="text" class="form-control" value="" name="nombrecomercial" required>
+                        <input type="text" class="form-control" value="" name="nombrecomercial" placeholder="Nombre Empresa" required>
                     </div>
                     <div class="col-md-6">
                         <label for="" class="form-label">RUC:</label>

@@ -10,7 +10,7 @@
             <h2><i class="bi bi-person-standing"></i> Clientes</h2>
         </div>
         <div class="col-4 text-end">
-            <x-btn_modal_cliente :clases="'btn-success'" :spanClass="''" :documentos="$tipoDocumentos"/>
+            <x-btn_modal_cliente :clases="'btn-success'" :spanClass="''"/>
         </div>
     </div>
     <br>
@@ -73,4 +73,12 @@
         @endif
     </div>
 </div>
+<x-modal_new_cliente :documentos="$tipoDocumentos"/>
+<script>
+document.getElementById('btn-modal-new-cliente').addEventListener('click',function(x){
+    setTimeout(function(){
+        window.location.reload();
+    },500);
+});
+</script>
 @endsection

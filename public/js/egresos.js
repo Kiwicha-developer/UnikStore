@@ -207,6 +207,4 @@ function stringDate(date){
     return `${day}/${month}/${year}`;
 } 
 
-function closeEgresoModal(){
-}
 

@@ -30,7 +30,7 @@ class EgresoController extends Controller
         
         //variables propias del controlador
         foreach($userModel->Accesos as $acceso){
-            if($acceso->idVista == 9){
+            if($acceso->idVista == 2){
                 Carbon::setLocale('es');
                 $carbonMonth = Carbon::createFromFormat('Y-m', $month);
                 $egresos = $this->egresoService->getEgresosByMonth($month,150);
@@ -130,6 +130,13 @@ class EgresoController extends Controller
     public function searchRegistro(Request $request){
         $query = $request->input('query');
         $results = $this->egresoService->searchAjaxRegistro($query);
+    
+        return response()->json($results);
+    }
+
+    public function getOneRegistro(Request $request){
+        $query = $request->input('query');
+        $results = $this->egresoService->getOneAjaxRegistro($query);
     
         return response()->json($results);
     }

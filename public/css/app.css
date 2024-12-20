@@ -345,3 +345,38 @@
     color: white;
     pointer-events: none;
 }
+
+/* Estilo base para form-check-input */
+.scan-check {
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+/* Estilo cuando el input está enfocado */
+.scan-check:focus {
+    border-color: #9900ff;
+    box-shadow: 0 0 0 0.2rem rgba(183, 0, 255, 0.25);
+}
+
+/* Estilo cuando el input está marcado */
+.scan-check:checked {
+    background-color: #a200ff;
+    border-color: #ae00ff;
+}
+
+/* Estilo cuando el input está deshabilitado */
+.scan-check:disabled {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+/* Estilo cuando el input está en hover */
+.scan-check:hover {
+    background-color: #4f04ff;
+    border-color: #adb5bd;
+}
+
+.scan-check:active {
+    background-color: #9500b3;
+    border-color: #85006f;
+}

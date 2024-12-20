@@ -57,7 +57,7 @@ class DocumentoController extends Controller
                 ]);
             }
 
-            if($acceso->idVista == 3 && !$bool){
+            if($acceso->idVista == 2 && !$bool){
                 return view('documento',['user' => $userModel,
                 'documento' => $documento,
                 'ubicaciones' => $ubicaciones,
@@ -78,7 +78,7 @@ class DocumentoController extends Controller
         $userModel = $this->headerService->getModelUser();
         
         foreach($userModel->Accesos as $acceso){
-            if($acceso->idVista == 3){
+            if($acceso->idVista == 2){
                 $carbonMonth = Carbon::createFromFormat('Y-m-d', $date . '-01');
                 $documentos = $this->comprobanteService->getByMonth($date,15,$request->query('filtro'))->appends($request->all());
 

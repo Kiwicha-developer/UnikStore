@@ -22,7 +22,6 @@ class ClienteService implements ClienteServiceInterface
 
     public function createCliente($nombre,$apePaterno,$apeMaterno,$tipoDoc,$numeroDoc,$telefono,$correo)
     {
-        $message = 'Faltan Datos';
         if(!empty($nombre) && !empty($tipoDoc) && !empty($numeroDoc)){
             $validate = $this->clienteRepository->validateDuplicity($tipoDoc,$numeroDoc);
             if($validate){
@@ -38,15 +37,19 @@ class ClienteService implements ClienteServiceInterface
                     'telefono' => $telefono,
                     'correo' => $correo];
 
-            $response = $this->clienteRepository->create($data);
-            $message = 'Cliente '.$response->numeroDocumento.' Registrado';
-            return $message;
+            $this->clienteRepository->create($data);
+            $response = $this->clienteRepository->getOne('idCliente',$data['idCliente'])->load('TipoDocumento');
+            return $response;
         }
-        return $message;
+        return null;
     }
 
     public function paginateAllCliente($cant){
         return $this->clienteRepository->all($cant);
+    }
+
+    public function searchAjaxCLiente($doc){
+        return $this->clienteRepository->searchCliente($doc,5)->load('TipoDocumento');
     }
 
     private function getNewIdCliente(){

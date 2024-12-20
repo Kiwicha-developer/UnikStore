@@ -52,11 +52,35 @@ class EgresoProductoService implements EgresoProductoServiceInterface
                             'numeroSerie' => $details->numeroSerie,
                             'estado' => $details->estado,
                             'modelo' => $details->DetalleComprobante->Producto->modelo,
-                            'image' => $details->DetalleComprobante->Producto->imagenProducto1
+                            'image' => $details->DetalleComprobante->Producto->imagenProducto1,
+                            'marca' => $details->DetalleComprobante->Producto->MarcaProducto->nombreMarca
                         ];
                     });
         return $result;
     }
+
+    public function getOneAjaxRegistro($serial){
+        $egreso = $this->registroRepository->getByEgreso($serial);
+    
+        if ($egreso) {
+            $details = $egreso->DetalleComprobante->Producto; 
+            
+            $result = [
+                'nombreProducto' => $details->nombreProducto,
+                'codigoProducto' => $details->codigoProducto,
+                'idRegistroProducto' => $egreso->idRegistro,
+                'numeroSerie' => $egreso->numeroSerie,
+                'estado' => $egreso->estado,
+                'modelo' => $details->modelo,
+                'image' => $details->imagenProducto1,
+                'marca' => $details->MarcaProducto->nombreMarca
+            ];
+            return $result;
+        }
+        
+        return [];
+    }
+    
     
     public function searchAjaxEgreso($serie,$cant){
         $egresos = $this->egresoRepository->getEgresoBySerial($serie,$cant);

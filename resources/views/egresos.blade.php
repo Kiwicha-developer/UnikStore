@@ -37,7 +37,11 @@
             </div>
 
             <div class="col-2 col-md-4 text-end">
-                <a class="btn btn-success" href="{{route('createegreso')}}" target="_blank"><i class="bi bi-plus-lg"></i><span class="d-none d-md-inline"> Nuevo Egreso</span> </a>
+                @foreach ($user->Accesos as $vista)
+                    @if($vista->idVista == 9)
+                    <a class="btn btn-success" href="{{route('createegreso')}}" target="_blank"><i class="bi bi-plus-lg"></i><span class="d-none d-md-inline"> Nuevo Egreso</span> </a>
+                    @endif
+                @endforeach
             </div>
         </div>
         <br>

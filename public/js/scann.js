@@ -31,6 +31,7 @@ function checkSerialChange(input,idInput){
     let inputSearch = document.getElementById(idInput);
 
     if(input.checked){
+        inputSearch.value = '';
         inputSearch.addEventListener('input', scannInput);
         inputSearch.focus();
     }else{

@@ -226,7 +226,7 @@ function changeCharEngToEs(inputText) {
 
     setTimeout(function(){
         alertPlaceholder.innerHTML = '';
-    },1500);
+    },2000);
 }
 
 

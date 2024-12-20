@@ -83,6 +83,7 @@ Route::middleware(['validate.session'])->group(function () {
     
     Route::get('/egresos/searchregistro', [EgresoController::class, 'searchRegistro'])->name('searchregistro');
     Route::get('/egresos/searchegreso', [EgresoController::class, 'searchEgreso'])->name('searchegreso');
+    Route::get('/egresos/getoneegreso', [EgresoController::class, 'getOneRegistro'])->name('getoneegreso');
     Route::get('/egresos/nuevosegresos', [EgresoController::class, 'create'])->name('createegreso');
     Route::get('/egresos/{month}', [EgresoController::class, 'index'])->name('egresos');
     Route::post('/egresos/insertegreso', [EgresoController::class, 'insertEgreso'])->name('insertegreso');
@@ -106,6 +107,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/searchpublicacion', [PublicacionController::class, 'searchPublicacion'])->name('searchpublicacion');
 
     Route::get('/clientes',[ClienteController::class,'index'])->name('clientes');
+    Route::get('/cliente/searchcliente',[ClienteController::class,'searchCliente'])->name('searchcliente');
     Route::post('/cliente/create',[ClienteController::class,'createCliente'])->name('createcliente');
     
     //Configuracion-WEB

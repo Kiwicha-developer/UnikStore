@@ -174,7 +174,7 @@ function searchRegistro(inputElement) {
                         suggestions.innerHTML =''; 
                         hiddenBody.style.display = 'none';
                         inputElement.style.zIndex = '1';
-                        createItem(item);
+                        createItem(item,query);
                         validateSubmit();
                     });
 
@@ -191,10 +191,19 @@ function searchRegistro(inputElement) {
     }
 }
 
-function createItem(object){
+function createItem(object,query){
+    if (object == null || Object.keys(object).length == 0) {
+        alertBootstrap('Producto '+query+' no encontrado','warning');
+        return;
+    }
+
+    if(validateSerialById(object.idRegistroProducto)){
+        alertBootstrap('Producto ' + object.numeroSerie + ' ya agregado', 'warning');
+        return;
+    }
     itemEgresoDiv;
     let divRowItem = createDiv(['row','pt-2','pb-2','border'],null);
-    let inputHidden = createInput(['body-form'],null,'hidden',object.idRegistroProducto,'idregistros[]');
+    let inputHidden = createInput(['body-form','hidden-form'],null,'hidden',object.idRegistroProducto,'idregistros[]');
     let divColImg = createDiv(['col-1'],null);
     let divColContent = createDiv(['col-11'],null);
     let divRowContent = createDiv(['row'],null);
@@ -239,6 +248,15 @@ function createItem(object){
     itemEgresoDiv.appendChild(divRowItem);
 }
 
+function validateSerialById(id) {
+    let inputHidden = document.querySelectorAll('.hidden-form');
+
+    return Array.from(inputHidden).some(function(x) {
+        return x.value == id;
+    });
+}
+
+
 function validateSubmit() {
     let validate = true;
     let inputsCab = document.querySelectorAll('.cab-form');
@@ -257,6 +275,24 @@ function validateSubmit() {
     btnSubmitCreateEgreso.disabled = !validate; 
 }
 
+function scanOperations(){
+    searchCodeToController(getSerial());
+}
+
+function searchCodeToController(query) {
+    let data = null;
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', `/egresos/getoneegreso?query=${query}`, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            data = JSON.parse(xhr.responseText);
+            createItem(data,query);
+        }
+    };
+    xhr.send();
+    return data;
+}
+
 
 document.getElementById('check-sku-egreso').addEventListener('change', checkSku);
 document.getElementById('check-sku-egreso').addEventListener('change', validateSubmit);
@@ -267,8 +303,3 @@ document.addEventListener('DOMContentLoaded',function(){
     });
     validateSubmit();
 })
-
-document.getElementById('btn-list-scan-codes').addEventListener('click', function () {
-
-    console.log(getSerials());
-});
