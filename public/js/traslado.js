@@ -13,6 +13,7 @@ document.getElementById('search').addEventListener('input', function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 hiddenBody.style.display = 'block';
                 data = JSON.parse(xhr.responseText);
+                suggestionUl.innerHTML = ''; 
 
                 data.forEach(item => {
                     let liItem = createLi(['list-group-item','hover-sistema-uno'], null);

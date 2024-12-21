@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Services\GarantiaServiceInterface;
 use App\Services\HeaderServiceInterface;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+use function PHPUnit\Framework\isNull;
 
 class GarantiaController extends Controller
 {
@@ -35,5 +38,32 @@ class GarantiaController extends Controller
 
         return view('creategarantia',['user' => $userModel,
                                     'tipoDocumentos' => $tipoDocumentos]);
+    }
+
+    public function insertGarantia(Request $request){
+        $idRegistro = $request->input('idregistro');
+        $idCliente = $request->input('idcliente');
+        $nroComprobante = $request->input('numerocomprobante');
+        $recepcion = $request->input('recepcion');
+        $estado = $request->input('estado');
+        $falla = $request->input('falla');
+
+        if(!empty($idRegistro) && !empty($idCliente)){
+            if(empty($nroComprobante)){
+                $this->headerService->sendFlashAlerts('Ocurrio un error','Hubo un error con el numero de comprobante','danger','btn-danger');
+                return back();
+            }
+
+            if(empty($recepcion) || empty($estado) || empty($falla)){
+                $this->headerService->sendFlashAlerts('Ocurrio un error','Faltan datos en el detalle de la garantia','danger','btn-danger');
+                return back();
+            }
+
+            $this->garantiaService->insertGarantia($idRegistro,$idCliente,$nroComprobante,$recepcion,$estado,$falla);
+            $this->headerService->sendFlashAlerts('Operacion Exitosa','Se creo una nueva garantia','success','btn-success');
+            return back();
+        }
+        $this->headerService->sendFlashAlerts('Ocurrio un error','Hubo un error en la operación','danger','btn-danger');
+        return back();
     }
 }

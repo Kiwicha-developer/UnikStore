@@ -18,6 +18,14 @@ class GarantiaRepository implements GarantiaRepositoryInterface
         return Garantia::whereMonth('fechaGarantia',$date->month)->paginate($cant);
     }
 
+    public function create(array $data){
+        return Garantia::create($data);
+    }
+
+    public function getLast(){
+        return Garantia::orderBy('idGarantia','desc')->first();
+    }
+
     private function validateColumns($column){
         if (!in_array($column, $this->modelColumns)) {
             throw new \InvalidArgumentException("La columna '$column' no es válida.");

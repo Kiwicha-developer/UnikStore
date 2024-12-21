@@ -37,4 +37,17 @@ class PdfController extends Controller
         
         return $pdf->stream('reporte_stock_'.$fechaActual.'.pdf');
     }
+
+    public function seriesByProductPdf($idProducto)
+    {
+        $producto = $this->pdfService->getOneProduct($idProducto);
+        $registros = $this->pdfService->getSerialsByProduct($idProducto);
+
+        $data = ['title' => 'Series en existencia',
+                'producto' => $producto,
+                'registros' => $registros];
+        $pdf = Pdf::loadView('pdf.series_by_products', $data);
+        
+        return $pdf->stream('Series_disponibles_'.$producto->codigoProducto.'.pdf');
+    }
 }

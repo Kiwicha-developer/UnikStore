@@ -91,6 +91,7 @@ Route::middleware(['validate.session'])->group(function () {
 
     Route::get('/garantia/creategarantia',[GarantiaController::class,'create'])->name('creategarantia');
     Route::get('/garantias/{date}',[GarantiaController::class,'index'])->name('garantias');
+    Route::post('/garantia/insertgarantia',[GarantiaController::class,'insertGarantia'])->name('insertgarantia');
     
     Route::get('/plataformas', [PlataformaController::class, 'index'])->name('plataformas');
     Route::post('/plataforma/updatecuenta', [PlataformaController::class, 'updateCuentas'])->name('updatecuenta');
@@ -143,6 +144,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::post('/configuracion/createproveedor', [ConfiguracionController::class, 'createProveedor'])->name('createproveedor');
 
     Route::get('/generateSerialPdf/{idDocumento}', [PdfController::class, 'generateSerialPdf'])->name('generarSeriesPdf');
+    Route::get('/pdf/serialbyproduct/{idProducto}', [PdfController::class, 'seriesByProductPdf'])->name('seriesXProducto');
     Route::get('/reporteAlmacen', [PdfController::class, 'reportStockPdf'])->name('reportealmacen');
 });
 

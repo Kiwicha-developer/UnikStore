@@ -1,50 +1,51 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Garantia extends Model
 {
- 
-    protected $table = 'Garantia';
+   public $timestamps = false;
 
-    protected $guarded = ['idGarantia'];
-    
-    protected $primaryKey = 'idGarantia';
-    
-    protected $fillable = ['idGarantia',
-                            'idRegistro',
-                            'idCliente',
-                            'fechaGarantia',
-                            'numeroComprobante',
-                            'recepcion',
-                            'estado',
-                            'falla'
-                            ];
+   protected $table = 'Garantia';
 
-    
-    protected $hidden = [
-        
-    ];
+   protected $guarded = ['idGarantia'];
 
-    
-    protected $casts = [
-        'idGarantia' => 'int',
-        'idRegistro' => 'int',
-        'idCliente' => 'int',
-        'fechaGarantia' => 'date'
-    ];
-    /**
-     * Obtener las relaciones del modelo.
-     */
-    
-     public function Cliente()
-     {
-        return $this->belongsTo(Cliente::class,'idCliente','idCliente');
-     }
+   protected $primaryKey = 'idGarantia';
 
-     public function RegistroProducto()
-     {
-        return $this->belongsTo(RegistroProducto::class,'idRegistro','idRegistro');
-     }
+   protected $fillable = [
+      'idGarantia',
+      'idRegistro',
+      'idCliente',
+      'fechaGarantia',
+      'numeroComprobante',
+      'recepcion',
+      'estado',
+      'falla'
+   ];
+
+
+   protected $hidden = [];
+
+
+   protected $casts = [
+      'idGarantia' => 'int',
+      'idRegistro' => 'int',
+      'idCliente' => 'int',
+      'fechaGarantia' => 'date'
+   ];
+   /**
+    * Obtener las relaciones del modelo.
+    */
+
+   public function Cliente()
+   {
+      return $this->belongsTo(Cliente::class, 'idCliente', 'idCliente');
+   }
+
+   public function RegistroProducto()
+   {
+      return $this->belongsTo(RegistroProducto::class, 'idRegistro', 'idRegistro');
+   }
 }

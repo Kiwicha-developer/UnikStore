@@ -10,6 +10,7 @@ use App\Repositories\AlmacenRepositoryInterface;
 use App\Repositories\CaracteristicasProductoRepositoryInterface;
 use App\Repositories\InventarioRepositoryInterface;
 use App\Repositories\ProveedorInventarioRepositoryInterface;
+use App\Repositories\RegistroProductoRepositoryInterface;
 use Exception;
 
 class ProductoService implements ProductoServiceInterface
@@ -23,6 +24,7 @@ class ProductoService implements ProductoServiceInterface
     protected $inventarioRepository;
     protected $proveedorInventarioRepository;
     protected $caracteristicasProductoRepository;
+    protected $registroRepository;
     
     private $path = '/home3/unikstor/public_html/images/productos';
 
@@ -34,7 +36,8 @@ class ProductoService implements ProductoServiceInterface
                                 AlmacenRepositoryInterface $almacenRepository,
                                 InventarioRepositoryInterface $inventarioRepository,
                                 ProveedorInventarioRepositoryInterface $proveedorInventarioRepository,
-                                CaracteristicasProductoRepositoryInterface $caracteristicasProductoRepository)
+                                CaracteristicasProductoRepositoryInterface $caracteristicasProductoRepository,
+                                RegistroProductoRepositoryInterface $registroRepository)
     {
         $this->productoRepository = $productoRepository;
         $this->marcaRepository = $marcaRepository;
@@ -45,6 +48,7 @@ class ProductoService implements ProductoServiceInterface
         $this->inventarioRepository = $inventarioRepository;
         $this->proveedorInventarioRepository = $proveedorInventarioRepository;
         $this->caracteristicasProductoRepository = $caracteristicasProductoRepository;
+        $this->registroRepository = $registroRepository;
     }
     
     public function getAllAlmacen(){

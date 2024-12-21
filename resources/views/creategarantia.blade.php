@@ -7,20 +7,21 @@
     <div class="bg-secondary" id="hidden-body" style="position:fixed;left:0;width:100vw;height:100vh;z-index:998;opacity:0.5;display:none">
     </div>
     <br>
-    <form action="" method="post" id="form-create-garantia">
+    <form action="{{route('insertgarantia')}}" method="post" id="form-create-garantia">
         @csrf
         <div class="row">
             <div class="col-8">
                 <h2>Nueva Garantia</h2>
             </div>
             <div class="col-4 text-end">
-                <input type="text" class="form-control" placeholder="Nro del comprobante.." required>
+                <input type="text" class="form-control body-form-garantia" placeholder="Nro del comprobante.." name="numerocomprobante" required>
             </div>
         </div>
         <br>
         <div class="row border shadow rounded-3 pt-3 pb-2">
             <div class="col-8 mb-3">
                 <h4>Datos del Cliente</h4>
+                <input type="hidden" value="" class="body-form-garantia" id="input-cliente-form-id" name="idcliente">
             </div>
             <div class="col-4 mb-3">
                 <div class="input-group" id="div-input-group-cliente" style="position: relative">
@@ -62,6 +63,7 @@
         <div class="row border shadow rounded-3 pt-3 pb-2">
             <div class="col-8 mb-1">
                 <h4>Datos del Producto</h4>
+                <input type="hidden" value="" class="body-form-garantia" id="input-producto-form-id" name="idregistro">
             </div>
             <div class="col-4 mb-1">
                 <div class="row">
@@ -105,21 +107,21 @@
             </div>
             <div class="col-6 mb-3">
                 <label class="form-label">Componentes Recepcionados:</label>
-                <textarea class="form-control" maxlength="100" required></textarea>
+                <textarea class="form-control body-form-garantia" maxlength="100" name="recepcion" required></textarea>
             </div>
             <div class="col-6 mb-3">
                 <label class="form-label">Estado F&iacute;sico:</label>
-                <textarea class="form-control" maxlength="100" required></textarea>
+                <textarea class="form-control body-form-garantia" maxlength="100" name="estado" required></textarea>
             </div>
             <div class="col-12 mb-3">
                 <label class="form-label">Falla Presentada:</label>
-                <textarea class="form-control" maxlength="100" required></textarea>
+                <textarea class="form-control body-form-garantia" maxlength="100" name="falla" required></textarea>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-12 text-center">
-                <button type="submit" class="btn btn-success" onclick="return confirm('¿Estas seguro de registrar?')">Registrar</button>
+                <button type="submit" id="btn-registrar-garantia" class="btn btn-success" onclick="return confirm('¿Estas seguro de registrar?')"><i class="bi bi-floppy-fill"></i> Registrar</button>
             </div>
         </div>
     </form>

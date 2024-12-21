@@ -5,6 +5,7 @@ let inputSearchCliente = document.getElementById('input-garantia-cliente');
 let inputSearchRegistro = document.getElementById('input-producto-serial');
 let divClienteInput = document.getElementById('div-input-group-cliente');
 let divRegistroInput = document.getElementById('div-input-group-registro');
+let btnRegistroGarantia = document.getElementById('btn-registrar-garantia');
 
     function searchCliente(query){
         let xhr = new XMLHttpRequest();
@@ -91,7 +92,7 @@ let divRegistroInput = document.getElementById('div-input-group-registro');
         let divColDoc = createDiv(['col-6'],null);
         divColDoc.innerHTML ='<small class="text-secondary">'+ object.numeroDocumento +'</small>';
 
-        let divColType = createDiv(['col-6',null]);
+        let divColType = createDiv(['col-6','text-end'],null);
         divColType.innerHTML = '<small class="text-secondary">'+ object.tipo_documento.descripcion +'</small>';
 
         itemLi.addEventListener('click',function(){
@@ -117,11 +118,15 @@ let divRegistroInput = document.getElementById('div-input-group-registro');
         let serie = document.getElementById('input-producto-form-serie');
         let marca = document.getElementById('input-producto-form-marca');
         let modelo = document.getElementById('input-producto-form-modelo');
-
+        let id = document.getElementById('input-producto-form-id');
+        
+        id.value = object.idRegistroProducto;
         nombre.value = object.nombreProducto;
         serie.value = object.numeroSerie;
         marca.value = object.marca;
         modelo.value = object.modelo;
+
+        validateInputs();
     }
 
     function viewClienteForm(object){
@@ -132,7 +137,9 @@ let divRegistroInput = document.getElementById('div-input-group-registro');
         let numeroDoc = document.getElementById('input-cliente-form-numDoc');
         let telefono = document.getElementById('input-cliente-form-telefono');
         let correo = document.getElementById('input-cliente-form-correo');
+        let id = document.getElementById('input-cliente-form-id');
 
+        id.value = object.idCliente;
         nombre.value = object.nombre;
         apePaterno.value = object.apellidoPaterno;
         apeMaterno.value = object.apellidoMaterno;
@@ -140,6 +147,8 @@ let divRegistroInput = document.getElementById('div-input-group-registro');
         numeroDoc.value = object.numeroDocumento;
         telefono.value = object.telefono;
         correo.value = object.correo;
+
+        validateInputs();
     }
 
     function clearView(){
@@ -150,6 +159,19 @@ let divRegistroInput = document.getElementById('div-input-group-registro');
 
     function scanOperations(){
         getOneRegistro(getSerial());
+    }
+
+    function validateInputs(){
+        let input = document.querySelectorAll('.body-form-garantia');
+        let inactive = false;
+
+        input.forEach(function(x){
+            if(x.value == ''){
+                inactive = true;
+            }
+        });
+
+        btnRegistroGarantia.disabled = inactive;
     }
 
     inputSearchCliente.addEventListener('input',function(){
@@ -192,5 +214,12 @@ let divRegistroInput = document.getElementById('div-input-group-registro');
         
     });
     
-    
+    document.addEventListener('DOMContentLoaded',function(){
+        validateInputs();
+    });
+
+    let bodyFormGarantia = document.querySelectorAll('textarea');
+    bodyFormGarantia.forEach(function(x){
+        x.addEventListener('input',validateInputs);
+    });
     

@@ -231,9 +231,25 @@
             <textarea name="descripcion" type="text" maxlength="5000" id="desc-producto" class="form-control input-edit" style=" width: 100%;max-height: 660px;overflow-y: auto;" oninput="autoResize(this)" disabled>{{ $producto->descripcionProducto }}</textarea>
         </div>
     </div>
-    <div class="row text-center">
-        <div class="col-12">
+    <div class="row ">
+        <div class="col-3">
+            @php
+                $totalInv = 0;
+            @endphp
+            @foreach ($producto->Inventario as $inv)
+                @php
+                    $totalInv += $inv->stock;
+                @endphp
+            @endforeach
+            @if($totalInv > 0)
+                <button class="btn btn-danger" onclick="reportSerials()"><i class="bi bi-file-earmark-pdf"></i> Series</button>
+            @endif
+        </div>
+        <div class="col-6 text-center">
             <button type="submit" class="btn btn-success" id="btnSave" disabled>Guardar <i class="bi bi-floppy"></i></button>
+        </div>
+        <div class="col-3">
+
         </div>
     </div>
     </form>
@@ -241,4 +257,10 @@
     <br>
 </div>
 <script src="{{ route('js.update-product-scripts',[$tc]) }}"></script>
+<script>
+    function reportSerials(){
+        var url = "{{route('seriesXProducto',[$producto->idProducto])}}";
+        window.open(url, '', 'width=800,height=600,scrollbars=yes,location=no,toolbar=no,status=no');
+    }
+</script>
 @endsection
