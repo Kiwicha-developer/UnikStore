@@ -107,6 +107,7 @@ use App\Services\ScriptService;
 use App\Services\ScriptServiceInterface;
 use App\Services\TrasladoService;
 use App\Services\TrasladoServiceInterface;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -174,6 +175,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Carbon::setLocale('es');
     }
 }

@@ -146,6 +146,7 @@ Route::middleware(['validate.session'])->group(function () {
     Route::get('/generateSerialPdf/{idDocumento}', [PdfController::class, 'generateSerialPdf'])->name('generarSeriesPdf');
     Route::get('/pdf/serialbyproduct/{idProducto}', [PdfController::class, 'seriesByProductPdf'])->name('seriesXProducto');
     Route::get('/reporteAlmacen', [PdfController::class, 'reportStockPdf'])->name('reportealmacen');
+    Route::get('/pdf/garantia/{idGarantia}', [PdfController::class, 'garantiaPdf'])->name('garantiaPdf');
 });
 
 

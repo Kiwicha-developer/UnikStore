@@ -40,8 +40,11 @@ class GarantiaService implements GarantiaServiceInterface
                 'estado' => $estado,
                 'falla' => $fallo
                 ];
+        
         $this->garantiaRepository->create($data);
         $this->updateStateGarantia($data['idRegistro']);
+        $response = $this->garantiaRepository->getOne($data['idGarantia']);
+        return $response;
     }
 
     private function updateStateGarantia($idGarantia){

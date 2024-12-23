@@ -346,44 +346,11 @@ function generatePlantilla(){
     XLSX.writeFile(wb, "plantilla_series.xlsx");
 }
 
-function validateSeries(idProveedor){
-    let inputSeries = document.querySelectorAll('.input-serial');
-    let series = [];
 
-    inputSeries.forEach(function(x){
-        series.push(x.value);
-    });
-
-    let seriesParams = series.map(s => `serial[]=${encodeURIComponent(s)}`).join('&');
-
-    let xhr = new XMLHttpRequest();
-        xhr.open('GET', `/documento/validateseries?${seriesParams}&proveedor=${idProveedor}`, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let data = JSON.parse(xhr.responseText);
-                if(data.valid){
-                    Swal.fire({
-                        title: 'Numeros de serie ya registrados!!',
-                        text: data.series,
-                        icon: 'warning',
-                        iconColor: '#00b1b9',
-                        confirmButtonText: 'Aceptar', 
-                        customClass: {
-                            confirmButton: 'btn-primary',  
-                        },
-                        reverseButtons: true
-                        });
-                }else{
-                    confirmForm();
-                }
-                console.log(typeof data.series);
-            }
-        };
-        xhr.send();
-}
-
-function confirmForm(){
+function confirmForm(event){
+    event.preventDefault();
     let formDocumento = document.getElementById('form-create-doc');
+    console.log(formDocumento.dataset.comprobante);
     Swal.fire({
     title: '!!No podras modificar el documento despues!!',
     text: '¿Estás seguro de que deseas continuar?',
@@ -399,9 +366,45 @@ function confirmForm(){
     reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            formDocumento.submit();
+            let formData = new FormData(formDocumento);
+            console.log(formData);
+            fetch(formDocumento.getAttribute('action'), {
+                method: 'POST', 
+                body: formData
+            })
+            .then(response => response.json())  // Esperamos la respuesta JSON
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: 'El documento se ha creado correctamente.',
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al crear el documento.',
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema con la solicitud.',
+                });
+            });
         }
     });
+}
+
+function logFormData(formData) {
+    // Crear un iterador sobre los datos del FormData
+    for (let [key, value] of formData.entries()) {
+        console.log(key + ": " + value); // Imprime el nombre del campo y su valor
+    }
 }
 
 function deleteForm(idComprobante){

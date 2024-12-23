@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Repositories\AlmacenRepositoryInterface;
 use App\Repositories\ComprobanteRepositoryInterface;
+use App\Repositories\GarantiaRepositoryInterface;
 use App\Repositories\ProductoRepositoryInterface;
 use App\Repositories\RegistroProductoRepositoryInterface;
 use Picqer\Barcode\BarcodeGeneratorPNG;
@@ -14,18 +15,21 @@ class PdfService implements PdfServiceInterface
     protected $almacenRepository;
     protected $generadorSeries;
     protected $registroRepository;
+    protected $garantiaRepository;
 
     public function __construct(ComprobanteRepositoryInterface $comprobanteRepository,
                                 ProductoRepositoryInterface $productoRepository,
                                 AlmacenRepositoryInterface $almacenRepository,
                                 BarcodeGeneratorPNG $generadorSeries,
-                                RegistroProductoRepositoryInterface $registroRepository)
+                                RegistroProductoRepositoryInterface $registroRepository,
+                                GarantiaRepositoryInterface $garantiaRepository)
     {
         $this->comprobanteRepository = $comprobanteRepository;
         $this->productoRepository =  $productoRepository;
         $this->almacenRepository = $almacenRepository;
         $this->generadorSeries = $generadorSeries;
         $this->registroRepository = $registroRepository;
+        $this->garantiaRepository = $garantiaRepository;
     }
     
     public function getSerialsPrint($idComprobante){
@@ -57,5 +61,9 @@ class PdfService implements PdfServiceInterface
 
     public function getOneProduct($idProducto){
         return $this->productoRepository->getOne('idProducto',$idProducto);
+    }
+    
+    public function getOneGarantia($idGarantia){
+        return $this->garantiaRepository->getOne($idGarantia);
     }
 }

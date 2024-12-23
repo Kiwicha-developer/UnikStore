@@ -50,4 +50,28 @@ class PdfController extends Controller
         
         return $pdf->stream('Series_disponibles_'.$producto->codigoProducto.'.pdf');
     }
+
+    public function garantiaPdf($idGarantia)
+    {
+        $garantia = $this->pdfService->getOneGarantia($idGarantia);
+
+        $cabRel = 'storage/cabecera_garantia.jpg';
+        $cabUrl = $this->getBase64Image($cabRel,'jpg');
+
+        $firmaRel = 'storage/firmaflor.png';
+        $firmaUrl = $this->getBase64Image($firmaRel,'png'); 
+
+        $data = ['title' => 'Registro Producto Garantía',
+                'garantia' => $garantia,
+                'cabecera' => $cabUrl,
+                'firma' => $firmaUrl];
+        $pdf = Pdf::loadView('pdf.garantia_pdf', $data);
+        return $pdf->stream('Garantia_Registro_'.(1000000 + $garantia->idGarantia).'.pdf');
+    }
+
+    private function getBase64Image($pathRel,$type){
+        $pathCab = public_path($pathRel);
+        $imgCab = base64_encode(file_get_contents($pathCab));
+        return 'data:image/'.$type.';base64,' . $imgCab;
+    }
 }

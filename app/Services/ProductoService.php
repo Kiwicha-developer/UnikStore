@@ -270,7 +270,7 @@ class ProductoService implements ProductoServiceInterface
     }
     
     public function validateDuplicySerial($id, $serial) {
-        return $this->productoRepository->validateSerial($id, $serial) !== null;
+        return $this->productoRepository->validateSerial($id, $serial);
     }
     
     public function updateInventory($idProduct,$array){

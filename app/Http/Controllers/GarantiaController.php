@@ -59,8 +59,9 @@ class GarantiaController extends Controller
                 return back();
             }
 
-            $this->garantiaService->insertGarantia($idRegistro,$idCliente,$nroComprobante,$recepcion,$estado,$falla);
-            $this->headerService->sendFlashAlerts('Operacion Exitosa','Se creo una nueva garantia','success','btn-success');
+            $result = $this->garantiaService->insertGarantia($idRegistro,$idCliente,$nroComprobante,$recepcion,$estado,$falla);
+
+            session()->flash('success_pdf', $result);
             return back();
         }
         $this->headerService->sendFlashAlerts('Ocurrio un error','Hubo un error en la operación','danger','btn-danger');

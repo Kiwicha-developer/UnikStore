@@ -86,9 +86,12 @@ class IngresoController extends Controller
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 8){
                 if($datacomprobante){
+                    dd($detalle);
+                    $validation = 
+
                     $this->comprobanteService->updateComprobante(decrypt($comprobante),$datacomprobante,$detalle);
                     
-                    return redirect()->route('documento', [$comprobante, 0]);
+                    return response()->json('funko');
                 }else{
                     
                     $this->headerService->sendFlashAlerts('Datos Faltantes','Revisa los campos','info','btn-warning');

@@ -164,19 +164,6 @@ class ComprobanteService implements ComprobanteServiceInterface
         return $comprobantes;
     }
 
-    public function validateSeriesAjax($idProveedor,array $data){
-        $series = array();
-        foreach($data as $serie){
-            if($serie != 0){
-                $find = $this->registroProductoRepository->validateSerie($idProveedor,$serie);
-                if($find){
-                    $series[] = $serie;
-                }
-            }
-        }
-        return $series;
-    }
-
     public function filtroUsuario($month){
         Carbon::setLocale('es');
         $fechacompleta = $month. '-01';

@@ -3,6 +3,40 @@
 @section('title', 'Nueva Garantia')
 
 @section('content')
+<script>
+    @if (session('success_pdf'))
+        @php
+            $garantia = session('success_pdf');
+        @endphp
+        Swal.fire({
+            icon: 'success',
+            title: '¡Operación Exitosa!',
+            text: " ",
+            showCancelButton: true, // Mostrar el botón "Cancelar"
+            confirmButtonText: 'Nuevo',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                    confirmButton: 'btn-success'
+                },
+            reverseButtons: true, // Invierte el orden de los botones
+            html: `
+                <!-- Aquí agregamos el botón PDF dentro del cuerpo de la alerta -->
+                <div class="text-center mt-3">
+                    <h6>Documento de garantía {{1000000 + $garantia->idGarantia}} registrado.</h6>
+                    <button class="btn btn-danger btn-sm" onclick="pdfGarantia('{{ route('garantiaPdf', [$garantia->idGarantia]) }}')">
+                        PDF <i class="bi bi-file-earmark-pdf"></i>
+                    </button>
+                </div>
+            `,
+        }).then((result) => {
+            if (result.isDismissed) {
+                window.location.href = "{{ route('garantias', [now()->format('Y-m')]) }}"; 
+            }
+        });
+    @endif
+</script>
+
+
 <div class="container">
     <div class="bg-secondary" id="hidden-body" style="position:fixed;left:0;width:100vw;height:100vh;z-index:998;opacity:0.5;display:none">
     </div>
@@ -128,5 +162,10 @@
 </div>
 <br>
 <x-modal_new_cliente :documentos="$tipoDocumentos"/>
+<script>
+    function pdfGarantia(url) {
+        window.open(url, '', 'width=800,height=600,scrollbars=yes,location=no,toolbar=no,status=no');
+    }
+</script>
 <script src="{{asset('js/createGarantia.js')}}"></script>
 @endsection

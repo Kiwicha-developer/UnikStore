@@ -18,6 +18,10 @@ class GarantiaRepository implements GarantiaRepositoryInterface
         return Garantia::whereMonth('fechaGarantia',$date->month)->paginate($cant);
     }
 
+    public function getOne($id){
+        return Garantia::where('idGarantia','=',$id)->first();
+    }
+
     public function create(array $data){
         return Garantia::create($data);
     }

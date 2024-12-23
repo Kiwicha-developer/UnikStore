@@ -58,7 +58,7 @@
                                 <small>{{$garantia->fechaGarantia->format('d-m-Y');}}</small>
                             </div>
                             <div class="col-1">
-                                <button class="btn btn-danger btn-sm"><i class="bi bi-file-earmark-pdf"></i></button>
+                                <button onclick="pdfGarantia()" class="btn btn-danger btn-sm"><i class="bi bi-file-earmark-pdf"></i></button>
                             </div>
                         </div>
                     </li>
@@ -68,4 +68,10 @@
         {{$garantias->total()}}
     </div>
 </div>
+<script>
+    function pdfGarantia() {
+        var url = "{{route('garantiaPdf',[$garantia->idGarantia])}}";
+        window.open(url, '', 'width=800,height=600,scrollbars=yes,location=no,toolbar=no,status=no');
+    }
+</script>
 @endsection
