@@ -3,6 +3,7 @@ var inputsModalProduct = document.querySelectorAll('.input-modal-product');
 var index = 1;
 var totalComprobante = 0;
 var idIndexProduct = null;
+var importIdProducto = 0;
 
 function sendIdToDelete(id){
     let inputDelete = document.getElementById('input-delete-ingreso');
@@ -74,16 +75,16 @@ function searchProduct(inputElement){
 
 
 
-function excelButton(id){
+function excelButton(id,idProducto){
     let inputFile = document.getElementById('excel-file');
     inputFile.accept = '.xls,.xlsx';
     inputFile.click();
+    updateIdProducto(idProducto);
     setIdList(id);
 }
 
-function createItemList(id,serial){
+function createItemList(id,serial,idProducto){
     let headerLi = document.getElementById('header-list-product-' + id);
-    let headerHidden = document.getElementById('header-hidden-product-' + id);
     
     cont = document.querySelectorAll('.item-list-product-' + id).length ;
     
@@ -95,6 +96,7 @@ function createItemList(id,serial){
     let divInputGroup = createDiv(['input-group','input-group-sm'],null);
     let inputSerialNumber = createInput(['form-control','form-control-sm','input-serial', 'input-serial-' + id],null,'text',serial ? serial : null,'detalle['+id+'][ingreso]['+cont+'][serialnumber]');
     inputSerialNumber.placeholder="Serial number..";
+    inputSerialNumber.dataset.producto = idProducto;
     let divInputGroupText = createDiv(['input-group-text'],null);
     let checkSerialNumber = createInput(['form-check-input','check-serial-' + id],null,'checkbox',null,null);
     checkSerialNumber.addEventListener('change', function() {disabledSerialNumber(this,inputSerialNumber);});
@@ -292,9 +294,9 @@ function readExcel(input) {
             if(key === 'SERIES'){
                 values.forEach(function(x){
                     if(x.SERIES == 'nulo'){
-                        createItemList(listData,'0');
+                        createItemList(listData,'0',importIdProducto);
                     }else{
-                        createItemList(listData,x.SERIES);
+                        createItemList(listData,x.SERIES,importIdProducto);
                     }
                     countProducts(listData);
                     invalidarChecks(listData);
@@ -347,10 +349,7 @@ function generatePlantilla(){
 }
 
 
-function confirmForm(event){
-    event.preventDefault();
-    let formDocumento = document.getElementById('form-create-doc');
-    console.log(formDocumento.dataset.comprobante);
+function confirmForm(){
     Swal.fire({
     title: '!!No podras modificar el documento despues!!',
     text: '¿Estás seguro de que deseas continuar?',
@@ -366,37 +365,89 @@ function confirmForm(event){
     reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            let formData = new FormData(formDocumento);
-            console.log(formData);
-            fetch(formDocumento.getAttribute('action'), {
-                method: 'POST', 
-                body: formData
-            })
-            .then(response => response.json())  // Esperamos la respuesta JSON
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Éxito!',
-                        text: 'El documento se ha creado correctamente.',
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Hubo un problema al crear el documento.',
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Hubo un problema con la solicitud.',
-                });
-            });
+            validateSeriesForm();
         }
+    });
+}
+
+function sendFormInsertIngreso(){
+    let formDocumento = document.getElementById('form-create-doc');
+
+    if(formDocumento){
+        console.log(validateCantXProduct());
+        if(validateCantXProduct() == false){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Producto sin serie',
+                text: 'verífica que ningún producto este vacío.',
+                confirmButtonText: 'Aceptar', 
+                customClass: {
+                    confirmButton: 'btn-success',
+                },
+            });
+            return;
+        }
+
+        formDocumento.submit();
+    }
+}
+
+function validateCantXProduct(){
+    let detallesProducto = document.querySelectorAll('.list-group-item-dark');
+    let valid = true;
+    detallesProducto.forEach(function(x){
+        let cantElement = x.querySelector('[id*="header-cantidad-product"]');
+        let cant = parseInt(cantElement.textContent.trim());
+        if (cant < 1) {
+            valid = false;
+        }
+        console.log('item : ' + cant);
+    });
+
+    return valid;
+}
+
+function validateSeriesForm(){
+    let serialWhitProduct = [];
+    let serialsForm = document.querySelectorAll('.input-serial');
+    serialsForm.forEach(function(x){
+        serialWhitProduct.push({
+            serie: x.value, 
+            producto: x.dataset.producto 
+        });
+    });
+
+    let jsonData = JSON.stringify(serialWhitProduct);
+    let base64Data = btoa(jsonData);
+
+    fetch(`/documento/validateseries?data=${encodeURIComponent(base64Data)}`, { 
+        method: 'GET'
+    })
+    .then(response => { 
+        if (response.ok) { 
+            return response.json(); 
+        } else { 
+            throw new Error('Error al registrar.'); 
+        } 
+    })
+    .then(data => {
+        console.log(data);
+        if(data.valid == true){ 
+            Swal.fire({
+                icon: 'warning',
+                title: 'Series ya registradas',
+                text: data.series,
+                confirmButtonText: 'Aceptar', 
+                customClass: {
+                    confirmButton: 'btn-success',
+                },
+            });
+        } else { 
+            sendFormInsertIngreso();
+        } 
+    }) 
+    .catch(error => {
+        console.error('error: ' + error);
     });
 }
 
@@ -432,13 +483,22 @@ function deleteForm(idComprobante){
     });
 }
 
+function updateIdProducto(idp){
+    importIdProducto = idp
+}
+
 function updateIdIndexProducto(idx){
     idIndexProduct = idx;
 }
 
+function btnScanUpdateValuesImport(index,producto){
+    updateIdIndexProducto(index);
+    updateIdProducto(producto);
+}
+
 document.getElementById('btn-list-scan-codes').addEventListener('click',function(event){
     getSerials().forEach(function(x){
-        createItemList(idIndexProduct,x);
+        createItemList(idIndexProduct,x,importIdProducto);
         countProducts(idIndexProduct);
         updateBtnAdd();
     });

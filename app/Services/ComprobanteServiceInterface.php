@@ -9,6 +9,7 @@ interface ComprobanteServiceInterface
     public function insertComprobante(array $inputs);
     public function updateComprobante($id,array $inputs,array $details);
     public function searchAjaxComprobante($column,$data);
+    public function validateSeriesAjax(array $array);
     public function getAllAlmacen();
     public function deleteComprobante($idComprobante);
     public function filtroUsuario($month);

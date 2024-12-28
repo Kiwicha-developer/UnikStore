@@ -22,7 +22,7 @@
             </div>
         </div>
         <br>
-        <form action="{{ route('insertingreso', [encrypt($documento->idComprobante)]) }}" data-comprobante="{{encrypt($documento->idComprobante)}}" id="form-create-doc" method="POST">
+        <form method="POST" action="{{ route('insertingreso',[encrypt($documento->idComprobante)]) }}" data-comprobante="{{$documento->idComprobante}}" id="form-create-doc">
             @csrf
             <div class="row">
                 <div class="col-md-12 mb-3">
@@ -259,7 +259,8 @@
                                 {{ $documento->TipoComprobante->descripcion }}</span></button>
                     </div>
                     <div class="col-6 text-center">
-                        <button type="button" onclick="confirmForm(event)"
+                        <button type="button" 
+                        onclick="confirmForm()"
                             class="btn btn-success" id="btnSubmit" disabled><i class="bi bi-floppy-fill"></i>
                             Registrar</button>
                     </div>

@@ -127,19 +127,20 @@ class DocumentoController extends Controller
     }
     
     public function validateSeries(Request $request){
-    $series = $request->query('serial', []);
-    $proveedor = $request->query('proveedor');
+        $base64Data = $request->query('data');
+        $jsonData = base64_decode($base64Data);
+        $data = json_decode($jsonData);
 
-    if (empty($series) || empty($proveedor)) {
-        return response()->json(['error' => 'Faltan parámetros'], 400); 
-    }
+        if (empty($data)) {
+            return response()->json(['error' => 'Faltan parámetros'], 400); 
+        }
 
-    $validSeries = $this->comprobanteService->validateSeriesAjax($proveedor, $series);
+        $validSeries = $this->comprobanteService->validateSeriesAjax($data);
 
-    if (count($validSeries) > 0) {
-        return response()->json(['valid' => true, 'series' => $validSeries]);
-    } else {
-        return response()->json(['valid' => false]);
-    }
+        if (count($validSeries) > 0) {
+            return response()->json(['valid' => true, 'series' => $validSeries]);
+        } else {
+            return response()->json(['valid' => false]);
+        }
     }
 }

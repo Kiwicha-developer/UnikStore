@@ -78,7 +78,7 @@ class IngresoController extends Controller
         return back();
     }
     
-    public function insertIngreso($comprobante,Request $request){
+    public function insertIngreso(Request $request,$comprobante){
         $userModel = $this->headerService->getModelUser();
         $datacomprobante = $request->input('comprobante');
         $detalle = $request->input('detalle');
@@ -86,12 +86,10 @@ class IngresoController extends Controller
         foreach($userModel->Accesos as $acceso){
             if($acceso->idVista == 8){
                 if($datacomprobante){
-                    dd($detalle);
-                    $validation = 
 
                     $this->comprobanteService->updateComprobante(decrypt($comprobante),$datacomprobante,$detalle);
                     
-                    return response()->json('funko');
+                    return redirect(route('documentos',[now()->format('Y-m')]));
                 }else{
                     
                     $this->headerService->sendFlashAlerts('Datos Faltantes','Revisa los campos','info','btn-warning');

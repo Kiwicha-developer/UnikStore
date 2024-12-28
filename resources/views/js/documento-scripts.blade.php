@@ -67,7 +67,7 @@ function createProductList(){
                                     null,
                                     '<i class="bi bi-plus-lg"></i>',
                                     'button',
-                                    [() => createItemList(inputHiddenProduct.value, ''),() => countProducts(inputHiddenProduct.value)]
+                                    [() => createItemList(inputHiddenProduct.value, '',productInput.dataset.id),() => countProducts(inputHiddenProduct.value)]
                                 );
     let buttonDelete = createButton(['btn','btn-danger','me-2','btn-sm'],
                                         null,
@@ -79,14 +79,14 @@ function createProductList(){
                                         null,
                                         '<i class="bi bi-filetype-xlsx"></i> <span class="d-none d-md-inline">Excel</span>',
                                         'button',
-                                        [() => excelButton(inputHiddenProduct.value)]
+                                        [() => excelButton(inputHiddenProduct.value,productInput.dataset.id)]
                                     );
     
     divColDelete.appendChild(buttonDelete);
     divColOptions.innerHTML = `<x-btn-scan 
                                 :class="'btn-warning btn-sm'" 
                                 :spanClass="'d-none d-md-inline'" 
-                                :onClick="'updateIdIndexProducto(\'${inputHiddenProduct.value}\')'" />`;
+                                :onClick="'btnScanUpdateValuesImport(\'${inputHiddenProduct.value}\',\'${productInput.dataset.id}\')'" />`;
     divColOptions.appendChild(buttonExcel);
     let buttonOption = document.createElement('button');
     buttonOption.type = 'button';
