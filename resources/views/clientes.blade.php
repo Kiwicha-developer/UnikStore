@@ -72,6 +72,7 @@
             </div>
         @endif
     </div>
+    {{$clientes->total()}}
 </div>
 <x-modal_new_cliente :documentos="$tipoDocumentos"/>
 <script>

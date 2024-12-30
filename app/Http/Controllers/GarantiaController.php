@@ -7,8 +7,6 @@ use App\Services\HeaderServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-use function PHPUnit\Framework\isNull;
-
 class GarantiaController extends Controller
 {
     protected $headerService;
